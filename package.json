@@ -1,0 +1,23 @@
+{
+  "name": "locustwalk",
+  "version": "0.0.1",
+  "author": "Locust Walk",
+  "description": "",
+  "contributors": [
+    {
+      "name": "Austin Eng",
+      "email": "austineng.inr@gmail.com",
+      "url": "http://austin-eng.co"
+    }
+  ],
+  "private": true,
+  "scripts": {
+    "start": "node app"
+  },
+  "dependencies": {
+    "mongoose": "^4.4.8"
+  },
+  "devDependencies": {
+    "morgan": "^1.7.0"
+  }
+}
