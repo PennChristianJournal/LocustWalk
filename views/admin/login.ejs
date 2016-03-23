@@ -1,0 +1,13 @@
+<h2>Account Login</h2>
+
+<form action='/admin/login' method='post'>
+<input type="text" name="username" placeholder="Username" /><br/>
+<input type="password" name="password" placeholder="Password" /><br/>
+<input type="submit" value="Submit"/>
+
+<br /><br />
+<% if (error) { %>
+<span><%= error %></span>
+<% } %>
+
+</form>

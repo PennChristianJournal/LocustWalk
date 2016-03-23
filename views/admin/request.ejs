@@ -1,0 +1,11 @@
+<h2>Request Account</h2>
+
+<form action='/admin/request' method='post'>
+<input type="text" name="email" placeholder="Email" /><br/>
+<input type="submit" value="Submit"/>
+
+<br /><br />
+<% if (error) { %>
+<span><%= error %></span>
+<% } %>
+</form>
