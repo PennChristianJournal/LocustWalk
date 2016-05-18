@@ -37,9 +37,9 @@ var Schema = mongoose.Schema({
       sparse: true
     }
   },
-  pending_attachments: [mongoose.Schema.Types.ObjectId],
-  cover: mongoose.Schema.Types.ObjectId,
-  thumb: mongoose.Schema.Types.ObjectId, 
+  pending_attachments: [String],
+  cover: String,
+  thumb: String, 
 }, {
   timestamps: true
 })

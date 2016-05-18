@@ -12,15 +12,26 @@ module.exports = router;
 router.use('/admin', require('./admin'))
 router.use('/articles', require('./articles'))
 
-router.get('/files/:id', function(req, res) {
-  Files.findOne({_id: req.params.id}, function(err, file, stream) {
-    if (err) console.log(err)
-    if (file) {
-      res.writeHead(200, {'Content-Type': file.contentType })
-      stream.pipe(res)
+router.get('/files/:id', function(req, res, next) {
+  var assetPath = __root + 'public/files/' + req.params.id
+  fs.exists(assetPath, (exists) => {
+    if (exists) {
+      return next()
     } else {
-      res.status(404)
-      res.type('txt').send('Not found')
+      Files.findOne({_id: req.params.id}, function(err, file, stream) {
+        if (err) console.log(err)
+        if (file) {
+          process.nextTick(function() {
+            var wstream = fs.createWriteStream(assetPath)
+            stream.pipe(wstream)
+          })
+          res.writeHead(200, {'Content-Type': file.contentType })
+          stream.pipe(res)
+        } else {
+          res.status(404)
+          res.type('txt').send('Not found')
+        }
+      })
     }
   })
 })
