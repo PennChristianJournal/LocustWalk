@@ -1,6 +1,9 @@
 extends ../_layout.pug
 
 block head
+  link(rel="stylesheet" href="/bower_components/medium-editor/dist/css/themes/default.css")
+  link(rel="stylesheet" href="/bower_components/medium-editor-insert-plugin/dist/css/medium-editor-insert-plugin.min.css")
+    
   link(rel='stylesheet' href='/css/article.css')
   title #{article.title}
 
