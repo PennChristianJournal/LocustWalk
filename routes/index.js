@@ -16,8 +16,10 @@ router.get('/files/:id', function(req, res) {
   Files.findOne({_id: req.params.id}, function(err, file, stream) {
     if (err) console.log(err)
     if (file) {
-      res.writeHead(200, {'Content-Type': file.contentType })
-      stream.pipe(res)
+      process.nextTick(function() {
+        res.writeHead(200, {'Content-Type': file.contentType })
+        stream.pipe(res)
+      })
     } else {
       res.status(404)
       res.type('txt').send('Not found')
