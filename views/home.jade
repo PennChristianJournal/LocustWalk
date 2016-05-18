@@ -1,0 +1,94 @@
+extends ./_split-layout.jade
+
+mixin featured_article(feature, ismain)
+  a(href='/articles/#{feature.slug}')
+    .bg-img(style='background-image: url(/files/#{feature.cover})')
+    .title-box
+      .title-bg(style='background-image: url(/files/#{feature.cover})')
+      .title-bg-darken
+      .title-content
+        h2.title #{feature.title}
+        p.author-date.h6
+          span.author #{feature.author} &#8212;&nbsp;
+          span.date #{moment(feature.date.toISOString()).format('MMM, DD YYYY')}
+        if ismain
+          p.preview !{truncate(feature.content.replace(/(<([^>]+)>)/ig,""), 140)}
+
+block append head
+  title Locust Walk - Penn Christian Journal
+  link(href='/css/home.css' rel='stylesheet' type='text/css')
+
+block top
+  
+  .featured-view
+    .featured-wrapper#feature-slide
+      each feature, index in features
+        .featured-block
+          .feature-month-bar
+            h2.strong.feature-month #{moment(feature.date.toISOString()).format('MMM YYYY')}
+          .featured-block-aspect: .content
+            .featured
+              .featured-aspect: .content
+                +featured_article(feature, true)
+            .feature-response
+              .feature-response-aspect: .content
+                +featured_article(feature, false)
+            .feature-response
+              .feature-response-aspect: .content
+                +featured_article(feature, false)
+    .feature-nav
+      a#feature-left(href='#'): i.fa.fa-chevron-left
+      a#feature-right(href='#'): i.fa.fa-chevron-right
+
+  br
+block main
+  .tile.tile-vertical.white-theme
+    h2.strong Recent Articles
+
+    each recent, index in recents
+      .recent-block
+        .thumb
+          a(href='/articles/#{recent.slug}'): .thumb-aspect(style='background-image: url(/files/#{recent.cover})')
+        .recent-content
+          a(href='/articles/#{recent.slug}'): h2.title #{recent.title}
+          p.author-date.h6 
+            span.author #{recent.author} &#8212;&nbsp;
+            span.date #{moment(recent.date.toISOString()).format('MMM, DD YYYY')}
+          p.preview !{truncate(recent.content.replace(/(<([^>]+)>)/ig,""), 300)}
+          //- p.preview !{recent.content.replace(/(<([^>]+)>)/ig,"").substring(0, 10)}...
+block sidebar
+  .row
+    .col-md-12.col-sm-6
+      .tile.tile-vertical.red-theme
+        include _sisters
+
+    .col-md-12.col-sm-6
+      .tile.tile-vertical.gray-theme
+        include _archive
+
+block bottom
+  div bottom
+
+block append footer
+  script.
+    (function() {
+      var featureIdx = 0;
+      var maxFeatures = #{features.length};
+      var lBtn = document.getElementById('feature-left');
+      var rBtn = document.getElementById('feature-right');
+      var slide = document.getElementById('feature-slide');
+
+      lBtn.onclick = function() {
+        if (featureIdx > 0) {
+          featureIdx -= 1  
+          slide.style.left = featureIdx * -100 + '%'
+        }
+      }
+
+      rBtn.onclick = function() {
+        if (featureIdx < maxFeatures - 1) {
+          featureIdx += 1
+          slide.style.left = featureIdx * -100 + '%'
+        }
+      }
+    })()

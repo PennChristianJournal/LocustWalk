@@ -1,0 +1,146 @@
+.default-theme {
+  background-color: $base;
+
+  .h1, .h2, .h3, .h4, .h5, .h6 {
+    color: $heavy-gray;
+
+    a {
+      color: inherit;
+    }
+  }
+
+  a {
+    color: $blue;
+    &:hover {
+      color: $heavy-gray;
+      text-decoration: none;
+    }
+  }
+
+  p, li {
+    font-family: $body-font;
+    color: $dark-gray;
+    font-size: 16px;
+  }
+
+  .button {
+    @extend .h3;
+    display: inline-block;
+    padding: 10px;
+    border: none;
+    background-color: $light-gray;
+  }
+}
+
+.blue-theme {
+  background-color: $blue;
+
+  .h1, .h2, .h3, .h4, .h5, .h6 {
+    color: $base;
+  }
+
+  a {
+    color: $red;
+    &:hover {
+      color: white;
+    }
+  }
+
+  p, li {
+    color: $very-light-gray;
+  }
+}
+
+.red-theme {
+  background-color: $red;
+
+  .h1, .h2, .h3, .h4, .h5, .h6 {
+    color: $base;
+  }
+
+  a {
+    color: $light-gray;
+    &:hover {
+      color: $base;
+    }
+  }   
+  p, li {
+    color: $light-gray;
+  }
+}
+
+.dark-theme {
+  background-color: $heavy-gray;
+
+  .h1, .h2, .h3, .h4, .h5, .h6 {
+    color: $base;
+  }
+  
+  p, li {
+    color: $light-gray
+  } 
+}
+
+.gray-theme {
+  background-color: $light-gray;
+
+  .h1, .h2, .h3, .h4, .h5, .h6 {
+    color: $red;
+
+    a {
+      color: inherit;
+      &:hover {
+        color: $heavy-gray;
+      }
+    }
+  }
+
+  a {
+    color: $dark-gray;
+  }
+
+  .button {
+    background-color: $base;
+  }
+}
+
+.white-theme {
+  background-color: white;
+}
+
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: $title-font;
+  letter-spacing: 0.05em;
+  word-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.strong {
+  font-weight: 900;
+}
+
+.thin {
+  font-weight: 300;
+}
+
+.h2 {
+  margin-top: 1.5em;
+  font-size: 24px;
+}
+
+.h3 {
+  font-size: 18px;
+  margin-top: 1em;
+  margin-bottom: 0.25em;
+}
+
+h1 { @extend .h1; }
+h2 { @extend .h2; }
+h3 { @extend .h3; }
+h4 { @extend .h4; }
+h5 { @extend .h5; }
+h6 { @extend .h6; }
+
+input[type='button'] {
+  @extend .button
+}

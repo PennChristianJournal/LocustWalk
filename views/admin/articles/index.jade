@@ -1,0 +1,68 @@
+extends ../_layout.jade
+
+block content
+  h1
+    span Articles
+    a.pull-right.btn.btn-primary(href='/admin/articles/new') New Article
+
+  script.
+    var deleteArticle = function(title, id) {
+      if (confirm('Are you sure you want to delete article ' + title + '?')) {
+        $('#deletearticleid').val(id)
+        $('#delete-form').submit()
+      }
+    }
+
+    var publishArticle = function(title, id) {
+      if (confirm('Are you sure you want to publish article ' + title + '?')) {
+        $('#publisharticleid').val(id)
+        $('#publish-form').submit()
+      }
+    }
+
+  form#delete-form(style='display: none' action='/admin/articles/delete' method='post')
+    input#deletearticleid(type='text' name='_id')
+
+  form#publish-form(style='display: none' action='/admin/articles/publish' method='post')
+    input#publisharticleid(type='text' name='_id')
+
+  table.table.table-striped
+    tr
+      th Title
+      th
+      th Posted
+      th Slug
+      //- th Featured 
+      //- th Preview
+      th Permalink
+      th Actions    
+
+    each article, index in articles
+      tr
+        td(style='position: relative')
+          if article.is_featured
+            i.fa.fa-star(style='position: absolute; left: -10px; top: 10px')
+          a(href='/admin/articles/#{article._id}/edit') #{article.title}
+        
+        td 
+          if article.is_published
+            i.fa.fa-check
+
+        if article.date
+          td #{moment(article.date).format('MMM DD, YYYY [at] H:mm')}
+        else
+          td
+
+        td: a(href='/articles/#{article.slug}') /articles/#{article.slug}
+        td: a(href='/articles/#{article._id}') /articles/#{article._id}
+        //- td 
+        //-   if article.content
+        //-     | #{article.content.replace(/(<([^>]+)>)/ig,"").substring(0, 200)}
+        td 
+          .btn-group(style='width: 130px')
+            if article.is_published
+              a.btn.btn-xs.btn-default(href='#' disabled) Publish
+            else 
+              a.btn.btn-xs.btn-default(href='#' onclick='publishArticle("#{article.title}", "#{article._id}")') Publish
+            a.btn.btn-xs.btn-primary(href='/admin/articles/#{article._id}/edit') Edit
+            a.btn.btn-xs.btn-danger(href='#' onclick='deleteArticle("#{article.title}", "#{article._id}")') Delete

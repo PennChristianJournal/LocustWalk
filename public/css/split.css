@@ -1,0 +1,86 @@
+.default-theme {
+  background-color: #f8f8f8; }
+  .default-theme .h1, .default-theme h1, .default-theme .h2, .default-theme h2, .default-theme .h3, .default-theme .button, .default-theme input[type='button'], .default-theme h3, .default-theme .h4, .default-theme h4, .default-theme .h5, .default-theme h5, .default-theme .h6, .default-theme h6 {
+    color: #222; }
+    .default-theme .h1 a, .default-theme h1 a, .default-theme .h2 a, .default-theme h2 a, .default-theme .h3 a, .default-theme .button a, .default-theme input[type='button'] a, .default-theme h3 a, .default-theme .h4 a, .default-theme h4 a, .default-theme .h5 a, .default-theme h5 a, .default-theme .h6 a, .default-theme h6 a {
+      color: inherit; }
+  .default-theme a {
+    color: #8193B5; }
+    .default-theme a:hover {
+      color: #222;
+      text-decoration: none; }
+  .default-theme p, .default-theme li {
+    font-family: "Roboto";
+    color: #777;
+    font-size: 16px; }
+  .default-theme .button, .default-theme input[type='button'] {
+    display: inline-block;
+    padding: 10px;
+    border: none;
+    background-color: #ddd; }
+
+.blue-theme {
+  background-color: #8193B5; }
+  .blue-theme .h1, .blue-theme h1, .blue-theme .h2, .blue-theme h2, .blue-theme .h3, .blue-theme .default-theme .button, .default-theme .blue-theme .button, .blue-theme .default-theme input[type='button'], .default-theme .blue-theme input[type='button'], .blue-theme h3, .blue-theme .h4, .blue-theme h4, .blue-theme .h5, .blue-theme h5, .blue-theme .h6, .blue-theme h6 {
+    color: #f8f8f8; }
+  .blue-theme a {
+    color: #A95B61; }
+    .blue-theme a:hover {
+      color: white; }
+  .blue-theme p, .blue-theme li {
+    color: #eee; }
+
+.red-theme {
+  background-color: #A95B61; }
+  .red-theme .h1, .red-theme h1, .red-theme .h2, .red-theme h2, .red-theme .h3, .red-theme .default-theme .button, .default-theme .red-theme .button, .red-theme .default-theme input[type='button'], .default-theme .red-theme input[type='button'], .red-theme h3, .red-theme .h4, .red-theme h4, .red-theme .h5, .red-theme h5, .red-theme .h6, .red-theme h6 {
+    color: #f8f8f8; }
+  .red-theme a {
+    color: #ddd; }
+    .red-theme a:hover {
+      color: #f8f8f8; }
+  .red-theme p, .red-theme li {
+    color: #ddd; }
+
+.dark-theme {
+  background-color: #222; }
+  .dark-theme .h1, .dark-theme h1, .dark-theme .h2, .dark-theme h2, .dark-theme .h3, .dark-theme .default-theme .button, .default-theme .dark-theme .button, .dark-theme .default-theme input[type='button'], .default-theme .dark-theme input[type='button'], .dark-theme h3, .dark-theme .h4, .dark-theme h4, .dark-theme .h5, .dark-theme h5, .dark-theme .h6, .dark-theme h6 {
+    color: #f8f8f8; }
+  .dark-theme p, .dark-theme li {
+    color: #ddd; }
+
+.gray-theme {
+  background-color: #ddd; }
+  .gray-theme .h1, .gray-theme h1, .gray-theme .h2, .gray-theme h2, .gray-theme .h3, .gray-theme .default-theme .button, .default-theme .gray-theme .button, .gray-theme .default-theme input[type='button'], .default-theme .gray-theme input[type='button'], .gray-theme h3, .gray-theme .h4, .gray-theme h4, .gray-theme .h5, .gray-theme h5, .gray-theme .h6, .gray-theme h6 {
+    color: #A95B61; }
+    .gray-theme .h1 a, .gray-theme h1 a, .gray-theme .h2 a, .gray-theme h2 a, .gray-theme .h3 a, .gray-theme .default-theme .button a, .default-theme .gray-theme .button a, .gray-theme .default-theme input[type='button'] a, .default-theme .gray-theme input[type='button'] a, .gray-theme h3 a, .gray-theme .h4 a, .gray-theme h4 a, .gray-theme .h5 a, .gray-theme h5 a, .gray-theme .h6 a, .gray-theme h6 a {
+      color: inherit; }
+      .gray-theme .h1 a:hover, .gray-theme h1 a:hover, .gray-theme .h2 a:hover, .gray-theme h2 a:hover, .gray-theme .h3 a:hover, .gray-theme .default-theme .button a:hover, .default-theme .gray-theme .button a:hover, .gray-theme .default-theme input[type='button'] a:hover, .default-theme .gray-theme input[type='button'] a:hover, .gray-theme h3 a:hover, .gray-theme .h4 a:hover, .gray-theme h4 a:hover, .gray-theme .h5 a:hover, .gray-theme h5 a:hover, .gray-theme .h6 a:hover, .gray-theme h6 a:hover {
+        color: #222; }
+  .gray-theme a {
+    color: #777; }
+  .gray-theme .button, .gray-theme input[type='button'] {
+    background-color: #f8f8f8; }
+
+.white-theme {
+  background-color: white; }
+
+.h1, h1, .h2, h2, .h3, .default-theme .button, .default-theme input[type='button'], h3, .h4, h4, .h5, h5, .h6, h6 {
+  font-family: "Lato";
+  letter-spacing: 0.05em;
+  word-spacing: 0.1em;
+  text-transform: uppercase; }
+
+.strong {
+  font-weight: 900; }
+
+.thin {
+  font-weight: 300; }
+
+.h2, h2 {
+  margin-top: 1.5em;
+  font-size: 24px; }
+
+.h3, .default-theme .button, .default-theme input[type='button'], h3 {
+  font-size: 18px;
+  margin-top: 1em;
+  margin-bottom: 0.25em; }

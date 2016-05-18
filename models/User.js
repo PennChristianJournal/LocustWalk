@@ -1,7 +1,6 @@
 'use strict'
 
 var mongoose = require('mongoose')
-var uniqueValidator = require('mongoose-unique-validator')
 var bcrypt = require("bcrypt")
 var SALT_WORK_FACTOR = 10
 
@@ -11,7 +10,6 @@ var UserSchema = new mongoose.Schema({
     index: {
       unique: true,
     },
-    unique: true,
     required: true,
   },
   password: {
@@ -23,7 +21,6 @@ var UserSchema = new mongoose.Schema({
     index: {
       unique: true,
     },
-    unique: true,
     required: true
   }
 })
@@ -45,8 +42,6 @@ UserSchema.pre('save', function (next) {
     return next()
   }
 })
-
-UserSchema.plugin(uniqueValidator)
 
 UserSchema.methods.comparePassword = function (passw, cb) {
   bcrypt.compare(passw, this.password, function(err, isMatch) {

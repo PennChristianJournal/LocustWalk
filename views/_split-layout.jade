@@ -1,0 +1,26 @@
+extends ./_layout.jade
+
+block append head
+  link(href='/css/split.css' rel='stylesheet' type='text/css')
+
+block append content
+
+  .row
+    .col-lg-12#top
+      block top
+  .row
+    .col-sm-12
+      .row
+        .col-lg-9.col-md-8#main
+          block main
+
+        .col-lg-3.col-md-4#sidebar
+          block sidebar
+
+  .row
+    .col-lg-12#bottom
+      block bottom
+    
+
+  
+    

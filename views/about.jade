@@ -1,0 +1,62 @@
+extends ./_split-layout.jade
+
+block append head
+  title About - Locust Walk
+
+block main
+  .tile.tile-vertical.white-theme
+    h2.strong Mission Statement
+    p Locust Walk is a student-led Christian publication that exists to present the perspectives of faith and non-faith worldviews on questions of truth and purpose. Through active dialogue within the University of Pennsylvania, we seek to build relationships modeled after the life and teachings of Jesus Christ who informs our understanding of cultural engagement, reconciliation, and community. We pledge to cultivate an environment where the pursuit of solidarity in diversity can lay a foundation for conversation conducted with love and mutual respect. 
+
+    h2.strong Statement of Faith
+
+    p We believe in one God,
+      | the Father almighty,
+      | maker of heaven and earth,
+      | of all things visible and invisible.
+
+    p And in one Lord Jesus Christ,
+      | the only Son of God,
+      | begotten from the Father before all ages,
+      |     God from God,
+      |     Light from Light,
+      |     true God from true God,
+      | begotten, not made;
+      | of the same essence as the Father.
+      | Through him all things were made.
+      | For us and for our salvation
+      |     he came down from heaven;
+      |     he became incarnate by the Holy Spirit and the virgin Mary,
+      |     and was made human.
+      |     He was crucified for us under Pontius Pilate;
+      |     he suffered and was buried.
+      |     The third day he rose again, according to the Scriptures.
+      |     He ascended to heaven
+      |     and is seated at the right hand of the Father.
+      |     He will come again with glory
+      |     to judge the living and the dead.
+      |     His kingdom will never end.
+
+    p And we believe in the Holy Spirit,
+      | the Lord, the giver of life.
+      | He proceeds from the Father and the Son,
+      | and with the Father and the Son is worshiped and glorified.
+      | He spoke through the prophets.
+      | We believe in one holy catholic and apostolic church.
+      | We affirm one baptism for the forgiveness of sins.
+      | We look forward to the resurrection of the dead,
+      | and to life in the world to come. Amen.
+
+    p © 1987, CRC Publications, Grand Rapids MI. 
+      a(href='www.crcna.org') www.crcna.org
+      | . Reprinted with permission.
+
+block sidebar
+  .row
+    .col-md-12.col-sm-6
+      .tile.tile-vertical.red-theme
+        include _sisters
+
+    .col-md-12.col-sm-6
+      .tile.tile-vertical.gray-theme
+        include _archive

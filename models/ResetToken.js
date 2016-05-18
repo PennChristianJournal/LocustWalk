@@ -1,7 +1,6 @@
 'use strict'
 
 var mongoose = require('mongoose')
-var uniqueValidator = require('mongoose-unique-validator')
 var uuid = require('node-uuid')
 
 var Schema = new mongoose.Schema({
@@ -44,13 +43,16 @@ Schema.statics.createToken = function(email, done) {
   })
 }
 
-var model = mongoose.model('VerificationToken', Schema)
+var model = mongoose.model('ResetToken', Schema)
 
 model.verify = function(token, email, done) {
   model.findOne({token: token, email: email}, function(err, doc) {
     if (err) return done(err)
     if (doc) {
-      return done(null, true)
+      model.remove(doc, function(err) {
+        if (err) throw err
+        return done(null, true)
+      })
     } else {
       return done(null, false)
     }

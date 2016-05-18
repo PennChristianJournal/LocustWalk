@@ -1,0 +1,103 @@
+extends ../_layout.jade
+
+block head
+  link(rel="stylesheet" href="/bower_components/medium-editor/dist/css/medium-editor.min.css" type="text/css" media="screen" charset="utf-8")
+  link(rel="stylesheet" href="/bower_components/medium-editor/dist/css/themes/default.css")
+  link(rel="stylesheet" href="/bower_components/medium-editor-insert-plugin/dist/css/medium-editor-insert-plugin.min.css")
+  link(rel='stylesheet' href='/css/article.css')
+
+  style.
+    .medium-editor-insert-plugin.medium-editor-placeholder:after {
+      padding: 0;
+    }
+
+    .medium-insert-images figure figcaption, .mediumInsert figure figcaption, .medium-insert-embeds figure figcaption, .mediumInsert-embeds figure figcaption {
+      color: #888;
+    }
+
+    .fa {
+      line-height: 2
+    }
+
+block content
+
+  if error.length > 0
+    .alert.alert-danger(role='alert') #{error}
+
+  .article
+    div.article-cover.article-cover-change-btn#change-cover
+      img#cover-photo(src='')
+    div.article-title.editable-title
+    div.article-content.editable-content
+
+  br
+  br
+
+  form(method='post')
+    .form-group
+      label Cover Photo
+      input#cover-photo-input(type='file' name='cover-photo' onchange='handleImage(this, document.getElementById("cover-photo"), this.files)' accept='image/*')
+    .form-group
+      label Slug
+      input.form-control(type='text' name='slug' placeholder='article-title')
+    .form-group
+      .checkbox
+        label.checkbox-inline
+          input(name='featured' type='checkbox')
+          | Featured
+        label.checkbox-inline
+          input(name='published' type='checkbox')
+          | Published
+    .form-group
+      label Thumbnail
+      br
+      img#thumbnail(width='200px' height='200px' src='')
+      input(type='file' name='thumbnail' onchange='handleImage(this, document.getElementById("thumbnail"), this.files)' accept='image/*')
+
+    button.btn.btn-primary(type='submit');
+
+block footer
+  script(src='/bower_components/medium-editor/dist/js/medium-editor.min.js')
+  script(src="/bower_components/handlebars/handlebars.runtime.min.js")
+  script(src="/bower_components/jquery-sortable/source/js/jquery-sortable-min.js")
+  script(src="/bower_components/blueimp-file-upload/js/vendor/jquery.ui.widget.js")
+  script(src="/bower_components/blueimp-file-upload/js/jquery.iframe-transport.js")
+  script(src="/bower_components/blueimp-file-upload/js/jquery.fileupload.js")
+  script(src="/bower_components/medium-editor-insert-plugin/dist/js/medium-editor-insert-plugin.min.js")
+  script.
+    var titleEditor = new MediumEditor('.editable-title', {
+      placeholder: {
+        text: 'New Article',
+        hideOnClick: false
+      },
+      toolbar: {
+        buttons: ['bold', 'italic', 'underline']
+      }
+    })
+    var contentEditor = new MediumEditor('.editable-content', {
+      placeholder: {
+        text: 'Article content...',
+        hideOnClick: false
+      }
+    })
+    $('.editable-content').mediumInsert({
+      editor: contentEditor
+    })
+
+    $('#change-cover').on('click', function(e) {
+      e.preventDefault()
+      $('#cover-photo-input').click()
+    })
+
+    var handleImage = function(el, img, files) {
+      var file = files[0]
+      if (!file) return
+      var imageType = /^image\//
+      if (!imageType.test(file.type)) {
+        el.value = ''
+        img.src =''
+        alert('Please select an image file')
+        return;
+      }
+      img.src = window.URL.createObjectURL(file)
+    }
