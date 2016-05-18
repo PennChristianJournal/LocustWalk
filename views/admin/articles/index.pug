@@ -1,4 +1,4 @@
-extends ../_layout.jade
+extends ../_layout.pug
 
 block content
   h1
@@ -42,7 +42,7 @@ block content
         td(style='position: relative')
           if article.is_featured
             i.fa.fa-star(style='position: absolute; left: -10px; top: 10px')
-          a(href='/admin/articles/#{article._id}/edit') #{article.title}
+          a(href=`/admin/articles/${article._id}/edit`) #{article.title}
         
         td 
           if article.is_published
@@ -53,8 +53,8 @@ block content
         else
           td
 
-        td: a(href='/articles/#{article.slug}') /articles/#{article.slug}
-        td: a(href='/articles/#{article._id}') /articles/#{article._id}
+        td: a(href=`/articles/${article.slug}`) /articles/#{article.slug}
+        td: a(href=`/articles/${article._id}`) /articles/#{article._id}
         //- td 
         //-   if article.content
         //-     | #{article.content.replace(/(<([^>]+)>)/ig,"").substring(0, 200)}

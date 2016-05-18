@@ -23,7 +23,7 @@ var node_env = process.env.NODE_ENV || 'development'
 
 mongoose.set('debug', node_env == 'development' ? true : false)
 app.set('views', path.join(__dirname, 'views'))
-app.set('view engine', 'jade')
+app.set('view engine', 'pug')
 app.set('port', process.env.PORT || 3000)
 
 app.use(logger(node_env == 'development' ? 'dev' : 'common'))

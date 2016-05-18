@@ -1,10 +1,10 @@
-extends ./_split-layout.jade
+extends ./_split-layout.pug
 
 mixin featured_article(feature, ismain)
-  a(href='/articles/#{feature.slug}')
-    .bg-img(style='background-image: url(/files/#{feature.cover})')
+  a(href=`/articles/${feature.slug}`)
+    .bg-img(style='background-image: url(/files/' + feature.cover + ')')
     .title-box
-      .title-bg(style='background-image: url(/files/#{feature.cover})')
+      .title-bg(style='background-image: url(/files/' + feature.cover + ')')
       .title-bg-darken
       .title-content
         h2.title #{feature.title}
@@ -48,14 +48,13 @@ block main
     each recent, index in recents
       .recent-block
         .thumb
-          a(href='/articles/#{recent.slug}'): .thumb-aspect(style='background-image: url(/files/#{recent.cover})')
+          a(href=`/articles/${recent.slug}`): .thumb-aspect(style=`background-image: url(/files/${recent.cover})`)
         .recent-content
-          a(href='/articles/#{recent.slug}'): h2.title #{recent.title}
+          a(href=`/articles/${recent.slug}`): h2.title #{recent.title}
           p.author-date.h6 
             span.author #{recent.author} &#8212;&nbsp;
             span.date #{moment(recent.date.toISOString()).format('MMM, DD YYYY')}
           p.preview !{truncate(recent.content.replace(/(<([^>]+)>)/ig,""), 300)}
-          //- p.preview !{recent.content.replace(/(<([^>]+)>)/ig,"").substring(0, 10)}...
 block sidebar
   .row
     .col-md-12.col-sm-6

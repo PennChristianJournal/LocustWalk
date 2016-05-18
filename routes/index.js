@@ -61,7 +61,7 @@ router.get('/', function(req, res) {
 })
 
 router.get('/:page', function(req, res, next) {
-  fs.exists('/views/' + req.params.page + '.jade', (exists) => {
+  fs.exists('/views/' + req.params.page + '.pug', (exists) => {
     if (exists) {
       Article
       .find({

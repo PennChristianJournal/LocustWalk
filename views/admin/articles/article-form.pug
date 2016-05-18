@@ -1,4 +1,4 @@
-extends ../_layout.jade
+extends ../_layout.pug
 
 block head
   link(rel="stylesheet" href="/bower_components/medium-editor/dist/css/medium-editor.min.css" type="text/css" media="screen" charset="utf-8")
@@ -29,9 +29,9 @@ block content
     //-     img#cover-photo(src='')
     //- div.article-title.editable-title #{article.title}
     //- div.article-content.editable-content !{article.content}
-    .article-cover.article-cover-change-btn#change-cover(style='background-image:url(/files/#{article.cover})')
+    .article-cover.article-cover-change-btn#change-cover(style=`background-image:url(/files/${article.cover})`)
     .nav-mask
-      .article-cover-blur(style='background-image:url(/files/#{article.cover})')
+      .article-cover-blur(style=`background-image:url(/files/${article.cover})`)
       .nav-mask-bg
 
     .container
@@ -75,7 +75,7 @@ block content
       .form-group
         label Thumbnail
         br
-        img#thumbnail(width='200px' height='200px' src='')
+        img#thumbnail(width='200px' height='200px' src=`/files/${article.thumb}`)
         input(type='file' name='thumb' onchange='handleImage(this, document.getElementById("thumbnail"), this.files)' accept='image/*')
 
       .form-group
