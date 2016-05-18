@@ -28,10 +28,10 @@ router.get('/', function(req, res) {
 router.get('/new', function(req, res) {
   var new_article = new Article()
   var defaultValidate = new_article.validate
-  new_article.validate = function(next) { next(); }
-  new_article.save(function(err, article) {
+  // new_article.validate = (next) => { return next() }
+  new_article.save({validateBeforeSave: false}, (err, article) => {
     if (err) console.log(err)
-    article.validate = defaultValidate
+    // article.validate = defaultValidate
     res.redirect('/admin/articles/' + article._id + '/edit')
   }) 
 })

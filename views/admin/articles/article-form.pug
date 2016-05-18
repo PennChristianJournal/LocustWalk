@@ -31,7 +31,7 @@ block content
     //- div.article-content.editable-content !{article.content}
     .article-cover.article-cover-change-btn#change-cover(style=`background-image:url(/files/${article.cover})`)
     .nav-mask
-      .article-cover-blur(style=`background-image:url(/files/${article.cover})`)
+      .article-cover-blur#change-cover-blur(style=`background-image:url(/files/${article.cover})`)
       .nav-mask-bg
 
     .container
@@ -48,7 +48,7 @@ block content
 
       .form-group
         label Cover Photo
-        input#cover-photo-input(type='file' name='cover' onchange='handleImage(this, document.getElementById("cover-photo"), this.files)' accept='image/*')
+        input#cover-photo-input(type='file' name='cover' onchange='handleCoverImage([document.getElementById("change-cover"), document.getElementById("change-cover-blur")], this.files)' accept='image/*')
 
       .form-group
         label Author
@@ -75,7 +75,7 @@ block content
       .form-group
         label Thumbnail
         br
-        img#thumbnail(width='200px' height='200px' src=`/files/${article.thumb}`)
+        img#thumbnail(width='400px' height='300px' src=`/files/${article.thumb}`)
         input(type='file' name='thumb' onchange='handleImage(this, document.getElementById("thumbnail"), this.files)' accept='image/*')
 
       .form-group
@@ -146,6 +146,22 @@ block footer
         return;
       }
       img.src = window.URL.createObjectURL(file)
+    }
+
+    var handleCoverImage = function(els, files) {
+      var file = files[0]
+      if (!file) return
+      var imageType = /^image\//
+      var src = window.URL.createObjectURL(file)
+      
+      if (!imageType.test(file.type)) {
+        alert('Please select an image file')
+        return
+      }
+      for (var i = 0; i < els.length; i++) {
+        var el = els[i]
+        el.style.backgroundImage = 'url(' + src + ')'
+      }
     }
 
     $('#article-form').submit(function() {
