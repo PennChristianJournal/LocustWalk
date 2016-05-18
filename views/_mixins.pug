@@ -1,0 +1,10 @@
+mixin article-thumb(article)
+  .article-thumb-block
+    .thumb
+      a(href=`/articles/${article.slug}`): .thumb-aspect(style=`background-image: url(/files/${article.cover})`)
+    .article-thumb-content
+      a(href=`/articles/${article.slug}`): h2.title #{article.title}
+      p.author-date.h6 
+        span.author #{article.author} &#8212;&nbsp;
+        span.date #{moment(article.date.toISOString()).format('MMM, DD YYYY')}
+      p.preview !{truncate(article.content.replace(/(<([^>]+)>)/ig,""), 300)}

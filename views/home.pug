@@ -1,4 +1,5 @@
 extends ./_split-layout.pug
+include ./_mixins
 
 mixin featured_article(feature, ismain)
   a(href=`/articles/${feature.slug}`)
@@ -17,6 +18,7 @@ mixin featured_article(feature, ismain)
 block append head
   title Locust Walk - Penn Christian Journal
   link(href='/css/home.css' rel='stylesheet' type='text/css')
+  link(href='/css/article-thumb.css' rel='stylesheet' type='text/css')
 
 block top
   
@@ -46,15 +48,7 @@ block main
     h2.strong Recent Articles
 
     each recent, index in recents
-      .recent-block
-        .thumb
-          a(href=`/articles/${recent.slug}`): .thumb-aspect(style=`background-image: url(/files/${recent.cover})`)
-        .recent-content
-          a(href=`/articles/${recent.slug}`): h2.title #{recent.title}
-          p.author-date.h6 
-            span.author #{recent.author} &#8212;&nbsp;
-            span.date #{moment(recent.date.toISOString()).format('MMM, DD YYYY')}
-          p.preview !{truncate(recent.content.replace(/(<([^>]+)>)/ig,""), 300)}
+      +article-thumb(recent)
 block sidebar
   .row
     .col-md-12.col-sm-6

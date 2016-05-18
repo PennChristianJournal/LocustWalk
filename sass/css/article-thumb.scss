@@ -1,0 +1,41 @@
+@import '../mixins';
+@import '../variables';
+
+.article-thumb-block {
+  position: relative;
+  .thumb-aspect {
+    @include aspect-ratio(4, 3);
+    background-size: cover;
+    background-position: center center;
+  }
+  .thumb {
+    width: 30%;
+    margin-right: 15px;
+    float: left;
+  }
+  .article-thumb-content {
+    .title {
+      font-size: 24px;
+      margin: 0.1em 0em;
+    }
+    .author-date {
+      font-size: 16px;
+      margin: 0.1em 0em;
+    }
+    .preview {
+      overflow: hidden;
+    }
+  }
+  &:after {
+    zoom: 1;
+    display: table;
+    content: '';
+    line-height: 0;
+    clear: both;
+  }
+  & + .article-thumb-block {
+    border-top: 1px solid $base;
+    padding-top: 15px;
+    margin-top: 15px;
+  }
+}

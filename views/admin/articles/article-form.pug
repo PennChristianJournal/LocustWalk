@@ -36,6 +36,8 @@ block content
 
     .container
       h1.article-title.strong.editable-title #{article.title}
+      h4.article-author-date.thin #{article.author} &#8212; #{moment(article.date).format('MMM DD, YYYY')}
+      
       .article-content.editable-content !{article.content}
 
   br

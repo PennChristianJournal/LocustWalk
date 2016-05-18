@@ -2,8 +2,6 @@
   background-color: #f8f8f8; }
   .default-theme .h1, .default-theme h1, .default-theme .h2, .default-theme h2, .default-theme .h3, .default-theme .button, .default-theme input[type='button'], .default-theme h3, .default-theme .h4, .default-theme h4, .default-theme .h5, .default-theme h5, .default-theme .h6, .default-theme h6 {
     color: #222; }
-    .default-theme .h1 a, .default-theme h1 a, .default-theme .h2 a, .default-theme h2 a, .default-theme .h3 a, .default-theme .button a, .default-theme input[type='button'] a, .default-theme h3 a, .default-theme .h4 a, .default-theme h4 a, .default-theme .h5 a, .default-theme h5 a, .default-theme .h6 a, .default-theme h6 a {
-      color: inherit; }
   .default-theme a {
     color: #8193B5; }
     .default-theme a:hover {

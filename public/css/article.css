@@ -1,3 +1,23 @@
+@media (min-width: 1200px) {
+  .container-wide .container {
+    width: 1170px; } }
+
+@media (min-width: 992px) {
+  .container-wide .container {
+    width: 970px; } }
+
+@media (min-width: 768px) {
+  .container-wide .container {
+    width: 750px; } }
+
+.response-to {
+  font-style: italic; }
+  .response-to a {
+    color: #A95B61; }
+
+.article .article-content {
+  padding-bottom: 50px; }
+
 .article p {
   margin: 0; }
 
@@ -110,8 +130,14 @@
 .article .article-title {
   position: relative;
   padding: 20px;
+  padding-bottom: 0px;
   text-align: center;
   font-size: 3em; }
+
+.article .article-author-date {
+  position: relative;
+  text-align: center;
+  margin-bottom: 30px; }
 
 .article .article-content p {
   font-size: 18px;

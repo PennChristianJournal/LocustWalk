@@ -2,8 +2,6 @@
   background-color: #f8f8f8; }
   .default-theme .h1, .default-theme h1, .default-theme .h2, .default-theme h2, .default-theme .h3, .default-theme .button, .default-theme input[type='button'], .default-theme h3, .default-theme .h4, .default-theme h4, .default-theme .h5, .default-theme h5, .default-theme .h6, .default-theme h6 {
     color: #222; }
-    .default-theme .h1 a, .default-theme h1 a, .default-theme .h2 a, .default-theme h2 a, .default-theme .h3 a, .default-theme .button a, .default-theme input[type='button'] a, .default-theme h3 a, .default-theme .h4 a, .default-theme h4 a, .default-theme .h5 a, .default-theme h5 a, .default-theme .h6 a, .default-theme h6 a {
-      color: inherit; }
   .default-theme a {
     color: #8193B5; }
     .default-theme a:hover {
@@ -294,46 +292,6 @@
   .feature-nav i {
     padding: 15px;
     background-color: #f8f8f8; }
-
-.recent-block {
-  position: relative; }
-  .recent-block .thumb-aspect {
-    position: relative;
-    background-size: cover;
-    background-position: center center; }
-    .recent-block .thumb-aspect:before {
-      display: block;
-      content: " ";
-      width: 100%;
-      padding-top: 75%; }
-    .recent-block .thumb-aspect > .content {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0; }
-  .recent-block .thumb {
-    width: 30%;
-    margin-right: 15px;
-    float: left; }
-  .recent-block .recent-content .title {
-    font-size: 24px;
-    margin: 0.1em 0em; }
-  .recent-block .recent-content .author-date {
-    font-size: 16px;
-    margin: 0.1em 0em; }
-  .recent-block .recent-content .preview {
-    overflow: hidden; }
-  .recent-block:after {
-    zoom: 1;
-    display: table;
-    content: '';
-    line-height: 0;
-    clear: both; }
-  .recent-block + .recent-block {
-    border-top: 1px solid #f8f8f8;
-    padding-top: 15px;
-    margin-top: 15px; }
 
 #home-menu {
   float: left;
