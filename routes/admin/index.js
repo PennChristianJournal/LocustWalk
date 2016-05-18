@@ -7,8 +7,10 @@ module.exports = router
 
 require('./accounts')(router)
 
+var node_env = process.env.NODE_ENV || 'development'
+
 router.use('/', function (req, res, next) {
-  if (false && !req.isAuthenticated()) {
+  if (!req.isAuthenticated()) {
     return res.redirect('/admin/login')
   } else {
     return next()
