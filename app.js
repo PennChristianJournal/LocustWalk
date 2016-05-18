@@ -19,12 +19,14 @@ var app = module.exports = express()
 
 var config = require('./config.js')
 
-mongoose.set('debug', true);
+var node_env = process.env.NODE_ENV || 'development'
+
+mongoose.set('debug', node_env == 'development' ? true : false)
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'jade')
 app.set('port', process.env.PORT || 3000)
 
-app.use(logger('dev'))
+app.use(logger(node_env == 'development' ? 'dev' : 'common'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cookieParser())
@@ -35,7 +37,7 @@ app.use(sassMiddleware({
   src: __dirname + '/sass', 
   dest: __dirname + '/public',
   // outputStyle: 'compressed',
-  debug: false,       
+  debug: node_env == 'development',       
 })); 
 
 app.use(express.static(path.join(__dirname, '/public')))
