@@ -13,8 +13,8 @@ module.exports = {
       port: 465,
       secure: true, // use SSL
       auth: {
-        user: config.mail.email,
-        pass: config.mail.pass
+        user: config.setup.admin_email,
+        pass: config.setup.admin_pass
       }
     }))
 

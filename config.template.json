@@ -1,9 +1,8 @@
 {
-  "cookie_secret": "",
-  "admin_email": "",
-  "mail": {
-    "name": "",
-    "email": "",
-    "pass": ""
+  "setup": {
+    "cookie_secret": "",
+    "admin_name": "",
+    "admin_email": "",
+    "admin_pass": ""
   }
 }

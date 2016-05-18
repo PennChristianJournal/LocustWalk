@@ -30,7 +30,7 @@ app.use(logger(node_env == 'development' ? 'dev' : 'common'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cookieParser())
-app.use(session({secret: config.cookie_secret, saveUninitialized: true, resave: true}))
+app.use(session({secret: config.setup.cookie_secret, saveUninitialized: true, resave: true}))
 app.use(fileUpload())
 
 app.use(sassMiddleware({
@@ -63,36 +63,17 @@ app.get('/clearDB', function(req, res) {
   res.end()
 })
 
-var prompt = require('prompt')
-
 var createAdmin = function(cb) {
-  User.findOne({}, function(err, user) {
+  User.findOne({email: config.setup.admin_email}, function(err, user) {
     if (err) throw err
     if (!user) {
-      prompt.start()
-      prompt.get({
-        properties: {
-          admin_email: {
-            required: true
-          },
-          admin_username: {
-            required: true
-          },
-          admin_password: {
-            hidden: true,
-            required: true
-          }
-        }
-      }, function(err, result) {
-        if (err) throw err
-        User.create({
-          email: result.admin_email,
-          username: result.admin_username,
-          password: result.admin_password
-        }, function(err, user) {
-          if (err) throw err   
-          return cb()
-        })
+      User.create({
+        email: config.setup.admin_email,
+        username: config.setup.admin_name,
+        password: config.setup.admin_pass
+      }, function(err, user) {
+        if (err) throw err   
+        return cb()
       })
     } else {
       return cb()
