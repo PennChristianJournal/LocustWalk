@@ -100,7 +100,7 @@ var createAdmin = function(cb) {
   })
 }
 
-mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost:27017/locustwalk', function(err) {
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/locustwalk', function(err) {
   if (err) throw err
 
   createAdmin(function() {
