@@ -7,7 +7,7 @@ block head
 
   link(rel='stylesheet' href='/css/article.css')
   link(href='/css/article-thumb.css' rel='stylesheet' type='text/css')
-  title #{article.title}
+  title #{article.title} - Locust Walk
 
 block content
 
@@ -24,42 +24,22 @@ block content
         }
 
       div(style='margin-top: 80px')
-      //- img(src='/files/#{article.cover}')
 
-      //- .title-box.dark-theme
-      //-   img(src='/files/#{article.cover}')
-      //-   .title-bg        
-      //-     h1.article-title.strong #{article.title}
+    .container
 
-    .container.container-wide
-
-      .response-to
-        h2 In Response To:&nbsp;
-          a(href=`/articles/${article.slug}`) #{article.title}
+      if parent
+        .response-to
+          h2 In Response To:&nbsp;
+            a(href=`/articles/${parent.slug}`) #{parent.title}
 
       h1.article-title.strong #{article.title}
       h4.article-author-date.thin #{article.author} &#8212; #{moment(article.date).format('MMM DD, YYYY')}
 
       .article-content !{article.content}
-      
-      h1.strong Discussion
-      .discussion.tile.tile-vertical.gray-theme
-        
 
-        +article-thumb(article)
-        +article-thumb(article)
+      if responses && responses.length > 0
+        h1.strong Discussion
+        .discussion.tile.tile-vertical.gray-theme
+          each response, index in responses          
+            +article-thumb(response)
 
-      //- .row
-
-      //-   .col-lg-4
-      //-     .tile.tile-vertical.blue-theme
-      //-       h2.strong In Response To:
-
-      //-   .col-lg-8
-          
-
-          
-
-        //- .col-lg-4
-          .tile.tile-vertical.red-theme
-            h2.strong Responses

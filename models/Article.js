@@ -40,6 +40,10 @@ var Schema = mongoose.Schema({
   pending_attachments: [String],
   cover: String,
   thumb: String, 
+  parent: {
+    type: mongoose.Schema.Types.ObjectId,
+    index: true
+  }
 }, {
   timestamps: true
 })

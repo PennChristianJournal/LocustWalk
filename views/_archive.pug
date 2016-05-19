@@ -2,4 +2,4 @@ h2.strong: a(href='/archive') Archive
 
 each feature, index in features
   ul.clean
-    li: a(href=`/feature/${feature.slug}`) #{moment(feature.date).format('MMM YYYY')}
+    li: a(href=`/articles/${feature.slug}`) #{moment(feature.date).format('MMM YYYY')}

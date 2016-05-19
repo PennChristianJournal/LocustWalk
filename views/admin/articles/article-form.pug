@@ -1,10 +1,14 @@
 extends ../_layout.pug
+include ../../_mixins
 
 block head
   link(rel="stylesheet" href="/bower_components/medium-editor/dist/css/medium-editor.min.css" type="text/css" media="screen" charset="utf-8")
   link(rel="stylesheet" href="/bower_components/medium-editor/dist/css/themes/default.css")
   link(rel="stylesheet" href="/bower_components/medium-editor-insert-plugin/dist/css/medium-editor-insert-plugin.min.css")
   link(rel='stylesheet' href='/css/article.css')
+  link(href='/css/article-thumb.css' rel='stylesheet' type='text/css')
+
+  title Editing - #{article.title}
 
   style.
     .medium-editor-insert-plugin.medium-editor-placeholder:after {
@@ -35,10 +39,22 @@ block content
       .nav-mask-bg
 
     .container
+
+      if parent
+        .response-to
+          h2 In Response To:&nbsp;
+            a(href=`/articles/${parent.slug}`) #{parent.title}
+
       h1.article-title.strong.editable-title #{article.title}
       h4.article-author-date.thin #{article.author} &#8212; #{moment(article.date).format('MMM DD, YYYY')}
-      
+
       .article-content.editable-content !{article.content}
+
+      if responses && responses.length > 0
+        h1.strong Discussion
+        .discussion.tile.tile-vertical.gray-theme
+          each response, index in responses          
+            +article-thumb(response)
 
   br
   br
@@ -59,7 +75,14 @@ block content
       .form-group
         label Slug
         input.form-control(type='text' name='slug' placeholder='article-title (leave blank for automatic)' value=article.slug)
-      
+
+      .form-group
+        label Response To
+        if article.parent
+          input.form-control(type='text' name='parent' placeholder='Article ID' value=article.parent.toString())
+        else
+          input.form-control(type='text' name='parent' placeholder='Article ID')
+
       .form-group
         .checkbox
           label.checkbox-inline

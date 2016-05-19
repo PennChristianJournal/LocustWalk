@@ -79,10 +79,31 @@ router.get('/:id/edit', function(req, res) {
     })
 
     async.parallel(funcs, function(err, results) {
-      res.render('admin/articles/article-form', {
-        error: err,
-        article: article
-      }) 
+      async.parallel([
+        (cb) => {
+          Article.findOne({
+            _id: article.parent,
+            is_published: true
+          }, (err, parent) => {
+            return cb(err, parent)
+          })
+        },
+        (cb) => {
+          Article.find({
+            parent: req.params.id,
+            is_published: true
+          }, (err, responses) => {
+            return cb(err, responses)
+          })
+        }
+      ], (err, results) => {
+        res.render('admin/articles/article-form', {
+          error: err,
+          article: article,
+          parent: results[0],
+          responses: results[1]
+        })
+      })
     })
   })
 })
@@ -174,6 +195,7 @@ router.post('/:id/edit', function(req, res) {
     article.is_featured = req.body.is_featured ? true : false
     article.is_published = req.body.is_published ? true : false
     article.pending_attachments = []
+    article.parent = req.body.parent ? req.body.parent : null
     if (!article.is_published) {
       article.date = null
     } else if (!article.date) {

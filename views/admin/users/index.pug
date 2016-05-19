@@ -29,4 +29,4 @@ block content
         td
           .btn-group
             //- a.btn.btn-xs.btn-default(href='users/#{user._id}/edit') Edit 
-            a.btn.btn-xs.btn-danger(href='#' onclick='deleteUser("#{user.username}", "#{user._id}")') Delete
+            a.btn.btn-xs.btn-danger(href='#' onclick=`deleteUser("${user.username}", "${user._id}")`) Delete
