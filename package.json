@@ -29,6 +29,7 @@
     "flash": "^1.1.0",
     "gridfs-stream": "^1.1.1",
     "medium-editor-insert-plugin": "^2.3.2",
+    "mkdirp": "^0.5.1",
     "moment": "^2.13.0",
     "mongodb": "^2.1.16",
     "mongoose": "^4.4.12",

@@ -6,6 +6,7 @@ var Files = require(__root + 'models/Files')
 var Article = require(__root + 'models/Article')
 var async = require('async')
 var fs = require('fs')
+var mkdirp = require('mkdirp')
 
 module.exports = router;
 
@@ -22,8 +23,11 @@ router.get('/files/:id', function(req, res, next) {
         if (err) console.log(err)
         if (file) {
           process.nextTick(function() {
-            var wstream = fs.createWriteStream(assetPath)
-            stream.pipe(wstream)
+            mkdirp(__root + 'public/files', function(err) {
+              if (err) console.log(err)
+              var wstream = fs.createWriteStream(assetPath)
+              stream.pipe(wstream)
+            })
           })
           res.writeHead(200, {'Content-Type': file.contentType })
           stream.pipe(res)
