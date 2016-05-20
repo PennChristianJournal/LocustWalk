@@ -34,10 +34,12 @@ block top
                 +featured_article(feature, true)
             .feature-response
               .feature-response-aspect: .content
-                +featured_article(feature, false)
+                if feature.responses && feature.responses[0]
+                  +featured_article(feature.responses[0], false)
             .feature-response
               .feature-response-aspect: .content
-                +featured_article(feature, false)
+                if feature.responses && feature.responses[1]
+                  +featured_article(feature.responses[1], false)
     .feature-nav
       a#feature-left(href='#'): i.fa.fa-chevron-left
       a#feature-right(href='#'): i.fa.fa-chevron-right
@@ -60,7 +62,7 @@ block sidebar
         include _archive
 
 block bottom
-  div bottom
+  //- div bottom
 
 block append footer
   script.

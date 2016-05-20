@@ -61,6 +61,10 @@ body {
   }
 }
 
+ul.navbar-nav.clean > li + li {
+  margin: 0;
+}
+
 .navbar-toggle {
   margin-top: 0px;
 }
