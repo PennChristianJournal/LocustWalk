@@ -60,47 +60,9 @@ app.locals.truncate = function(text, length) {
 
 global.__root = __dirname + '/';
 
-app.use('/', require('./routes'))
-
-
-/*app.get('/clearDB', function(req, res) {
-  mongoose.connection.db.dropDatabase()
-  res.end()
-})*/
-
-var createAdmin = function(cb) {
-  User.findOne({email: config.setup.admin_email}, function(err, user) {
-    if (err) throw err
-    if (!user) {
-      User.create({
-        email: config.setup.admin_email,
-        username: config.setup.admin_name,
-        password: config.setup.admin_pass
-      }, function(err, user) {
-        if (err) throw err   
-        return cb()
-      })
-    } else {
-      return cb()
-    }
-  })
-}
-
-var fakery = require('mongoose-fakery')
-
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/locustwalk', function(err) {
-  if (err) throw err
-
-  createAdmin(function() {
-    // require('./email/mailer').init(function() {
-      http.createServer(app).listen(app.get('port'), function(){
-        console.log("Express server listening on port " + app.get('port'))
-      })
-    // })
-  })
-
-
+app.get('/seedDB', (req, res, next) => {
   if (node_env == 'development') {
+    res.end()
     mongoose.connection.db.dropDatabase()
 
     fakery.generator('article_content', num_para => {
@@ -209,7 +171,48 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/locustwal
         if (err) console.log(err)
       })
     })
+  } else {
+    next()
   }
-  
+})
+
+app.use('/', require('./routes'))
+
+
+/*app.get('/clearDB', function(req, res) {
+  mongoose.connection.db.dropDatabase()
+  res.end()
+})*/
+
+var createAdmin = function(cb) {
+  User.findOne({email: config.setup.admin_email}, function(err, user) {
+    if (err) throw err
+    if (!user) {
+      User.create({
+        email: config.setup.admin_email,
+        username: config.setup.admin_name,
+        password: config.setup.admin_pass
+      }, function(err, user) {
+        if (err) throw err   
+        return cb()
+      })
+    } else {
+      return cb()
+    }
+  })
+}
+
+var fakery = require('mongoose-fakery')
+
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/locustwalk', function(err) {
+  if (err) throw err
+
+  createAdmin(function() {
+    // require('./email/mailer').init(function() {
+      http.createServer(app).listen(app.get('port'), function(){
+        console.log("Express server listening on port " + app.get('port'))
+      })
+    // })
+  })  
 })
 
