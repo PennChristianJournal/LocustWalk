@@ -91,6 +91,15 @@ var fakery = require('mongoose-fakery')
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/locustwalk', function(err) {
   if (err) throw err
 
+  createAdmin(function() {
+    // require('./email/mailer').init(function() {
+      http.createServer(app).listen(app.get('port'), function(){
+        console.log("Express server listening on port " + app.get('port'))
+      })
+    // })
+  })
+
+
   if (node_env == 'development') {
     mongoose.connection.db.dropDatabase()
 
@@ -201,14 +210,6 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/locustwal
       })
     })
   }
-
-  createAdmin(function() {
-    // require('./email/mailer').init(function() {
-      http.createServer(app).listen(app.get('port'), function(){
-        console.log("Express server listening on port " + app.get('port'))
-      })
-    // })
-  })
   
 })
 
