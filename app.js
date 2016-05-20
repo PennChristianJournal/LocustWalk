@@ -165,7 +165,7 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/locustwal
 
     var funcs = []
     var base_date = new Date()
-    for (let i = 0; i < 24; i++) {
+    for (let i = 0; i < 16; i++) {
       let date = new Date(base_date)
       date.setMonth(base_date.getMonth() - i)
       funcs.push(cb => {
@@ -184,7 +184,7 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/locustwal
     async.parallel(funcs, (err, results) => {
       console.log('Done creating feature articles')
       var resp_funcs = []
-      for (var ri = 0; ri < 5*results.length; ri++) {
+      for (var ri = 0; ri < 3*results.length; ri++) {
         let parentI = parseInt(Math.random()*results.length)
         let parent = results[parentI]
         let date = new Date(base_date)
