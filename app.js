@@ -27,6 +27,11 @@ var config = require('./config.js')
 var node_env = process.env.NODE_ENV || 'development'
 
 mongoose.set('debug', node_env == 'development' ? true : false)
+require('mongoose-cache').install(mongoose, {
+  max:50,
+  maxAge:1000*60*2
+})
+
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'pug')
 app.set('port', process.env.PORT || 3000)

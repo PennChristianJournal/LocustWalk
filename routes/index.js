@@ -50,6 +50,7 @@ router.get('/', function(req, res) {
       })
       .sort({'date': -1})
       .limit(12)
+      .cache()
       .exec(function(err, features) {
 
         if (err) console.log(err)
@@ -63,6 +64,7 @@ router.get('/', function(req, res) {
             })
             .sort({'date': -1})
             .limit(2)
+            .cache()
             .exec((err, responses) => {
               if (err) console.log(err)
               // recent_responses[i] = responses
@@ -89,6 +91,7 @@ router.get('/', function(req, res) {
       })
       .sort({'date': -1})
       .limit(20)
+      .cache()
       .exec((err, recents) => {
         cb(err, recents)
       })
@@ -99,43 +102,6 @@ router.get('/', function(req, res) {
       features: results[0],
       recents: results[1]
     })  
-  })
-})
-
-router.get('/', (req, res) => {
-  Article.find({
-    is_featured: true,
-    is_published: true
-  })
-  .sort({'date': -1})
-  .limit(12)
-  .exec((err, features) => {
-    if (err) console.log(err)
-    var funcs = []
-    var recent_responses = []
-    for (let i = 0; i < features.length; i++) {
-      funcs.push(cb => {
-        Article.find({
-          is_published: true,
-          parent: features[i]._id
-        })
-        .sort({'date': -1})
-        .limit(2)
-        .exec((err, responses) => {
-          if (err) console.log(err)
-          recent_responses[i] = responses
-          cb(err, responses)
-        })
-      })
-    }
-
-    async.parallel(recent_responses, (err, results) => {
-      if (err) console.log(err)
-      res.render(req.params.page, {
-        features: features,
-        responses: recent_responses
-      })
-    })
   })
 })
 

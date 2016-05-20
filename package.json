@@ -33,6 +33,7 @@
     "moment": "^2.13.0",
     "mongodb": "^2.1.16",
     "mongoose": "^4.4.12",
+    "mongoose-cache": "^0.1.4",
     "mongoose-fakery": "^0.1.7",
     "morgan": "^1.7.0",
     "node-sass-middleware": "^0.9.8",
