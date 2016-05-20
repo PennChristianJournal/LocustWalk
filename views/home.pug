@@ -3,9 +3,9 @@ include ./_mixins
 
 mixin featured_article(feature, ismain)
   a(href=`/articles/${feature.slug}`)
-    .bg-img(style='background-image: url(/files/' + feature.cover + ')')
+    .bg-img(style='background-image: url(/files/' + feature.thumb + ')')
     .title-box
-      .title-bg(style='background-image: url(/files/' + feature.cover + ')')
+      .title-bg(style='background-image: url(/files/' + feature.thumb + ')')
       .title-bg-darken
       .title-content
         h2.title #{feature.title}

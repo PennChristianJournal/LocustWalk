@@ -106,6 +106,9 @@ ul.list {
       position: absolute;
       left: -20px; }
 
+ul.clean li + li {
+  margin-top: 5px; }
+
 .tile {
   padding: 30px;
   margin: 0px; }

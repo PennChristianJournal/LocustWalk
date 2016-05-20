@@ -10,6 +10,28 @@ conn.once('open', function() {
 })
 
 module.exports = {
+  fromStream: function(stream, options, cb) {
+    var writestream = gfs.createWriteStream({
+      filename: options.name,
+      content_type: options.mimetype
+    })
+    stream.pipe(writestream)
+    writestream.on('close', function(upload) {
+      return cb(null, upload)
+    })
+  },
+
+  makeWriteStream: function(options, cb) {
+    var writestream = gfs.createWriteStream({
+      filename: options.name,
+      content_type: options.mimetype
+    })
+    writestream.on('close', function(upload) {
+      return cb(null, upload)
+    })
+    return writestream
+  },
+
   fromUpload: function(file, cb) {
     var writestream = gfs.createWriteStream({
       filename: file.name,

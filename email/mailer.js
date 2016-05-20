@@ -45,6 +45,7 @@ module.exports = {
   },*/
 
   sendPasswordResetEmail: function(message, done) {
+    return done();
     var mailOptions = {
       from: "\"" + config.mail.name + "\"" + "<" + config.mail.email + ">",
       to: message.email,
