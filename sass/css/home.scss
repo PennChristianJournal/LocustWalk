@@ -214,6 +214,31 @@ $num-features: 12;
   }
 }
 
+.featured {
+  @media(max-width: 767px) {
+    .title {
+      font-size: 18px;
+    }
+    .author-date {
+      font-size: 14px;
+    }
+    .preview {
+      display: none;
+    }
+  }
+}
+
+.feature-response {
+  @media(max-width: 767px) {
+    .title {
+      font-size: 16px;
+    }
+    .author-date {
+      font-size: 12px;
+    }
+  }
+}
+
 .feature-nav {
    position: absolute;
    top: 0;
@@ -347,5 +372,11 @@ $num-features: 12;
     text-transform: uppercase;
     float: right;
     font-style: italic;
+  }
+}
+
+@media(max-width: 767px) {
+  #top {
+    padding: 0px;
   }
 }

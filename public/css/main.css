@@ -210,6 +210,25 @@ nav {
 body {
   margin-top: 130px; }
 
+.navbar-toggle {
+  margin-top: 0px; }
+
+@media (max-width: 767px) {
+  nav {
+    padding-top: 40px; }
+    nav .navbar-brand {
+      padding: 0px; }
+      nav .navbar-brand img {
+        height: 90px;
+        position: relative;
+        top: -40px;
+        margin-top: 4px; }
+  body {
+    margin-top: 100px; }
+  .navbar-toggle {
+    margin-top: 10px;
+    margin-bottom: 0px; } }
+
 .anchor {
   display: block;
   position: relative;
@@ -240,6 +259,3 @@ body {
 
 ul.navbar-nav.clean > li + li {
   margin: 0; }
-
-.navbar-toggle {
-  margin-top: 0px; }

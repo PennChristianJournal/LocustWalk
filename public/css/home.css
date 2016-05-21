@@ -285,6 +285,20 @@
 .feature-response .title {
   font-size: 20px; }
 
+@media (max-width: 767px) {
+  .featured .title {
+    font-size: 18px; }
+  .featured .author-date {
+    font-size: 14px; }
+  .featured .preview {
+    display: none; } }
+
+@media (max-width: 767px) {
+  .feature-response .title {
+    font-size: 16px; }
+  .feature-response .author-date {
+    font-size: 12px; } }
+
 .feature-nav {
   position: absolute;
   top: 0;
@@ -385,3 +399,7 @@
     text-transform: uppercase;
     float: right;
     font-style: italic; }
+
+@media (max-width: 767px) {
+  #top {
+    padding: 0px; } }

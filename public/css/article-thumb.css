@@ -35,5 +35,14 @@
     clear: both; }
   .article-thumb-block + .article-thumb-block {
     border-top: 1px solid #f8f8f8;
-    padding-top: 15px;
-    margin-top: 15px; }
+    padding-top: 20px;
+    margin-top: 20px; }
+  @media (max-width: 767px) {
+    .article-thumb-block .article-thumb-content .title {
+      font-size: 20px; }
+    .article-thumb-block .article-thumb-content .author-date {
+      font-size: 14px; }
+    .article-thumb-block .thumb {
+      width: 100%;
+      margin-right: 0px;
+      margin-bottom: 15px; } }

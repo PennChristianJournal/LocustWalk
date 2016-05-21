@@ -35,7 +35,23 @@
   }
   & + .article-thumb-block {
     border-top: 1px solid $base;
-    padding-top: 15px;
-    margin-top: 15px;
+    padding-top: 20px;
+    margin-top: 20px;
+  }
+
+  @media(max-width: 767px) {
+    .article-thumb-content {
+      .title {
+        font-size: 20px;
+      }
+      .author-date {
+        font-size: 14px;
+      }
+    }
+    .thumb {
+      width: 100%;
+      margin-right: 0px;
+      margin-bottom: 15px;
+    }
   }
 }

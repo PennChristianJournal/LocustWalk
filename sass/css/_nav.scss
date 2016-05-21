@@ -1,24 +1,42 @@
 
 $nav-img-height: 120px;
 
-nav {
-  padding-top: $nav-img-height - 50px;
-  .navbar-brand {
-    padding: 0px;
-    img {
-      height: $nav-img-height;
-      position: relative;
-      top: 50px - $nav-img-height;
-      margin-top: 4px;
+@mixin nav-mixin($ht) {
+  nav {
+    padding-top: $ht - 50px;
+    .navbar-brand {
+      padding: 0px;
+      img {
+        height: $ht;
+        position: relative;
+        top: 50px - $ht;
+        margin-top: 4px;
+      }
+    }
+    & + .container {
+      // margin-top: $ht + 10px;
     }
   }
-  & + .container {
-    // margin-top: $nav-img-height + 10px;
+  body {
+    margin-top: $ht + 10px;
+  }
+}
+
+@include nav-mixin(120px);
+.navbar-toggle {
+  margin-top: 0px;
+}
+
+@media(max-width: 767px) {
+  @include nav-mixin(90px);
+  .navbar-toggle {
+    margin-top: 10px;
+    margin-bottom: 0px;
   }
 }
 
 body {
-  margin-top: $nav-img-height + 10px;
+  // margin-top: $nav-img-height + 10px;
 }
 
 .anchor {
@@ -63,8 +81,4 @@ body {
 
 ul.navbar-nav.clean > li + li {
   margin: 0;
-}
-
-.navbar-toggle {
-  margin-top: 0px;
 }
