@@ -55,12 +55,14 @@ app.use(passport.initialize())
 app.use(passport.session())
 app.use(flash())
 
+app.locals.root = config.setup.root
 app.locals.moment = require('moment')
-app.locals.truncate = function(text, length) {
+app.locals.truncate = (text, length, noelipsis) => {
   if (text.length < length) return text;
   text = text.substring(0, length)
   var idx = text.lastIndexOf(' ')
-  return text.substring(0, idx) + '...'
+  var str = text.substring(0, idx)
+  return noelipsis ? str  : str + '...'
 }
 
 global.__root = __dirname + '/';

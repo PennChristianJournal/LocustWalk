@@ -1,6 +1,22 @@
 extends ../_layout.pug
 include ../_mixins
 
+block meta
+  meta(property='og:url' content=`${root}/articles/${article._id}`)
+  meta(property='twitter:url' content=`${root}/articles/${article._id}`)
+
+  meta(property='og:title' content=article.title) 
+  meta(property='twitter:title' content=article.title) 
+  
+  meta(property='description' content=truncate(article.content.replace(/(<([^>]+)>)/ig,""), 160, true))
+  meta(property='og:description' content=truncate(article.content.replace(/(<([^>]+)>)/ig,""), 300, true))
+  meta(property='twitter:description' content=truncate(article.content.replace(/(<([^>]+)>)/ig,""), 140, true))
+
+  meta(property='og:site_name' content='Penn Christian Journal')
+  
+  meta(property='og:image' content=`${root}/files/${article.thumb}`)
+  meta(property='twitter:image' content=`${root}/files/${article.thumb}`)  
+
 block head
   link(rel="stylesheet" href="/bower_components/medium-editor/dist/css/themes/default.css")
   link(rel="stylesheet" href="/bower_components/medium-editor-insert-plugin/dist/css/medium-editor-insert-plugin.min.css")
