@@ -11,7 +11,8 @@ var Schema = mongoose.Schema({
   },
   is_published: {
     type: Boolean,
-    default: false
+    default: false,
+    index: true
   },
   is_featured: {
     type: Boolean,
@@ -20,6 +21,7 @@ var Schema = mongoose.Schema({
   },
   date: {
     type: Date,
+    index: true
   },
   author: String,
   content: {
