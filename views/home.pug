@@ -43,10 +43,11 @@ block append head
 block top
   .featured-view
     .featured-wrapper#feature-slide
+      - var dup = new dup_date()
       each feature, index in features
         .featured-block
           .feature-month-bar
-            h2.strong.feature-month #{moment(feature.date.toISOString()).format('MMM YYYY')}
+            h2.strong.feature-month #{dup.handle(moment(feature.date.toISOString()).format('MMM YYYY'))}
           .featured-block-aspect: .content
             if !feature.responses || feature.responses.length < 2
               .featured(style='width:100%')
@@ -68,6 +69,7 @@ block top
                 .feature-response-aspect: .content
                   if feature.responses && feature.responses[1]
                     +featured_article(feature.responses[1], false)
+      - var first_count = dup.first_count()
     .feature-nav
       a#feature-left(href='#'): i.fa.fa-chevron-left
       a#feature-right(href='#'): i.fa.fa-chevron-right
@@ -101,7 +103,10 @@ block append footer
       var rBtn = document.getElementById('feature-right');
       var slide = document.getElementById('feature-slide');
 
+      var autoscroll = true
+
       lBtn.onclick = function() {
+        autoscroll = false
         if (featureIdx > 0) {
           featureIdx -= 1  
           slide.style.left = featureIdx * -100 + '%'
@@ -109,9 +114,23 @@ block append footer
       }
 
       rBtn.onclick = function() {
+        autoscroll = false
         if (featureIdx < maxFeatures - 1) {
           featureIdx += 1
           slide.style.left = featureIdx * -100 + '%'
         }
       }
+
+      if (#{first_count} > 1) {
+        var interval = setInterval(function() {
+          if (autoscroll) {
+            featureIdx += 1
+            if (featureIdx >= #{first_count}) featureIdx = 0
+            slide.style.left = featureIdx * -100 + '%'
+          } else {
+            clearInterval(interval)
+          }
+        }, 5000)
+      }
+
     })()

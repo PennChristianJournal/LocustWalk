@@ -1,0 +1,83 @@
+extends ./_split-layout.pug
+
+block meta
+  meta(property='og:url' content=`${root}/staff`)
+  meta(property='twitter:url' content=`${root}/staff`)
+
+  meta(property='og:title' content='Staff - Locust Walk') 
+  meta(property='twitter:title' content='Staff - Locust Walk') 
+  
+  meta(property='description' content=truncate('Locust Walk Staff', 160, true))
+  meta(property='og:description' content='Locust Walk Staff')
+  meta(property='twitter:description' content=truncate('Locust Walk Staff', 140, true))
+
+  meta(property='og:site_name' content='Penn Christian Journal')
+  
+  meta(property='og:image' content=`${root}/img/social-share.png`) 
+  meta(property='og:image:width' content='1280')
+  meta(property='og:image:height' content='667')
+  meta(property='twitter:image' content=`${root}/img/social-share.png`) 
+  meta(property='twitter:image:width' content='1280')
+  meta(property='twitter:image:height' content='667')  
+
+block main
+  .row
+    .col-md-12
+      .tile.tile-vertical.white-theme
+        h2.strong Staff
+        table
+          tr
+            th Name
+            th Fellowship
+            th Position
+            th Email Address
+          tr
+            td Esther Jou
+            td GCC
+            td Editor-in-Chief
+            td jouest@sas.upenn.edu
+          tr
+            td Patricia Jia 
+            td GCC
+            td Associate Editor 
+            td patjia@sas.upenn.edu
+          tr
+            td Philip Jung
+            td P4J/GCC
+            td Associate Editor
+            td juji@sas.upenn.edu
+          tr
+            td Wendy Zhou 
+            td GCC
+            td Communications Chair 
+            td hongyuz@sas.upenn.edu
+          tr
+            td Michael Ruan 
+            td GCC
+            td Business Manager
+            td mruan@wharton.upenn.edu
+          tr
+            td Sarah Tang 
+            td GCC
+            td Design Editor
+            td sartang@sas.upenn.edu
+          tr
+            td Austin Eng 
+            td GCC
+            td Webmaster
+            td aen@seas.upenn.edu
+
+    .col-md-12
+      .tile.tile-vertical.gray-theme
+        include _donate
+
+block sidebar
+  .row
+    .col-md-12.col-sm-6
+      .tile.tile-vertical.red-theme
+        include _sisters
+
+    .col-md-12.col-sm-6
+      .tile.tile-vertical.gray-theme
+        include _archive
+  

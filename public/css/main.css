@@ -197,6 +197,9 @@ hr {
 p {
   margin-top: 10px; }
 
+th, td {
+  padding: 5px 10px; }
+
 nav {
   padding-top: 70px; }
   nav .navbar-brand {
@@ -228,6 +231,10 @@ body {
   .navbar-toggle {
     margin-top: 10px;
     margin-bottom: 0px; } }
+
+@media (max-width: 991px) {
+  .navbar-nav > li > a {
+    padding: 10px 10px; } }
 
 .anchor {
   display: block;

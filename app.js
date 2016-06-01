@@ -15,6 +15,7 @@ var async = require('async')
 var request = require('request')
 var fs = require('fs')
 var mkdirp = require('mkdirp')
+const favicon = require('serve-favicon')
 
 var User = require('./models/User')
 var Files = require('./models/Files')
@@ -50,6 +51,7 @@ app.use(sassMiddleware({
   debug: node_env == 'development',       
 })); 
 
+app.use(favicon(__dirname + '/public/img/favicon.ico'))
 app.use(express.static(path.join(__dirname, '/public')))
 app.use(passport.initialize())
 app.use(passport.session())
@@ -65,7 +67,66 @@ app.locals.truncate = (text, length, noelipsis) => {
   return noelipsis ? str  : str + '...'
 }
 
+let duplicate_date_map = {}
+app.locals.duplicate_date = {
+
+  handle: function(str) {
+    if (duplicate_date_map[str]) {
+      duplicate_date_map[str] += 1
+      return str + ' #' + duplicate_date_map[str]
+    } else {
+      duplicate_date_map[str] = 1
+      return str
+    }
+  },
+
+  clear: function() {
+    duplicate_date_map = {}
+    return ''
+  }
+}
+
+app.locals.dup_date = function() {
+  let map = {}
+
+  let first_count = 0
+  let should_count = true
+  let self = this
+
+  this.first_count = function() {
+    return first_count
+  }
+
+  this.handle = function(str) {
+    if (map[str]) {
+      if (should_count) {
+        first_count += 1        
+      }
+
+      map[str] += 1
+      return str + ' #' + map[str]
+    } else {
+      if (first_count != 0) {
+        should_count = false
+      } else {
+        first_count = 1
+      }
+      map[str] = 1
+      return str 
+    }
+  }
+}
+
 global.__root = __dirname + '/';
+
+app.get('/clearDB', (req, res, next) => {
+  if (node_env == 'development') {
+    res.end()
+    mongoose.connection.db.dropDatabase()
+  } else {
+    next()
+  }
+})
 
 app.get('/seedDB', (req, res, next) => {
   if (node_env == 'development') {
@@ -185,12 +246,6 @@ app.get('/seedDB', (req, res, next) => {
 
 app.use('/', require('./routes'))
 
-
-/*app.get('/clearDB', function(req, res) {
-  mongoose.connection.db.dropDatabase()
-  res.end()
-})*/
-
 var createAdmin = function(cb) {
   User.findOne({email: config.setup.admin_email}, function(err, user) {
     if (err) throw err
@@ -213,7 +268,7 @@ var fakery = require('mongoose-fakery')
 
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/locustwalk', function(err) {
   if (err) throw err
-
+  console.log('Connected to database')
   createAdmin(function() {
     // require('./email/mailer').init(function() {
       http.createServer(app).listen(app.get('port'), function(){

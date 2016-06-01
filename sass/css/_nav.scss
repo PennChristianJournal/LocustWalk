@@ -35,6 +35,12 @@ $nav-img-height: 120px;
   }
 }
 
+@media(max-width: 991px) {
+  .navbar-nav>li>a {
+    padding: 10px 10px;
+  }
+}
+
 body {
   // margin-top: $nav-img-height + 10px;
 }

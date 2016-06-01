@@ -44,6 +44,7 @@
     "passport-local": "^1.0.0",
     "pug": "^2.0.0-alpha7",
     "request": "^2.72.0",
+    "serve-favicon": "^2.3.0",
     "slugs": "^0.1.3"
   }
 }

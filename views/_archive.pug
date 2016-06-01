@@ -1,7 +1,8 @@
 h2.strong: a(href='/archive') Archive
 
 ul.clean
+  - var dup = new dup_date()
   each feature, index in features
-    li: a(href=`/articles/${feature.slug}`) #{moment(feature.date).format('MMM YYYY')}
+    li: a(href=`/articles/${feature.slug}`) #{dup.handle(moment(feature.date).format('MMM YYYY'))}
   //- br
   //- li: a(href='/archive') &#8212; See more
