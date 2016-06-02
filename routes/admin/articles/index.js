@@ -196,6 +196,7 @@ router.post('/:id/edit', function(req, res) {
     article.is_published = req.body.is_published ? true : false
     article.pending_attachments = []
     article.parent = req.body.parent ? req.body.parent : null
+    article.heading_override = req.body.heading_override ? req.body.heading_override : ''
     if (!article.is_published) {
       article.date = null
     } else if (!article.date) {

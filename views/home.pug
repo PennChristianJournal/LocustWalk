@@ -47,7 +47,11 @@ block top
       each feature, index in features
         .featured-block
           .feature-month-bar
-            h2.strong.feature-month #{dup.handle(moment(feature.date.toISOString()).format('MMM YYYY'))}
+            - var featureHeading = dup.handle(moment(feature.date.toISOString()).format('MMM YYYY'))
+            if (feature.heading_override && feature.heading_override.length > 0)
+              h2.strong.feature-month #{feature.heading_override}
+            else
+              h2.strong.feature-month #{featureHeading}
           .featured-block-aspect: .content
             if !feature.responses || feature.responses.length < 2
               .featured(style='width:100%')

@@ -3,6 +3,10 @@ h2.strong: a(href='/archive') Archive
 ul.clean
   - var dup = new dup_date()
   each feature, index in features
-    li: a(href=`/articles/${feature.slug}`) #{dup.handle(moment(feature.date).format('MMM YYYY'))}
+    - var heading = dup.handle(moment(feature.date).format('MMM YYYY'))
+    if (feature.heading_override && feature.heading_override.length > 0)
+      li: a(href=`/articles/${feature.slug}`) #{feature.heading_override}
+    else
+      li: a(href=`/articles/${feature.slug}`) #{heading}
   //- br
   //- li: a(href='/archive') &#8212; See more

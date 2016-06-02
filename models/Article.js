@@ -32,6 +32,10 @@ var Schema = mongoose.Schema({
       display: 'e'
     }
   },
+  heading_override: {
+    type: String,
+    default: ''
+  },
   slug: {
     type: String,
     index: {

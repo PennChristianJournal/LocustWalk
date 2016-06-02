@@ -111,6 +111,10 @@ block content
         else
           input#date-field(type='hidden' name='date' value='#{article.date}')
 
+      .form-group
+        label Heading Override
+        input.form-control(type='text' name='heading_override' placeholder='Jun 2016 Special Feature (leave blank for automatic' value=article.heading_override)
+
       button.btn.btn-primary(type='submit') Save
       
 

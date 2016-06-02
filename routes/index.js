@@ -52,7 +52,7 @@ router.get('/', function(req, res) {
       .limit(12)
       .cache()
       .exec(function(err, features) {
-
+        console.log(features)
         if (err) console.log(err)
         var funcs = []
         var recent_responses = []
