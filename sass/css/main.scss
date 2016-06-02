@@ -111,4 +111,12 @@ th, td {
   padding: 5px 10px;
 }
 
+.tile {
+  .logo {
+    width: 50px;
+    margin-top: 10px;
+    margin-right: 10px;
+  }
+}
+
 @import 'nav';
