@@ -23,7 +23,7 @@ block head
 
   link(rel='stylesheet' href='/css/article.css')
   link(href='/css/article-thumb.css' rel='stylesheet' type='text/css')
-  title #{article.title} - Locust Walk
+  title !{article.title} - Locust Walk
 
 block content
 
@@ -46,9 +46,9 @@ block content
       if parent
         .response-to
           h2 In Response To:&nbsp;
-            a(href=`/articles/${parent.slug}`) #{parent.title}
+            a(href=`/articles/${parent.slug}`) !{parent.title}
 
-      h1.article-title.strong #{article.title}
+      h1.article-title.strong !{article.title}
       h4.article-author-date.thin #{article.author} &#8212; #{moment(article.date).format('MMM DD, YYYY')}
 
       .article-content !{article.content}

@@ -8,7 +8,7 @@ block head
   link(rel='stylesheet' href='/css/article.css')
   link(href='/css/article-thumb.css' rel='stylesheet' type='text/css')
 
-  title Editing - #{article.title}
+  title Editing - !{article.title}
 
   style.
     .medium-editor-insert-plugin.medium-editor-placeholder:after {
@@ -43,9 +43,9 @@ block content
       if parent
         .response-to
           h2 In Response To:&nbsp;
-            a(href=`/articles/${parent.slug}`) #{parent.title}
+            a(href=`/articles/${parent.slug}`) !{parent.title}
 
-      h1.article-title.strong.editable-title #{article.title}
+      h1.article-title.strong.editable-title !{article.title}
       h4.article-author-date.thin #{article.author} &#8212; #{moment(article.date).format('MMM DD, YYYY')}
 
       .article-content.editable-content !{article.content}
@@ -144,7 +144,7 @@ block footer
         hideOnClick: false
       },
       toolbar: {
-        buttons: ['bold', 'italic', 'underline', 'anchor', 'h2', 'h3', 'quote', 'superscript'],
+        buttons: ['bold', 'italic', 'underline', 'anchor', 'h2', 'h3', 'quote', 'superscript', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
       }
     })
 

@@ -42,7 +42,7 @@ block content
         td(style='position: relative')
           if article.is_featured
             i.fa.fa-star(style='position: absolute; left: -10px; top: 10px')
-          a(href=`/admin/articles/${article._id}/edit`) #{article.title}
+          a(href=`/admin/articles/${article._id}/edit`) !{article.title}
         
         td 
           if article.is_published
