@@ -23,9 +23,11 @@ block meta
 
 mixin featured_article(feature, ismain)
   a(href=`/articles/${feature.slug}`)
-    .bg-img(style='background-image: url(/files/' + feature.thumb + ')')
+    .bg-img(style=`background-image:url("${feature.thumb}")`)
+    //- .bg-img(style='background-image: url(/files/' + feature.thumb + ')')
     .title-box
-      .title-bg(style='background-image: url(/files/' + feature.thumb + ')')
+      .title-bg(style=`background-image:url("${feature.thumb}")`)
+      //- .title-bg(style='background-image: url(/files/' + feature.thumb + ')')
       .title-bg-darken
       .title-content
         h2.title !{feature.title}

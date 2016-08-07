@@ -29,9 +29,9 @@ block content
 
   .article
     if article.cover
-      .article-cover(style=`background-image:url(/files/${article.cover})`)
+      .article-cover(style=`background-image:url("${article.cover}")`)
       .nav-mask
-        .article-cover-blur(style=`background-image:url(/files/${article.cover})`)
+        .article-cover-blur(style=`background-image:url("${article.cover}")`)
         .nav-mask-bg
     else
       style.

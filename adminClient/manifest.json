@@ -1,0 +1,35 @@
+{
+  "manifest_version": 2,
+
+  "name": "Locust Walk Admin",
+  "description": "Admin control panel for Locust Walk",
+  "version": "1.0",
+
+  "permissions": [
+    "activeTab", "http://*/*", "https://*/*"
+  ],
+
+  "background": {
+    "scripts": ["background.js"]
+  },
+
+  "content_scripts": [{
+    "js": ["main.js"],
+    "css": ["style.css"],
+    "matches": ["https://drive.google.com/drive/*"]
+  }],
+
+  "web_accessible_resources": [
+    "inject.js",
+    "panel.html"
+  ],
+
+  "browser_action": {
+    "default_icon": "icon.png"
+  }
+
+  // "browser_action": {
+  //   "default_title": "Locust Walk Admin",
+  //   "default_popup": "popup.html"
+  // }
+}

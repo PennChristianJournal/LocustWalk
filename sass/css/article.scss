@@ -186,12 +186,16 @@
 
   .article-content {
     p {
-      font-size: 18px;
-      line-height: 1.5em;
+      font-size: 18px!important;
+      line-height: 1.5em!important;
+      color: $dark-gray!important;
+      font-family: Roboto!important;
 
       & > span {
         font-size: inherit!important;
         line-height: inherit!important;
+        color: inherit!important;
+        font-family: inherit!important;
       }
     }
   }
