@@ -12,7 +12,9 @@ module.exports = router;
 
 router.use('/admin', require('./admin'))
 router.use('/articles', require('./articles'))
+router.use('/api', require('./api'))
 
+/*
 router.get('/files/:id', function(req, res, next) {
   var assetPath = __root + 'public/files/' + req.params.id
   fs.exists(assetPath, (exists) => {
@@ -39,6 +41,7 @@ router.get('/files/:id', function(req, res, next) {
     }
   })
 })
+*/
 
 router.get('/', function(req, res) {
   async.parallel([
@@ -50,9 +53,8 @@ router.get('/', function(req, res) {
       })
       .sort({'date': -1})
       .limit(12)
-      .cache()
+      // .cache()
       .exec(function(err, features) {
-        console.log(features)
         if (err) console.log(err)
         var funcs = []
         var recent_responses = []
@@ -64,11 +66,20 @@ router.get('/', function(req, res) {
             })
             .sort({'date': -1})
             .limit(2)
-            .cache()
+            // .cache()
             .exec((err, responses) => {
-              if (err) console.log(err)
-              // recent_responses[i] = responses
-              cb(err, responses)
+              if (err) console.log(err)            
+              fs = []
+              for (let i=0; i < responses.length; i++) {
+                fs.push(cb => {
+                  responses[i].fill(err => {
+                    return cb(err)
+                  })
+                })
+              }
+              async.parallel(fs, err => {
+                return cb(err, responses)
+              })
             })
           })
         }
@@ -91,9 +102,20 @@ router.get('/', function(req, res) {
       })
       .sort({'date': -1})
       .limit(20)
-      .cache()
+      // .cache()
       .exec((err, recents) => {
-        cb(err, recents)
+        // cb(err, recents)
+        fs = []
+        for (let i=0; i < recents.length; i++) {
+          fs.push(cb => {
+            recents[i].fill(err => {
+              return cb(err)
+            })
+          })
+        }
+        async.parallel(fs, err=> {
+          return cb(err, recents)
+        })
       })
     }
   ], (err, results) => {

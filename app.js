@@ -48,7 +48,7 @@ app.use(sassMiddleware({
   src: __dirname + '/sass', 
   dest: __dirname + '/public',
   // outputStyle: 'compressed',
-  debug: node_env == 'development',       
+  // debug: node_env == 'development',       
 })); 
 
 app.use(favicon(__dirname + '/public/img/favicon.ico'))

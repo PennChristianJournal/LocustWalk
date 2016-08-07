@@ -1,0 +1,99 @@
+//- extends ../_layout.pug
+
+//- block head
+//-   link(rel='stylesheet' href='/css/article.css')
+
+//- block content
+
+//-   if error && error.length > 0
+//-     .alert.alert-danger(role='alert') #{error}
+
+//-   .article
+//-     div.article-cover
+//-       img#cover-photo(src='')
+//-     div.article-title
+//-     div.article-content !{article.content}
+
+//- block footer
+
+extends ../../article/show.pug
+
+include ../_admin.pug
+
+block append head
+  link(rel='stylesheet' href='/css/admin/sidebar.css')
+  link(rel='stylesheet' href='/css/admin/article.css')
+
+block append content
+  #admin-sidebar
+    h1 Edit Article
+    form(action=`/admin/articles/${article._id}/edit` method='POST')
+      .form-group
+        .checkbox
+          label.checkbox-inline
+            if article.is_featured
+              input(name='is_featured' type='checkbox' checked)
+            else  
+              input(name='is_featured' type='checkbox')
+            | Featured
+          label.checkbox-inline
+            if article.is_published
+              input(name='is_published' type='checkbox' checked) 
+            else 
+              input(name='is_published' type='checkbox')
+            | Published
+
+      .form-group
+        label Title
+        input.form-control(type='text' name='title' placeholder='Title' value=article.title)
+
+      .form-group
+        label Author
+        input.form-control(type='text' name='author' placeholder='Author' value=article.author)
+
+      .form-group
+        label Google Doc ID
+        input.form-control(type='text' name='doc_id' placeholder='1Nk47scv9NgVUtf3f5QPUYayBt5a8oCYcY7tmh6pW6aU' value=article.doc_id)
+        label.caption The ID of the google doc this article refers to
+
+      .form-group
+        label Cover ID
+        input.form-control(type='text' name='cover_id' placeholder='1Nk47scv9NgVUtf3f5QPUYayBt5a8oCYcY7tmh6pW6aU' value=article.cover_id)
+        label.caption The ID of the cover photo on google drive
+
+      .form-group
+        label Thumb ID
+        input.form-control(type='text' name='thumb_id' placeholder='1Nk47scv9NgVUtf3f5QPUYayBt5a8oCYcY7tmh6pW6aU' value=article.thumb_id)
+        label.caption The ID of the thumbnail on google drive
+        img(width='100%' src=`${article.thumb}`)
+
+      .form-group
+        label Response To
+        if article.parent
+          input.form-control(type='text' name='parent' placeholder='Article ID' value=article.parent.toString())
+        else
+          input.form-control(type='text' name='parent' placeholder='Article ID')
+
+      .form-group
+        label Slug
+        input.form-control(type='text' name='slug' placeholder='article-title' value=article.slug)
+        label.caption This is the pretty name that will be used to display links. Leave blank to set automatically.
+
+      .form-group
+        label Post Date
+        input.form-control#date-input(type='text' name='date' placeholder='May 16, 2016 at 13:12')
+        //- if article.is_published
+        //-   input#date-field(type='hidden' name='date')
+        //- else
+        //-   input#date-field(type='hidden' name='date' value='#{article.date}')
+        label.caption Leave blank to set automatically
+
+      .form-group
+        label Heading Override
+        input.form-control(type='text' name='heading_override' placeholder='Jun 2016 Special Feature' value=article.heading_override)
+        label.caption The heading displayed for feature articles. Leave blank to set automatically (MMM YYYY)
+
+
+      .btn-group
+        input.btn.btn-primary(name='submit' type='submit' value='Save')
+        input.btn.btn-default(name='submit' type='submit' value='Preview')

@@ -1,0 +1,137 @@
+
+var express = require('express')
+var router = express.Router()
+var Article = require('../../models/Article')
+var async = require('async')
+module.exports = router;
+
+router.get('/', (req, res) => {
+  Article.find()
+  .sort({
+    date: -1,
+    updatedAt: -1
+  })
+  .exec((err, articles) => {
+    if (err) req.flash('error', err)
+    res.render('admin/articles/index', {
+      articles: articles,
+      error: req.flash('error')
+    })
+  })
+})
+
+router.get('/new', (req, res) => {
+  article = new Article()
+  res.render('admin/articles/edit', {
+    article: article,
+  }) 
+})
+
+router.get('/:id/edit', function(req, res) {
+
+  Article.findOne({doc_id: req.params.id}, (err, article) => {
+    if (err) req.flash('error', err.toString())
+    if (article) {
+      return res.redirect(`/admin/articles/${article._id}/edit`)
+    } else {
+      Article.findOne({_id: req.params.id}, function(err, article) {
+        if (err) req.flash('error', err.toString())
+        mocked = false
+        if (!article) {
+          mocked = true
+          article = new Article({
+            doc_id: req.params.id
+          })
+        }
+        article.fill(function(err) {
+          if (err) console.log(err)
+          if (err) req.flash('error', err.toString())
+          res.render('admin/articles/edit', {
+            article: article,
+            error: req.flash('error')
+          })  
+        })
+        if (mocked) {
+          delete article
+        }
+      })
+    }
+  })
+})
+
+router.post('/:id/edit', function(req, res) {
+
+  Article.findOne({_id: req.params.id}, (err, article) => {
+    if (err) {
+      req.flash('error', err.toString())
+    }
+
+    mocked = false
+    if (!article) {
+      mocked = true
+      article = new Article()
+    } else {
+    }
+
+    article.title = req.body.title
+    article.doc_id = req.body.doc_id
+    article.cover_id = req.body.cover_id
+    article.thumb_id = req.body.thumb_id
+    article.slug = req.body.slug
+    article.author = req.body.author
+    article.is_featured = req.body.is_featured ? true : false
+    article.is_published = req.body.is_published ? true : false
+    article.parent = req.body.parent ? req.body.parent : null
+    article.heading_override = req.body.heading_override ? req.body.heading_override : ''
+    
+    if (!article.is_published) {
+      article.date = null
+    } else if (!article.date) {
+      article.date = Date.now()
+    }
+    if (req.body.date) {
+      var d = Date.parse(req.body.date)
+      if (d) {
+        article.date = d
+      }
+    }
+
+    var funcs = []
+    if (req.body.submit == 'Save') {
+      funcs.push(callback => {
+        article.save(function(err) {
+          return callback(err)
+        })
+      })
+    }
+
+    funcs.push(callback => {
+      article.expire()
+      article.fill(err => {
+        return callback(err)  
+      })
+    })    
+
+    async.parallel(funcs, (err, results) => {
+      if (err) {
+        req.flash('error', err.toString())
+      }
+      if (err) req.flash('error', err.toString())
+
+      // res.redirect(`/admin/articles/${article._id}/edit`)
+      res.render('admin/articles/edit', {
+        article: article,
+        error: req.flash('error')
+      })  
+      // article.expire()
+      // article.fill(function(err) {
+      //   if (err) req.flash('error', err.toString())
+      //   res.redirect(`/admin/articles/${article._id}/edit`)  
+      // })
+    })
+
+    if (mocked) {
+      delete article
+    }
+  })
+})

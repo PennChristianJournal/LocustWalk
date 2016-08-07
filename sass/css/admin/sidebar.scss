@@ -1,0 +1,33 @@
+@import '../../variables';
+@import '../../theme';
+@import '../../mixins';
+
+$admin-sidebar-width: 400px;
+
+#admin-sidebar {
+  @extend .dark-theme;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: $admin-sidebar-width;
+  padding: 20px;
+  padding-top: 61px;
+
+  label.caption {
+    font-weight: normal;
+  }
+}
+
+body {
+  margin-left: $admin-sidebar-width;
+}
+
+.container {
+  max-width: 100%
+}
+
+.dark-theme {
+  label {
+    color: #eee;
+  }
+}

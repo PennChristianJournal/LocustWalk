@@ -65,4 +65,4 @@ block content
             else 
               a.btn.btn-xs.btn-default(href='#' onclick=`publishArticle("${article.title}", "${article._id}")`) Publish
             a.btn.btn-xs.btn-primary(href=`/admin/articles/${article._id}/edit`) Edit
-            a.btn.btn-xs.btn-danger(href='#' onclick=`deleteArticle("#{article.title}", "#{article._id}")`) Delete
+            a.btn.btn-xs.btn-danger(href='#' onclick=`deleteArticle("${article.title}", "#{article._id}")`) Delete

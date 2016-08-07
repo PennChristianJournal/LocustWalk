@@ -16,8 +16,10 @@ router.get('/:slugOrId', function(req, res) {
     Article.findOne({_id: req.params.slugOrId}, function(err, article) {
       if (err) console.log(err)
       if (article) {
-        return res.render('article/show', {
-          article: article
+        article.fill(function(err) {
+          return res.render('article/show', {
+            article: article
+          })  
         })
       }
       res.status(404); res.end('Not Found')

@@ -20,30 +20,27 @@ html
 
   body
 
-    nav.navbar.navbar-fixed-top
-      .container
-        .navbar-header
-          button.navbar-toggle.collapsed(type='button' data-toggle='collapse' data-target='#navbar-collapse' aria-expanded='false')
-            span.sr-only Toggle navigation
-            span.icon-bar
-            span.icon-bar
-            span.icon-bar
+    block nav
+      nav.navbar.navbar-fixed-top
+        .container
+          .navbar-header
+            button.navbar-toggle.collapsed(type='button' data-toggle='collapse' data-target='#navbar-collapse' aria-expanded='false')
+              span.sr-only Toggle navigation
+              span.icon-bar
+              span.icon-bar
+              span.icon-bar
 
-          a.navbar-brand(href='/') 
-            img(src='/img/logo-horizontal.svg')
-            h1.strong(style='display: none') Locust<span class='thin'>Walk</span>
+            a.navbar-brand(href='/') 
+              img(src='/img/logo-horizontal.svg')
+              h1.strong(style='display: none') Locust<span class='thin'>Walk</span>
 
-        .collapse.navbar-collapse#navbar-collapse
-          ul.nav.navbar-nav.clean
-            li: a(href='/about') About
-            li: a(href='/staff') Staff
-            //- li: a(href='/archive') Archive
-            li: a(href='/submissions') Submissions
-            li: a(href='/subscribe') Subscribe
-            //- li: a(href='/contact') Contact
-          //- ul.nav.navbar-nav.navbar-right
-          //-   li: a(href='#') thing2
-    
+          .collapse.navbar-collapse#navbar-collapse
+            ul.nav.navbar-nav.clean
+              li: a(href='/about') About
+              li: a(href='/staff') Staff
+              li: a(href='/submissions') Submissions
+              li: a(href='/subscribe') Subscribe
+      
     .container
       block content
 

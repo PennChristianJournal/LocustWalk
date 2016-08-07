@@ -140,11 +140,15 @@
   margin-bottom: 30px; }
 
 .article .article-content p {
-  font-size: 18px;
-  line-height: 1.5em; }
+  font-size: 18px !important;
+  line-height: 1.5em !important;
+  color: #777 !important;
+  font-family: Roboto !important; }
   .article .article-content p > span {
     font-size: inherit !important;
-    line-height: inherit !important; }
+    line-height: inherit !important;
+    color: inherit !important;
+    font-family: inherit !important; }
 
 .article *:focus {
   outline: none; }
