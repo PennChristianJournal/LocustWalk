@@ -271,8 +271,11 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/locustwal
   console.log('Connected to database')
   createAdmin(function() {
     // require('./email/mailer').init(function() {
-      http.createServer(app).listen(app.get('port'), function(){
-        console.log("Express server listening on port " + app.get('port'))
+      mkdirp(__root + 'public/files', function(err) {
+        if (err) console.log(err)
+        http.createServer(app).listen(app.get('port'), function(){
+          console.log("Express server listening on port " + app.get('port'))
+        })
       })
     // })
   })  
