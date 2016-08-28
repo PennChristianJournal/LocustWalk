@@ -27,8 +27,29 @@ router.get('/new', (req, res) => {
   }) 
 })
 
-router.get('/:id/edit', function(req, res) {
+router.get('/search/docs', function(req, res) {
+  // if (req.query.name && req.query.name.length < 5) return res.send([]);
+  Article.searchDrive(req.query.name, 'application/vnd.google-apps.document', function(err, files) {
+    return res.send(files)
+  })
+})
 
+router.get('/search/images', function(req, res) {
+  // if (req.query.name && req.query.name.length < 5) return res.send([]);
+  Article.searchDrive(req.query.name, 'image/', function(err, files) {
+    return res.send(files)
+  })
+})
+
+router.get('/search/articles', function(req, res) {
+  Article.find({
+    "title": {$regex: `.*${req.query.name}.*`}
+  }, function(err, articles) {
+    return res.send(articles)
+  })
+})
+
+router.get('/:id/edit', function(req, res) {
   Article.findOne({doc_id: req.params.id}, (err, article) => {
     if (err) req.flash('error', err.toString())
     if (article) {
@@ -36,24 +57,30 @@ router.get('/:id/edit', function(req, res) {
     } else {
       Article.findOne({_id: req.params.id}, function(err, article) {
         if (err) req.flash('error', err.toString())
-        mocked = false
-        if (!article) {
-          mocked = true
-          article = new Article({
-            doc_id: req.params.id
+        Article.findOne({
+          _id: article.parent,
+          is_published: true
+        }, (err, parent) => {
+          mocked = false
+          if (!article) {
+            mocked = true
+            article = new Article({
+              doc_id: req.params.id
+            })
+          }
+          article.fill(function(err) {
+            if (err) console.log(err)
+            if (err) req.flash('error', err.toString())
+            res.render('admin/articles/edit', {
+              article: article,
+              parent: parent,
+              error: req.flash('error')
+            })  
           })
-        }
-        article.fill(function(err) {
-          if (err) console.log(err)
-          if (err) req.flash('error', err.toString())
-          res.render('admin/articles/edit', {
-            article: article,
-            error: req.flash('error')
-          })  
+          if (mocked) {
+            delete article
+          }
         })
-        if (mocked) {
-          delete article
-        }
       })
     }
   })
@@ -133,5 +160,25 @@ router.post('/:id/edit', function(req, res) {
     if (mocked) {
       delete article
     }
+  })
+})
+
+router.post('/publish', function(req, res) {
+  Article.update({_id: req.body._id}, {
+    is_published: true,
+    date: Date.now(),
+  }, function(err) {
+    if (err) req.flash('error', err)
+    res.redirect('/admin/articles')
+  })
+})
+
+router.post('/unpublish', function(req, res) {
+  Article.update({_id: req.body._id}, {
+    is_published: false,
+    date: Date.now(),
+  }, function(err) {
+    if (err) req.flash('error', err)
+    res.redirect('/admin/articles')
   })
 })

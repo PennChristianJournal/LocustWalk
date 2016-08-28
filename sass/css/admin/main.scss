@@ -6,3 +6,25 @@
 //     top: -90%;
 //   }
 // }
+
+.twitter-typeahead {
+  display: block!important;
+}
+
+.tt-menu {
+ 
+  width: 100%;
+  .tt-dataset {
+    padding: 5px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px 0 black;
+    background-color: white;
+  }
+  .tt-suggestion {
+    padding: 2px 10px;
+  }
+}
+
+html, body {
+  overflow-x: hidden;
+}
