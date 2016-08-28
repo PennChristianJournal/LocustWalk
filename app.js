@@ -41,13 +41,21 @@ app.use(logger(node_env == 'development' ? 'dev' : 'common'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cookieParser())
-app.use(session({secret: config.setup.cookie_secret, saveUninitialized: true, resave: true}))
+var RedisStore = require('connect-redis')(session);
+app.use(session({
+  secret: config.setup.cookie_secret, 
+  saveUninitialized: true, 
+  resave: true,
+  store: new RedisStore({
+    client: require('redis').createClient(process.env.REDIS_URL || 'redis://127.0.0.1:6379')
+  })
+}))
 app.use(fileUpload())
 
 app.use(sassMiddleware({
   src: __dirname + '/sass', 
   dest: __dirname + '/public',
-  // outputStyle: 'compressed',
+  outputStyle: 'compressed',
   // debug: node_env == 'development',       
 })); 
 
