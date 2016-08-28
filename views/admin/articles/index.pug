@@ -20,11 +20,21 @@ block content
       }
     }
 
+    var unpublishArticle = function(title, id) {
+      if (confirm('Are you sure you want to unpublish article ' + title + '?')) {
+        $('#unpublisharticleid').val(id)
+        $('#unpublish-form').submit()
+      }
+    }
+
   form#delete-form(style='display: none' action='/admin/articles/delete' method='post')
     input#deletearticleid(type='text' name='_id')
 
   form#publish-form(style='display: none' action='/admin/articles/publish' method='post')
     input#publisharticleid(type='text' name='_id')
+
+  form#unpublish-form(style='display: none' action='/admin/articles/unpublish' method='post')
+    input#unpublisharticleid(type='text' name='_id')
 
   table.table.table-striped
     tr
@@ -59,9 +69,9 @@ block content
         //-   if article.content
         //-     | #{article.content.replace(/(<([^>]+)>)/ig,"").substring(0, 200)}
         td 
-          .btn-group(style='width: 130px')
+          .btn-group(style='width: 150px')
             if article.is_published
-              a.btn.btn-xs.btn-default(href='#' disabled) Publish
+              a.btn.btn-xs.btn-default(href='#' onclick=`unpublishArticle("${article.title}", "${article._id}")`) Unpublish
             else 
               a.btn.btn-xs.btn-default(href='#' onclick=`publishArticle("${article.title}", "${article._id}")`) Publish
             a.btn.btn-xs.btn-primary(href=`/admin/articles/${article._id}/edit`) Edit

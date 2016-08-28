@@ -53,26 +53,31 @@ block append content
 
       .form-group
         label Google Doc ID
-        input.form-control(type='text' name='doc_id' placeholder='1Nk47scv9NgVUtf3f5QPUYayBt5a8oCYcY7tmh6pW6aU' value=article.doc_id)
+        input.form-control(id='doc-search' placeholder='Search Documents...')
+        input.form-control(id='doc-id-input' type='text' name='doc_id' placeholder='1Nk47scv9NgVUtf3f5QPUYayBt5a8oCYcY7tmh6pW6aU' value=article.doc_id)
         label.caption The ID of the google doc this article refers to
 
       .form-group
         label Cover ID
-        input.form-control(type='text' name='cover_id' placeholder='1Nk47scv9NgVUtf3f5QPUYayBt5a8oCYcY7tmh6pW6aU' value=article.cover_id)
+        input.form-control(id='cover-search' placeholder='Search Images...')
+        input.form-control(id='cover-id-input' type='text' name='cover_id' placeholder='1Nk47scv9NgVUtf3f5QPUYayBt5a8oCYcY7tmh6pW6aU' value=article.cover_id)
         label.caption The ID of the cover photo on google drive
 
       .form-group
         label Thumb ID
-        input.form-control(type='text' name='thumb_id' placeholder='1Nk47scv9NgVUtf3f5QPUYayBt5a8oCYcY7tmh6pW6aU' value=article.thumb_id)
+        input.form-control(id='thumb-search' placeholder='Search Images...')
+        input.form-control(id='thumb-id-input' type='text' name='thumb_id' placeholder='1Nk47scv9NgVUtf3f5QPUYayBt5a8oCYcY7tmh6pW6aU' value=article.thumb_id)
         label.caption The ID of the thumbnail on google drive
-        img(width='100%' src=`${article.thumb}`)
+        //- img(width='100%' src=)
+        div(style=`background-image: url(${article.thumb}); width: 100%; padding-top: 75%; background-position: center center; background-size: cover;`)
 
       .form-group
         label Response To
+        input.form-control(type='text' id='parent-search' placeholder='Search Articles...')
         if article.parent
-          input.form-control(type='text' name='parent' placeholder='Article ID' value=article.parent.toString())
+          input.form-control(type='text' id='parent-id-input' name='parent' placeholder='Article ID' value=article.parent.toString())
         else
-          input.form-control(type='text' name='parent' placeholder='Article ID')
+          input.form-control(type='text' id='parent-id-input' name='parent' placeholder='Article ID')
 
       .form-group
         label Slug
@@ -97,3 +102,79 @@ block append content
       .btn-group
         input.btn.btn-primary(name='submit' type='submit' value='Save')
         input.btn.btn-default(name='submit' type='submit' value='Preview')
+
+block append footer
+  script(src='/bower_components/typeahead.js/dist/bloodhound.min.js')
+  script(src='/bower_components/typeahead.js/dist/typeahead.bundle.min.js')
+  script.
+    var documentSearch = new Bloodhound({
+      datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+      queryTokenizer: Bloodhound.tokenizers.whitespace,
+      remote: {
+        url: '/admin/articles/search/docs?name=%QUERY',
+        wildcard: '%QUERY'
+      }
+    })
+    var imageSearch = new Bloodhound({
+      datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+      queryTokenizer: Bloodhound.tokenizers.whitespace,
+      remote: {
+        url: '/admin/articles/search/images?name=%QUERY',
+        wildcard: '%QUERY'
+      }
+    })
+    var articleSearch = new Bloodhound({
+      datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+      queryTokenizer: Bloodhound.tokenizers.whitespace,
+      remote: {
+        url: '/admin/articles/search/articles?name=%QUERY',
+        wildcard: '%QUERY'
+      }
+    })
+    documentSearch.initialize()
+    imageSearch.initialize()
+    articleSearch.initialize()
+
+    $('#doc-search').typeahead(null, {
+      hint: true,
+      highlight: true,
+      minLength: 3,
+      source: documentSearch,
+      display: 'name',
+    })
+    $('#doc-search').on('typeahead:selected typeahead:autocompleted', function(e, datum) {
+      $('#doc-id-input').val(datum.id)
+    })
+
+    $('#cover-search').typeahead(null, {
+      hint: true,
+      highlight: true,
+      minLength: 3,
+      source: imageSearch,
+      display: 'name',
+    })
+    $('#cover-search').on('typeahead:selected typeahead:autocompleted', function(e, datum) {
+      $('#cover-id-input').val(datum.id)
+    })
+
+    $('#thumb-search').typeahead(null, {
+      hint: true,
+      highlight: true,
+      minLength: 3,
+      source: imageSearch,
+      display: 'name',
+    })
+    $('#thumb-search').on('typeahead:selected typeahead:autocompleted', function(e, datum) {
+      $('#thumb-id-input').val(datum.id)
+    })
+
+    $('#parent-search').typeahead(null, {
+      hint: true,
+      highlight: true,
+      minLength: 3,
+      source: articleSearch,
+      display: 'title',
+    })
+    $('#parent-search').on('typeahead:selected typeahead:autocompleted', function(e, datum) {
+      $('#parent-id-input').val(datum._id)
+    })

@@ -187,6 +187,37 @@ Schema.pre('save', function(next) {
   next()
 })
 
+Schema.statics.searchDrive = function(name, mimeType, callback) {
+  var drive;
+  var files = [];
+
+  var fetchPage = function(pageToken, cb) {
+    drive.files.list({
+      q: `name contains '${name}'`,
+      fields: 'nextPageToken, files(id, name)',
+      spaces: 'drive',
+      pageToken: pageToken
+    }, function(err, res) {
+      if (err) return cb(err)
+      res.files.forEach(function(file) {
+        files.push(file)
+      })
+      if (res.nextPageToken) {
+        // more results...
+      }
+      cb(null)
+    })
+  }
+
+  jwtClient.authorize((err, tokens) => {
+    drive = google.drive({ version: 'v3', auth: jwtClient })
+    fetchPage(null, function() {
+      console.log(files)
+      callback(null, files)
+    })
+  })
+}
+
 var Model = mongoose.model('Article', Schema)
 
 module.exports = Model

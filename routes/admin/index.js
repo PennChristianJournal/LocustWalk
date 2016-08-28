@@ -32,7 +32,7 @@ router.use('/', function (req, res, next) {
   //   next()
   // })
   // res.redirect('/')
-  if (!req.isAuthenticated()) {
+  if (false && !req.isAuthenticated()) {
     req.session.lastUrl = req.originalUrl;
     return res.redirect('/admin/login')
     // return res.redirect('/admin/login')
