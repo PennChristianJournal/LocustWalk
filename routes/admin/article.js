@@ -57,30 +57,37 @@ router.get('/:id/edit', function(req, res) {
     } else {
       Article.findOne({_id: req.params.id}, function(err, article) {
         if (err) req.flash('error', err.toString())
-        Article.findOne({
-          _id: article.parent,
-          is_published: true
-        }, (err, parent) => {
-          mocked = false
-          if (!article) {
-            mocked = true
-            article = new Article({
-              doc_id: req.params.id
-            })
-          }
-          article.fill(function(err) {
-            if (err) console.log(err)
-            if (err) req.flash('error', err.toString())
+        
+
+
+        mocked = false
+        if (!article) {
+          mocked = true
+          article = new Article({
+            doc_id: req.params.id
+          })
+        }
+        article.fill(function(err) {
+          if (err) console.log(err)
+          if (err) req.flash('error', err.toString())
+
+          Article.findOne({
+            _id: article.parent,
+            is_published: true
+          }, (err, parent) => {
+            
             res.render('admin/articles/edit', {
               article: article,
               parent: parent,
               error: req.flash('error')
-            })  
+            }) 
+
           })
-          if (mocked) {
-            delete article
-          }
+
         })
+        if (mocked) {
+          delete article
+        }
       })
     }
   })
