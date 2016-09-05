@@ -13,12 +13,12 @@
 
 .tt-dropdown-menu { 
   width: 100%;
-}
-.tt-dataset-0 {
-  padding: 5px;
-  border-radius: 5px;
-  box-shadow: 0 0 10px 0 black;
-  background-color: white;
+  & > div {
+    padding: 5px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px 0 black;
+    background-color: white;
+  }
 }
 .tt-suggestion {
   padding: 2px 10px;
