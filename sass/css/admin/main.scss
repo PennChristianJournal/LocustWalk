@@ -11,18 +11,31 @@
   display: block!important;
 }
 
-.tt-menu {
- 
+.tt-dropdown-menu { 
   width: 100%;
-  .tt-dataset {
-    padding: 5px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px 0 black;
-    background-color: white;
+}
+.tt-dataset-0 {
+  padding: 5px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px 0 black;
+  background-color: white;
+}
+.tt-suggestion {
+  padding: 2px 10px;
+  line-height: 24px;
+  color: #333;
+  p {
+    margin: 0;
   }
-  .tt-suggestion {
-    padding: 2px 10px;
-  }
+}
+
+.tt-suggestion.tt-cursor,.tt-suggestion:hover {
+  color: #fff;
+  background-color: #0097cf;
+}
+
+.tt-hint {
+  color: #999
 }
 
 html, body {
