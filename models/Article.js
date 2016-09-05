@@ -211,7 +211,6 @@ Schema.statics.searchDrive = function(name, mimeType, callback) {
   jwtClient.authorize((err, tokens) => {
     drive = google.drive({ version: 'v3', auth: jwtClient })
     fetchPage(null, function() {
-      console.log(files)
       callback(null, files)
     })
   })

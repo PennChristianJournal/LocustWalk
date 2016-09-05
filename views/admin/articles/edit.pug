@@ -112,7 +112,10 @@ block append footer
       queryTokenizer: Bloodhound.tokenizers.whitespace,
       remote: {
         url: '/admin/articles/search/docs?name=%QUERY',
-        wildcard: '%QUERY'
+        wildcard: '%QUERY',
+        //- filter: function(data) {
+        //-   console.log(data)
+        //- }
       }
     })
     var imageSearch = new Bloodhound({
@@ -138,8 +141,8 @@ block append footer
     $('#doc-search').typeahead(null, {
       hint: true,
       highlight: true,
-      minLength: 3,
-      source: documentSearch,
+      minLength: 1,
+      source: documentSearch.ttAdapter(),
       display: 'name',
     })
     $('#doc-search').on('typeahead:selected typeahead:autocompleted', function(e, datum) {
@@ -150,7 +153,7 @@ block append footer
       hint: true,
       highlight: true,
       minLength: 3,
-      source: imageSearch,
+      source: imageSearch.ttAdapter(),
       display: 'name',
     })
     $('#cover-search').on('typeahead:selected typeahead:autocompleted', function(e, datum) {
@@ -161,7 +164,7 @@ block append footer
       hint: true,
       highlight: true,
       minLength: 3,
-      source: imageSearch,
+      source: imageSearch.ttAdapter(),
       display: 'name',
     })
     $('#thumb-search').on('typeahead:selected typeahead:autocompleted', function(e, datum) {
@@ -172,7 +175,7 @@ block append footer
       hint: true,
       highlight: true,
       minLength: 3,
-      source: articleSearch,
+      source: articleSearch.ttAdapter(),
       display: 'title',
     })
     $('#parent-search').on('typeahead:selected typeahead:autocompleted', function(e, datum) {
