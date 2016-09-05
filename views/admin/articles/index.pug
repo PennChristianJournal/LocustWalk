@@ -27,6 +27,11 @@ block content
       }
     }
 
+    var refreshArticle = function(title, id) {
+      $('#refresharticleid').val(id)
+      $('#refresh-form').submit()
+    }
+
   form#delete-form(style='display: none' action='/admin/articles/delete' method='post')
     input#deletearticleid(type='text' name='_id')
 
@@ -35,6 +40,9 @@ block content
 
   form#unpublish-form(style='display: none' action='/admin/articles/unpublish' method='post')
     input#unpublisharticleid(type='text' name='_id')
+
+  form#refresh-form(style='display: none' action='/admin/articles/refresh' method='post')
+    input#refresharticleid(type='text' name='_id')
 
   table.table.table-striped
     tr
@@ -69,10 +77,11 @@ block content
         //-   if article.content
         //-     | #{article.content.replace(/(<([^>]+)>)/ig,"").substring(0, 200)}
         td 
-          .btn-group(style='width: 150px')
+          .btn-group(style='width: 200px')
             if article.is_published
               a.btn.btn-xs.btn-default(href='#' onclick=`unpublishArticle("${article.title}", "${article._id}")`) Unpublish
             else 
               a.btn.btn-xs.btn-default(href='#' onclick=`publishArticle("${article.title}", "${article._id}")`) Publish
             a.btn.btn-xs.btn-primary(href=`/admin/articles/${article._id}/edit`) Edit
-            a.btn.btn-xs.btn-danger(href='#' onclick=`deleteArticle("${article.title}", "#{article._id}")`) Delete
+            a.btn.btn-xs.btn-danger(href='#' onclick=`deleteArticle("${article.title}", "${article._id}")`) Delete
+            a.btn.btn-xs.btn-default(href='#' onclick=`refreshArticle("${article.title}", "${article._id}")`) Refresh

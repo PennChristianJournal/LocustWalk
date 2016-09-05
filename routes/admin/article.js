@@ -189,3 +189,25 @@ router.post('/unpublish', function(req, res) {
     res.redirect('/admin/articles')
   })
 })
+
+router.post('/delete', function(req, res) {
+  Article.remove({_id: req.body._id}, function(err) {
+    req.flash('error', err)
+    res.redirect('/admin/articles')
+  })
+})
+
+router.post('/refresh', function(req, res) {
+  Article.findOne({_id: req.body._id}, function(err, article) {
+    if (err) req.flash('error', err)
+    if (article) {
+      article.expire()
+      article.fill(function(err) {
+        if (err) req.flash('error', err)
+        return res.redirect('/admin/articles')  
+      });
+    } else {
+      return res.redirect('/admin/articles')
+    }
+  })
+})
