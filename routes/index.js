@@ -121,8 +121,8 @@ router.get('/', function(req, res) {
   ], (err, results) => {
     if (err) console.log(err)
     res.render('home', {
-      features: results[0],
-      recents: results[1]
+      features: results[0] || [],
+      recents: results[1] || []
     })  
   })
 })
@@ -139,7 +139,7 @@ router.get('/:page', function(req, res, next) {
       .limit(12)
       .exec((err, features) => {
         res.render(req.params.page, {
-          features: features
+          features: features || []
         })
       })
     } else {
