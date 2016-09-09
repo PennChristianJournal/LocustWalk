@@ -380,3 +380,17 @@ $num-features: 12;
     padding: 0px;
   }
 }
+
+.announcement {
+  padding: 20px;
+  p {
+    font-size: 18px;
+    color: white;
+    a {
+      color: #eee;
+      &:hover {
+        color: #A95B61;
+      }
+    }
+  }
+}
