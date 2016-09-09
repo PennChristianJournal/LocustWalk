@@ -127,23 +127,70 @@ router.get('/', function(req, res) {
   })
 })
 
-router.get('/:page', function(req, res, next) {
-  fs.exists(__root + 'views/' + req.params.page + '.pug', (exists) => {
-    if (exists) {
-      Article
-      .find({
-        is_featured: true,
-        is_published: true
-      })
-      .sort({'date': -1})
-      .limit(12)
-      .exec((err, features) => {
-        res.render(req.params.page, {
-          features: features || []
-        })
-      })
-    } else {
-      return next()
-    }
+router.get('/about', function(req, res) {
+  Article
+  .find({
+    is_featured: true,
+    is_published: true
   })
+  .sort({'date': -1})
+  .limit(12)
+  .exec((err, features) => {
+    res.render('about', {
+      features: features || []
+    })
+  })
+})
+
+router.get('/staff', function(req, res) {
+  Article
+  .find({
+    is_featured: true,
+    is_published: true
+  })
+  .sort({'date': -1})
+  .limit(12)
+  .exec((err, features) => {
+    res.render('staff', {
+      features: features || []
+    })
+  })
+})
+
+router.get('/submissions', function(req, res) {
+  Article
+  .find({
+    is_featured: true,
+    is_published: true
+  })
+  .sort({'date': -1})
+  .limit(12)
+  .exec((err, features) => {
+    res.render('submissions', {
+      features: features || []
+    })
+  })
+})
+
+router.get('/subscribe', function(req, res) {
+  Article
+  .find({
+    is_featured: true,
+    is_published: true
+  })
+  .sort({'date': -1})
+  .limit(12)
+  .exec((err, features) => {
+    res.render('subscribe', {
+      features: features || []
+    })
+  })
+})
+
+router.get('/writers-guide-feature', function(req, res) {
+  res.render('writers-guide-feature')
+})
+
+router.get('/writers-guide-response', function(req, res) {
+  res.render('writers-guide-response')
 })
