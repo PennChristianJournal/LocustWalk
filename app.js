@@ -144,6 +144,7 @@ app.use('/', require('./routes'))
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/locustwalk', function(err) {
   if (err) throw err
   console.log('Connected to database')
+  console.log(`Making directory ${__root + 'public/files'}`)
   mkdirp(__root + 'public/files', function(err) {
     if (err) console.log(err)
     http.createServer(app).listen(app.get('port'), function(){

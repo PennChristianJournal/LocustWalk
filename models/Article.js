@@ -120,8 +120,9 @@ Schema.methods.fill = function(cb) {
           }, (err, response) => {
             if (err) return callback(err)
             var public_path = `/files/${this.cover_id}-${response.name}`
-            var path = `${__root}/public${public_path}`
+            var path = `${__root}public${public_path}`
             var wstream = fs.createWriteStream(path)
+            console.log(`writing to: ${path}`)
             google.drive({ version: 'v3', auth: jwtClient }).files.get({
               auth: jwtClient,
               fileId: this.cover_id,
@@ -146,8 +147,9 @@ Schema.methods.fill = function(cb) {
           }, (err, response) => {
             if (err) return callback(err)
             var public_path = `/files/${this.thumb_id}-${response.name}`
-            var path = `${__root}/public${public_path}`
+            var path = `${__root}public${public_path}`
             var wstream = fs.createWriteStream(path)
+            console.log(`writing to: ${path}`)
             google.drive({ version: 'v3', auth: jwtClient }).files.get({
               auth: jwtClient,
               fileId: this.thumb_id,
