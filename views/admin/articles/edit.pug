@@ -1,21 +1,3 @@
-//- extends ../_layout.pug
-
-//- block head
-//-   link(rel='stylesheet' href='/css/article.css')
-
-//- block content
-
-//-   if error && error.length > 0
-//-     .alert.alert-danger(role='alert') #{error}
-
-//-   .article
-//-     div.article-cover
-//-       img#cover-photo(src='')
-//-     div.article-title
-//-     div.article-content !{article.content}
-
-//- block footer
-
 extends ../../article/show.pug
 
 include ../_admin.pug
@@ -113,9 +95,6 @@ block append footer
       remote: {
         url: '/admin/articles/search/docs?name=%QUERY',
         wildcard: '%QUERY',
-        //- filter: function(data) {
-        //-   console.log(data)
-        //- }
       }
     })
     var imageSearch = new Bloodhound({

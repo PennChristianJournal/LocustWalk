@@ -2,46 +2,13 @@
 
 var express = require('express');
 var router = express.Router();
-var Files = require(__root + 'models/Files')
 var Article = require(__root + 'models/Article')
 var async = require('async')
-var fs = require('fs')
-var mkdirp = require('mkdirp')
 
 module.exports = router;
 
 router.use('/admin', require('./admin'))
 router.use('/articles', require('./articles'))
-router.use('/api', require('./api'))
-
-/*
-router.get('/files/:id', function(req, res, next) {
-  var assetPath = __root + 'public/files/' + req.params.id
-  fs.exists(assetPath, (exists) => {
-    if (exists) {
-      return next()
-    } else {
-      Files.findOne({_id: req.params.id}, function(err, file, stream) {
-        if (err) console.log(err)
-        if (file) {
-          process.nextTick(function() {
-            mkdirp(__root + 'public/files', function(err) {
-              if (err) console.log(err)
-              var wstream = fs.createWriteStream(assetPath)
-              stream.pipe(wstream)
-            })
-          })
-          res.writeHead(200, {'Content-Type': file.contentType })
-          stream.pipe(res)
-        } else {
-          res.status(404)
-          res.type('txt').send('Not found')
-        }
-      })
-    }
-  })
-})
-*/
 
 router.get('/', function(req, res) {
   async.parallel([
@@ -69,7 +36,7 @@ router.get('/', function(req, res) {
             // .cache()
             .exec((err, responses) => {
               if (err) console.log(err)            
-              fs = []
+              let fs = []
               for (let i=0; i < responses.length; i++) {
                 fs.push(cb => {
                   responses[i].fill(err => {
@@ -105,7 +72,7 @@ router.get('/', function(req, res) {
       // .cache()
       .exec((err, recents) => {
         // cb(err, recents)
-        fs = []
+        let fs = []
         for (let i=0; i < recents.length; i++) {
           fs.push(cb => {
             recents[i].fill(err => {

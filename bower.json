@@ -18,8 +18,6 @@
   "dependencies": {
     "jquery": "^2.2.3",
     "bootstrap": "^3.3.6",
-    "medium-editor": "^5.16.1",
-    "medium-editor-insert-plugin": "^2.3.2",
     "normalize-css": "^4.1.1",
     "moment": "^2.13.0",
     "font-awesome": "^4.6.3",

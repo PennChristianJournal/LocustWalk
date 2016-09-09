@@ -7,7 +7,6 @@ var NodeCache = require("node-cache")
 var async = require('async')
 var fs = require('fs')
 var cheerio = require('cheerio')
-var stream = require('stream');
 
 var google = require('googleapis')
 var config = require(__root + '/config.js')
@@ -21,9 +20,9 @@ var jwtClient = new google.auth.JWT(
   ['https://www.googleapis.com/auth/drive']
 )
 
-var googleCache = new NodeCache({stdTTL: 3600})
+var googleCache = new NodeCache({stdTTL: 604800})
 
-var fileCache = new NodeCache({stdTTL: 3600})
+var fileCache = new NodeCache({stdTTL: 604800})
 fileCache.on('del', (key, value) => {
   var path = `${__root}/public${value}`
   fs.unlinkSync(path)
