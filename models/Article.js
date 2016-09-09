@@ -119,7 +119,7 @@ Schema.methods.fill = function(cb) {
             fileId: this.cover_id,
           }, (err, response) => {
             if (err) return callback(err)
-            var public_path = `/files/${this.cover_id}-${response.name}`
+            var public_path = encodeURI(`/files/${this.cover_id}-${response.name}`)
             var path = `${__root}public${public_path}`
             var wstream = fs.createWriteStream(path)
             console.log(`writing to: ${path}`)
@@ -146,7 +146,7 @@ Schema.methods.fill = function(cb) {
             fileId: this.thumb_id,
           }, (err, response) => {
             if (err) return callback(err)
-            var public_path = `/files/${this.thumb_id}-${response.name}`
+            var public_path = encodeURI(`/files/${this.thumb_id}-${response.name}`)
             var path = `${__root}public${public_path}`
             var wstream = fs.createWriteStream(path)
             console.log(`writing to: ${path}`)
