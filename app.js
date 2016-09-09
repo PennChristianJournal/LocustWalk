@@ -119,6 +119,15 @@ app.locals.dup_date = function() {
   }
 }
 
+app.locals.preview_text = function(text) {
+  return app.locals.truncate(
+    text
+      .replace(/<sup><a\b[^>]*>\[\d+\]<\/a><\/sup>/ig,"")
+      .replace(/(<([^>]+)>)/ig,""),
+    300
+  )
+}
+
 global.__root = __dirname + '/';
 
 app.get('/clearDB', (req, res, next) => {
