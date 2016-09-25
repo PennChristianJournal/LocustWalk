@@ -15,7 +15,7 @@ fs.writeFileSync(`${__root}/jwt.json`, JSON.stringify(config.jwt))
 
 var jwtClient = new google.auth.JWT(
   config.jwt.client_email,
-  'jwt.json',  
+  'jwt.json',
   config.jwt.private_key,
   ['https://www.googleapis.com/auth/drive']
 )
@@ -27,6 +27,48 @@ fileCache.on('del', (key, value) => {
   var path = `${__root}/public${value}`
   fs.unlinkSync(path)
 })
+
+var RateLimiter = require('limiter').RateLimiter;
+var Limiter = new RateLimiter(10, 'second')
+var redis_server = require('redis').createClient(process.env.REDIS_URL || 'redis://127.0.0.1:6379');
+// var mutex = require('node-mutex')({
+//   pub: redis_server,
+//   sub: redis_server
+// })
+var mutex = require('mutex')({
+  id: require('uuid').v4(),
+  strategy: {
+    name: 'redis',
+    connectionString: process.env.REDIS_URL || 'redis://127.0.0.1:6379'
+  }
+})
+/*if (process.env.REDIS_URL) {
+  var items = process.env.REDIS_URL.split(':')
+  
+  mutex = require('node-mutex')({
+    // prefix: items[1],
+    host: items[0] + ':' + items[1] + ':' + items[2],
+    port: items[3]
+  })
+} else {
+  mutex = require('node-mutex')();
+}*/
+
+var limited = function(cb) {
+  mutex.lock('gdrive', {
+    duration: 3000,
+    maxWait: 6000
+  }, (err, lock) => {
+    if (err) console.log(err)
+    Limiter.removeTokens(1, (err, remaining) => {
+      if (err) console.log(err)
+      cb()
+      mutex.unlock(lock, function(err) {
+        if (err) console.log(err)
+      })
+    })
+  })
+}
 
 var Schema = mongoose.Schema({
   title: {
@@ -98,15 +140,17 @@ Schema.methods.fill = function(cb) {
           async.parallel([
             (callback) => {
               if (!this.content) {
-                google.drive({ version: 'v3', auth: jwtClient }).files.export({
-                  auth: jwtClient,
-                  fileId: this.doc_id,
-                  mimeType: 'text/html'
-                }, (err, response) => {
-                  if (err) return callback(err)
-                  var $ = cheerio.load(response)
-                  googleCache.set(this.doc_id, $('body').html(), (err, success) => {
-                    return callback(err)
+                limited(() => {
+                  google.drive({ version: 'v3', auth: jwtClient }).files.export({
+                    auth: jwtClient,
+                    fileId: this.doc_id,
+                    mimeType: 'text/html'
+                  }, (err, response) => {
+                    if (err) return callback(err)
+                    var $ = cheerio.load(response)
+                    googleCache.set(this.doc_id, $('body').html(), (err, success) => {
+                      return callback(err)
+                    })
                   })
                 })
               } else {
@@ -115,26 +159,28 @@ Schema.methods.fill = function(cb) {
             },
             (callback) => {
               if ((!coverFd || !this.cover) && this.cover_id) {
-                google.drive({ version: 'v3', auth: jwtClient }).files.get({
-                  auth: jwtClient,
-                  fileId: this.cover_id,
-                }, (err, response) => {
-                  if (err) return callback(err)
-                  var public_path = encodeURI(`/files/${this.cover_id}-${response.name}`)
-                  var path = `${__root}public${public_path}`
-                  var wstream = fs.createWriteStream(path)
-                  console.log(`writing to: ${path}`)
-                  google.drive({ version: 'v3', auth: jwtClient }).files.get({
+                limited(() => {
+                    google.drive({ version: 'v3', auth: jwtClient }).files.get({
                     auth: jwtClient,
                     fileId: this.cover_id,
-                    alt: 'media'
-                  }).on('error', (err) => {
-                    return callback(err)
-                  }).on('end', () => {
-                    fileCache.set(this.cover_id, public_path, (err, success) => {
+                  }, (err, response) => {
+                    if (err) return callback(err)
+                    var public_path = encodeURI(`/files/${this.cover_id}-${response.name}`)
+                    var path = `${__root}public${public_path}`
+                    var wstream = fs.createWriteStream(path)
+                    console.log(`writing to: ${path}`)
+                    google.drive({ version: 'v3', auth: jwtClient }).files.get({
+                      auth: jwtClient,
+                      fileId: this.cover_id,
+                      alt: 'media'
+                    }).on('error', (err) => {
                       return callback(err)
-                    })
-                  }).pipe(wstream)
+                    }).on('end', () => {
+                      fileCache.set(this.cover_id, public_path, (err, success) => {
+                        return callback(err)
+                      })
+                    }).pipe(wstream)
+                  })
                 })
               } else {
                 return callback(null)
@@ -142,26 +188,28 @@ Schema.methods.fill = function(cb) {
             },
             (callback) => {
               if ((!thumbFd || !this.thumb) && this.thumb_id) {
-                google.drive({ version: 'v3', auth: jwtClient }).files.get({
-                  auth: jwtClient,
-                  fileId: this.thumb_id,
-                }, (err, response) => {
-                  if (err) return callback(err)
-                  var public_path = encodeURI(`/files/${this.thumb_id}-${response.name}`)
-                  var path = `${__root}public${public_path}`
-                  var wstream = fs.createWriteStream(path)
-                  console.log(`writing to: ${path}`)
+                limited(() => {
                   google.drive({ version: 'v3', auth: jwtClient }).files.get({
                     auth: jwtClient,
                     fileId: this.thumb_id,
-                    alt: 'media'
-                  }).on('error', (err) => {
-                    return callback(err)
-                  }).on('end', () => {
-                    fileCache.set(this.thumb_id, public_path, (err, success) => {
+                  }, (err, response) => {
+                    if (err) return callback(err)
+                    var public_path = encodeURI(`/files/${this.thumb_id}-${response.name}`)
+                    var path = `${__root}public${public_path}`
+                    var wstream = fs.createWriteStream(path)
+                    console.log(`writing to: ${path}`)
+                    google.drive({ version: 'v3', auth: jwtClient }).files.get({
+                      auth: jwtClient,
+                      fileId: this.thumb_id,
+                      alt: 'media'
+                    }).on('error', (err) => {
                       return callback(err)
-                    })
-                  }).pipe(wstream)
+                    }).on('end', () => {
+                      fileCache.set(this.thumb_id, public_path, (err, success) => {
+                        return callback(err)
+                      })
+                    }).pipe(wstream)
+                  })
                 })
               } else {
                 return callback(null)
