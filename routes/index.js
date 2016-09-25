@@ -9,6 +9,7 @@ module.exports = router;
 
 router.use('/admin', require('./admin'))
 router.use('/articles', require('./articles'))
+router.use('/files', require('./files'))
 
 router.get('/', function(req, res) {
   async.parallel([
