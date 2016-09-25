@@ -129,7 +129,7 @@ Schema.methods.fill = function(cb) {
                     fileId: this.cover_id,
                     alt: 'media'
                   }).on('error', (err) => {
-                    console.log(err)
+                    return callback(err)
                   }).on('end', () => {
                     fileCache.set(this.cover_id, public_path, (err, success) => {
                       return callback(err)
@@ -156,7 +156,7 @@ Schema.methods.fill = function(cb) {
                     fileId: this.thumb_id,
                     alt: 'media'
                   }).on('error', (err) => {
-                    console.log(err)
+                    return callback(err)
                   }).on('end', () => {
                     fileCache.set(this.thumb_id, public_path, (err, success) => {
                       return callback(err)
