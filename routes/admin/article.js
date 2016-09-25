@@ -57,8 +57,6 @@ router.get('/:id/edit', function(req, res) {
     } else {
       Article.findOne({_id: req.params.id}, function(err, article) {
         if (err) req.flash('error', err.toString())
-        
-
 
         mocked = false
         if (!article) {
@@ -117,56 +115,58 @@ router.post('/:id/edit', function(req, res) {
     article.is_published = req.body.is_published ? true : false
     article.parent = req.body.parent ? req.body.parent : null
     article.heading_override = req.body.heading_override ? req.body.heading_override : ''
-    
-    if (!article.is_published) {
-      article.date = null
-    } else if (!article.date) {
-      article.date = Date.now()
-    }
-    if (req.body.date) {
-      var d = Date.parse(req.body.date)
-      if (d) {
-        article.date = d
-      }
-    }
 
-    var funcs = []
-    if (req.body.submit == 'Save') {
-      funcs.push(callback => {
-        article.save(function(err) {
-          return callback(err)
+    console.log('Syncing content with google drive...')
+    article.driveSync((err) => {
+      if (err) return callback(err)
+
+      console.log(article.content)
+      
+      if (!article.is_published) {
+        article.date = null
+      } else if (!article.date) {
+        article.date = Date.now()
+      }
+      if (req.body.date) {
+        var d = Date.parse(req.body.date)
+        if (d) {
+          article.date = d
+        }
+      }
+
+      var funcs = []
+      if (req.body.submit == 'Save') {
+        funcs.push(callback => {
+          article.save(function(err) {
+            return callback(err)
+          })
         })
-      })
-    }
-
-    funcs.push(callback => {
-      article.expire()
-      article.fill(err => {
-        return callback(err)  
-      })
-    })    
-
-    async.parallel(funcs, (err, results) => {
-      if (err) {
-        req.flash('error', err.toString())
       }
-      if (err) req.flash('error', err.toString())
 
-      // res.redirect(`/admin/articles/${article._id}/edit`)
-      res.render('admin/articles/edit', {
-        article: article,
-        error: req.flash('error')
-      })  
-      // article.expire()
-      // article.fill(function(err) {
-      //   if (err) req.flash('error', err.toString())
-      //   res.redirect(`/admin/articles/${article._id}/edit`)  
-      // })
+      funcs.push(callback => {
+        article.expire()
+        article.fill(err => {
+          return callback(err)  
+        })
+      })    
+
+      async.parallel(funcs, (err, results) => {
+        if (err) {
+          req.flash('error', err.toString())
+        }
+        if (err) req.flash('error', err.toString())
+
+        res.render('admin/articles/edit', {
+          article: article,
+          error: req.flash('error')
+        })  
+      })
+
+      if (mocked) {
+        delete article
+      }
+  
     })
-
-    if (mocked) {
-      delete article
-    }
   })
 })
 
@@ -201,11 +201,18 @@ router.post('/refresh', function(req, res) {
   Article.findOne({_id: req.body._id}, function(err, article) {
     if (err) req.flash('error', err)
     if (article) {
-      article.expire()
-      article.fill(function(err) {
+      article.driveSync(err => {
         if (err) req.flash('error', err)
-        return res.redirect('/admin/articles')  
-      });
+        article.save(err => {
+          if (err) req.flash('error', err)
+          return res.redirect('/admin/articles')
+        })
+      })
+      // article.expire()
+      // article.fill(function(err) {
+      //   if (err) req.flash('error', err)
+      //   return res.redirect('/admin/articles')  
+      // });
     } else {
       return res.redirect('/admin/articles')
     }
