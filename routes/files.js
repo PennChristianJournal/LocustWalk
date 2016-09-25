@@ -19,7 +19,7 @@ router.get('/:name', function(req, res, next) {
             File.findOne({
                 filename: req.params.name
             }, (err, file, stream) => {
-                if (err) console.log(err); res.end()
+                if (err) console.log(err)
                 if (stream) {
                     process.nextTick(function() {
                         mkdirp(`${__root}public/files`, function(err) {

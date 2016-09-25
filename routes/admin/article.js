@@ -119,8 +119,6 @@ router.post('/:id/edit', function(req, res) {
     console.log('Syncing content with google drive...')
     article.driveSync((err) => {
       if (err) return callback(err)
-
-      console.log(article.content)
       
       if (!article.is_published) {
         article.date = null
@@ -156,10 +154,11 @@ router.post('/:id/edit', function(req, res) {
         }
         if (err) req.flash('error', err.toString())
 
-        res.render('admin/articles/edit', {
-          article: article,
-          error: req.flash('error')
-        })  
+        res.redirect(req.get('referer'));
+        // res.render('admin/articles/edit', {
+        //   article: article,
+        //   error: req.flash('error')
+        // })  
       })
 
       if (mocked) {

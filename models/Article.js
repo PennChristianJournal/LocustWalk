@@ -172,8 +172,8 @@ Schema.methods.driveSync = function(cb) {
             if (err) return callback(err)
             if (response) {
               File.makeWriteStream({
-                name: `${this._id}_cover`,
-                contentType: response.mimeType
+                filename: `${this._id}_cover`,
+                content_type: response.mimeType
               }, (err, wstream) => {
                 if (err) return callback(err)
                 google.drive({ version: 'v3', auth: jwtClient }).files.get({
@@ -202,8 +202,8 @@ Schema.methods.driveSync = function(cb) {
             if (err) return callback(err)
             if (response) {
               File.makeWriteStream({
-                name: `${this._id}_thumb`,
-                contentType: response.mimeType
+                filename: `${this._id}_thumb`,
+                content_type: response.mimeType
               }, (err, wstream) => {
                 if (err) return callback(err)
                 google.drive({ version: 'v3', auth: jwtClient }).files.get({
@@ -225,7 +225,6 @@ Schema.methods.driveSync = function(cb) {
     ], (err, results) => {
       if (err) return callback(err)
       this.content = results[0]
-      console.log(this.content)
       return cb(null)
     })
   })

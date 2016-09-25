@@ -28,20 +28,23 @@ var File = {
         gfs.exist(options, (err, found) => {
           if (err) return reject(err)
           if (found) {
+            console.log('Removing existing file...')
             gfs.remove(options, (err) => {
-              if (err) return reject(err)
-              resolve()
+              if (err) {
+                reject(err)
+              } else {
+                resolve()
+              }
             })
           } else {
             resolve()
           }
         })
+      } else {
+        resolve()
       }
     }).then(() => {
-      var writestream = gfs.createWriteStream({
-        filename: options.name,
-        content_type: options.mimetype
-      })
+      var writestream = gfs.createWriteStream(options)
       // writestream.on('close', function(upload) {
       //   return cb(null, upload)
       // })
