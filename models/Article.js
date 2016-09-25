@@ -87,89 +87,100 @@ Schema.virtual('thumb').get(function() {
 })
 
 Schema.methods.fill = function(cb) {
+  fs.open(`${__root}public${this.cover}`, 'r', (err1, coverFd) => {
+    fs.open(`${__root}public${this.thumb}`, 'r', (err2, thumbFd) => {
+      if (coverFd && thumbFd && this.content) {
+        return cb(null);
+      } else {
 
-  if (this.content && this.cover && this.thumb) {
-    return cb(null)
-  }
+        jwtClient.authorize((err, tokens) => {
+          if (err) return cb(err)
+          async.parallel([
+            (callback) => {
+              if (!this.content) {
+                google.drive({ version: 'v3', auth: jwtClient }).files.export({
+                  auth: jwtClient,
+                  fileId: this.doc_id,
+                  mimeType: 'text/html'
+                }, (err, response) => {
+                  if (err) return callback(err)
+                  var $ = cheerio.load(response)
+                  googleCache.set(this.doc_id, $('body').html(), (err, success) => {
+                    return callback(err)
+                  })
+                })
+              } else {
+                return callback(null)
+              }
+            },
+            (callback) => {
+              if ((!coverFd || !this.cover) && this.cover_id) {
+                google.drive({ version: 'v3', auth: jwtClient }).files.get({
+                  auth: jwtClient,
+                  fileId: this.cover_id,
+                }, (err, response) => {
+                  if (err) return callback(err)
+                  var public_path = encodeURI(`/files/${this.cover_id}-${response.name}`)
+                  var path = `${__root}public${public_path}`
+                  var wstream = fs.createWriteStream(path)
+                  console.log(`writing to: ${path}`)
+                  google.drive({ version: 'v3', auth: jwtClient }).files.get({
+                    auth: jwtClient,
+                    fileId: this.cover_id,
+                    alt: 'media'
+                  }).on('error', (err) => {
+                    console.log(err)
+                  }).on('end', () => {
+                    fileCache.set(this.cover_id, public_path, (err, success) => {
+                      return callback(err)
+                    })
+                  }).pipe(wstream)
+                })
+              } else {
+                return callback(null)
+              }
+            },
+            (callback) => {
+              if ((!thumbFd || !this.thumb) && this.thumb_id) {
+                google.drive({ version: 'v3', auth: jwtClient }).files.get({
+                  auth: jwtClient,
+                  fileId: this.thumb_id,
+                }, (err, response) => {
+                  if (err) return callback(err)
+                  var public_path = encodeURI(`/files/${this.thumb_id}-${response.name}`)
+                  var path = `${__root}public${public_path}`
+                  var wstream = fs.createWriteStream(path)
+                  console.log(`writing to: ${path}`)
+                  google.drive({ version: 'v3', auth: jwtClient }).files.get({
+                    auth: jwtClient,
+                    fileId: this.thumb_id,
+                    alt: 'media'
+                  }).on('error', (err) => {
+                    console.log(err)
+                  }).on('end', () => {
+                    fileCache.set(this.thumb_id, public_path, (err, success) => {
+                      return callback(err)
+                    })
+                  }).pipe(wstream)
+                })
+              } else {
+                return callback(null)
+              }
+            },
+          ], function(err, res) {
+            return cb(err)
+          })
+        })
 
-  jwtClient.authorize((err, tokens) => {
-    if (err) return cb(err)
-    async.parallel([
-      (callback) => {
-        if (!this.content) {
-          google.drive({ version: 'v3', auth: jwtClient }).files.export({
-            auth: jwtClient,
-            fileId: this.doc_id,
-            mimeType: 'text/html'
-          }, (err, response) => {
-            if (err) return callback(err)
-            var $ = cheerio.load(response)
-            googleCache.set(this.doc_id, $('body').html(), (err, success) => {
-              return callback(err)
-            })
-          })
-        } else {
-          return callback(null)
-        }
-      },
-      (callback) => {
-        if (!this.cover && this.cover_id) {
-          google.drive({ version: 'v3', auth: jwtClient }).files.get({
-            auth: jwtClient,
-            fileId: this.cover_id,
-          }, (err, response) => {
-            if (err) return callback(err)
-            var public_path = encodeURI(`/files/${this.cover_id}-${response.name}`)
-            var path = `${__root}public${public_path}`
-            var wstream = fs.createWriteStream(path)
-            console.log(`writing to: ${path}`)
-            google.drive({ version: 'v3', auth: jwtClient }).files.get({
-              auth: jwtClient,
-              fileId: this.cover_id,
-              alt: 'media'
-            }).on('error', (err) => {
-              console.log(err)
-            }).on('end', () => {
-              fileCache.set(this.cover_id, public_path, (err, success) => {
-                return callback(err)
-              })
-            }).pipe(wstream)
-          })
-        } else {
-          return callback(null)
-        }
-      },
-      (callback) => {
-        if (!this.thumb && this.thumb_id) {
-          google.drive({ version: 'v3', auth: jwtClient }).files.get({
-            auth: jwtClient,
-            fileId: this.thumb_id,
-          }, (err, response) => {
-            if (err) return callback(err)
-            var public_path = encodeURI(`/files/${this.thumb_id}-${response.name}`)
-            var path = `${__root}public${public_path}`
-            var wstream = fs.createWriteStream(path)
-            console.log(`writing to: ${path}`)
-            google.drive({ version: 'v3', auth: jwtClient }).files.get({
-              auth: jwtClient,
-              fileId: this.thumb_id,
-              alt: 'media'
-            }).on('error', (err) => {
-              console.log(err)
-            }).on('end', () => {
-              fileCache.set(this.thumb_id, public_path, (err, success) => {
-                return callback(err)
-              })
-            }).pipe(wstream)
-          })
-        } else {
-          return callback(null)
-        }
-      },
-    ], function(err, res) {
-      return cb(err)
-    })
+      }
+    })  
   })
+  
+  // if (this.content && this.cover && this.thumb) {
+  //   return cb(null)
+  // }
+
+  
 }
 
 Schema.methods.expire = function() {
