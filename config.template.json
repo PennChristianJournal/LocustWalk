@@ -4,6 +4,9 @@
     "admin_name": "",
     "admin_email": "",
     "admin_pass": "",
-    "root": ""
+    "root": "",
+    "google_client_id": "",
+    "google_client_secret": "",
+    "emails": ""
   }
 }
