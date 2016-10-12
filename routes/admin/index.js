@@ -3,13 +3,41 @@
 var express = require('express')
 var router = express.Router()
 var Article = require(__root + 'models/Article')
+var passport = require('./auth')
 module.exports = router
 
-require('./accounts')(router)
+//require('./accounts')(router)
 
 var node_env = process.env.NODE_ENV || 'development'
 
+router.get('/login', passport.authenticate('google', {
+  scope: ['https://www.googleapis.com/auth/userinfo.email']
+}))
+
+router.get('/login/callback', passport.authenticate('google', {
+  successRedirect: '/admin/login/success',
+  failureRedirect: '/'
+}))
+
+router.get('/login/success', function(req, res) {
+  res.redirect(req.session.lastUrl || '/')
+})
+
 router.use('/', function (req, res, next) {
+  if (!req.isAuthenticated()) {
+    req.session.lastUrl = req.originalUrl;
+    return res.redirect('/admin/login')
+  } else {
+    return next()
+  }
+})
+
+router.get('/logout', function(req, res) {
+  req.logout()
+  res.redirect('/')
+})
+
+/*router.use('/', function (req, res, next) {
   if (!req.isAuthenticated()) {
     return res.redirect('/admin/login')
   } else {
@@ -27,7 +55,11 @@ router.get('/', function(req, res) {
       articles: articles
     })
   })
-})
+})*/
 
 router.use('/articles', require('./articles'))
-router.use('/users', require('./users'))
+
+router.get('/', (req, res) => {
+  res.redirect('/admin/articles/')
+})
+//router.use('/users', require('./users'))

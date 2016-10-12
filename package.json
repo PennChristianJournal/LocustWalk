@@ -21,6 +21,7 @@
     "body-parser": "^1.15.1",
     "bower": "^1.7.9",
     "connect-flash": "^0.1.1",
+    "connect-redis": "^3.1.0",
     "cookie-parser": "^1.4.1",
     "express": "^4.13.4",
     "express-alias": "^0.4.0",
@@ -41,8 +42,10 @@
     "nodemailer": "^2.3.0",
     "nodemailer-smtp-transport": "^2.4.1",
     "passport": "^0.3.2",
+    "passport-google-oauth20": "^1.0.0",
     "passport-local": "^1.0.0",
     "pug": "^2.0.0-alpha7",
+    "redis": "^2.6.2",
     "request": "^2.72.0",
     "serve-favicon": "^2.3.0",
     "slugs": "^0.1.3"

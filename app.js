@@ -17,7 +17,7 @@ var fs = require('fs')
 var mkdirp = require('mkdirp')
 const favicon = require('serve-favicon')
 
-var User = require('./models/User')
+//var User = require('./models/User')
 var Files = require('./models/Files')
 
 var express = require('express')
@@ -26,6 +26,7 @@ var app = module.exports = express()
 var config = require('./config.js')
 
 var node_env = process.env.NODE_ENV || 'development'
+app.locals.environment = node_env;
 
 mongoose.set('debug', node_env == 'development' ? true : false)
 require('mongoose-cache').install(mongoose, {
@@ -41,13 +42,21 @@ app.use(logger(node_env == 'development' ? 'dev' : 'common'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cookieParser())
-app.use(session({secret: config.setup.cookie_secret, saveUninitialized: true, resave: true}))
+var RedisStore = require('connect-redis')(session);
+app.use(session({
+  secret: config.setup.cookie_secret, 
+  saveUninitialized: true, 
+  resave: true,
+  store: new RedisStore({
+    client: require('redis').createClient(process.env.REDIS_URL || 'redis://127.0.0.1:6379')
+  })
+}))
 app.use(fileUpload())
 
 app.use(sassMiddleware({
   src: __dirname + '/sass', 
   dest: __dirname + '/public',
-  // outputStyle: 'compressed',
+  outputStyle: 'compressed',
   debug: node_env == 'development',       
 })); 
 
@@ -128,7 +137,7 @@ app.get('/clearDB', (req, res, next) => {
   }
 })
 
-app.get('/seedDB', (req, res, next) => {
+/*app.get('/seedDB', (req, res, next) => {
   if (node_env == 'development') {
     res.end()
     mongoose.connection.db.dropDatabase()
@@ -242,11 +251,11 @@ app.get('/seedDB', (req, res, next) => {
   } else {
     next()
   }
-})
+})*/
 
 app.use('/', require('./routes'))
 
-var createAdmin = function(cb) {
+/*var createAdmin = function(cb) {
   User.findOne({email: config.setup.admin_email}, function(err, user) {
     if (err) throw err
     if (!user) {
@@ -264,17 +273,17 @@ var createAdmin = function(cb) {
   })
 }
 
-var fakery = require('mongoose-fakery')
+var fakery = require('mongoose-fakery')*/
 
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/locustwalk', function(err) {
   if (err) throw err
   console.log('Connected to database')
-  createAdmin(function() {
+  //createAdmin(function() {
     // require('./email/mailer').init(function() {
       http.createServer(app).listen(app.get('port'), function(){
         console.log("Express server listening on port " + app.get('port'))
       })
     // })
-  })  
+  //})  
 })
 
