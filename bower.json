@@ -22,6 +22,7 @@
     "medium-editor-insert-plugin": "^2.3.2",
     "normalize-css": "^4.1.1",
     "moment": "^2.13.0",
-    "font-awesome": "^4.6.3"
+    "font-awesome": "^4.6.3",
+    "typeahead.js": "^0.11.1"
   }
 }

@@ -258,3 +258,46 @@ router.post('/:id/edit', function(req, res) {
   })
 
 })
+
+router.get('/search/docs', function(req, res) {
+   Article.searchDrive(req.query.name, 'application/vnd.google-apps.document', function(err, files) {
+    return res.send(files)
+  })
+})
+
+router.post('/:id/sync', function(req, res) {
+  Article.findOne({_id: req.params.id}, function(err, article) {
+    if (err) req.flash('error', err.toString())
+    
+    article.populate(req.body.doc_id, function(err) {
+      if (err) req.flash('error', err.toString())
+
+      async.parallel([
+        (cb) => {
+          Article.findOne({
+            _id: article.parent,
+            is_published: true
+          }, (err, parent) => {
+            return cb(err, parent)
+          })
+        },
+        (cb) => {
+          Article.find({
+            parent: req.params.id,
+            is_published: true
+          }, (err, responses) => {
+            return cb(err, responses)
+          })
+        }
+      ], (err, results) => {
+        if (err) req.flash('error', err.toString())
+        res.render('admin/articles/article-form', {
+          error: req.flash('error'),
+          article: article,
+          parent: results[0],
+          responses: results[1]
+        })
+      })
+    })
+  })
+})
