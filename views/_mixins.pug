@@ -1,5 +1,5 @@
 mixin article-thumb(article)
-  .article-thumb-block
+  .article-thumb-block(data-article-id=article.id)
     .thumb
       a(href=`/articles/${article.slug}`): .thumb-aspect(style=`background-image: url(/files/${article.thumb})`)
     .article-thumb-content

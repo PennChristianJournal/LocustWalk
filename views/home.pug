@@ -22,7 +22,7 @@ block meta
   meta(property='twitter:image:height' content='667')  
 
 mixin featured_article(feature, ismain)
-  a(href=`/articles/${feature.slug}`)
+  a(href=`/articles/${feature.slug}` data-article-id=feature.id)
     .bg-img(style='background-image: url(/files/' + feature.thumb + ')')
     .title-box
       .title-bg(style='background-image: url(/files/' + feature.thumb + ')')

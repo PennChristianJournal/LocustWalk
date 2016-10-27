@@ -27,7 +27,7 @@ block head
 
 block content
 
-  .article
+  .article(data-article-id=article.id)
     if article.cover
       .article-cover(style=`background-image:url(/files/${article.cover})`)
       .nav-mask
@@ -44,9 +44,9 @@ block content
     .container
 
       if parent
-        .response-to
+        .response-to(data-article-id=parent.id)
           h2 In Response To:&nbsp;
-            a(href=`/articles/${parent.slug}`) !{parent.title}
+            a.response-title(href=`/articles/${parent.slug}`) !{parent.title}
 
       h1.article-title.strong !{article.title}
       h4.article-author-date.thin #{article.author} &#8212; #{moment(article.date).format('MMM DD, YYYY')}
