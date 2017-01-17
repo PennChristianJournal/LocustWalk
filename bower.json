@@ -1,0 +1,25 @@
+{
+  "name": "locustwalk",
+  "description": "",
+  "main": "server.js",
+  "authors": [
+    "Austin Eng"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^2.2.3",
+    "bootstrap": "^3.3.6",
+    "normalize-css": "^4.1.1",
+    "font-awesome": "^4.6.3",
+    "typeahead.js": "0.10.5"
+  }
+}
