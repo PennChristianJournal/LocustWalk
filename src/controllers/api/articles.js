@@ -20,7 +20,6 @@ function makeQuery(req) {
 }
 
 router.get('/', (req, res) => {
-
     var query = Article.find(makeQuery(req));
     if (req.query.limit) query = query.limit(parseInt(req.query.limit));
     if (req.query.sort) query = query.sort({[req.query.sort]: -1});
@@ -29,10 +28,17 @@ router.get('/', (req, res) => {
         if (err) console.log(err);
         res.send(articles);
     });
-    // res.send([{
-    //     id: 5,
-    //     content: 'hiiiii'
-    // }])
+});
+
+router.get('/metadata', (req, res) => {
+    var query = Article.find(makeQuery(req));
+    if (req.query.limit) query = query.limit(parseInt(req.query.limit));
+    if (req.query.sort) query = query.sort({[req.query.sort]: -1});
+    
+    query.exec((err, articles) => {
+        if (err) console.log(err);
+        res.send(articles);
+    });
 });
 
 export default router

@@ -114,12 +114,13 @@ p {
   margin-top: 10px;
 }
 
+.p {
+  @extend p;
+}
+
 th, td {
   padding: 5px 10px;
 }
 
-.announcement p a {
-  color: #eee;
-}
-
 @import 'article-thumb';
+@import 'home';

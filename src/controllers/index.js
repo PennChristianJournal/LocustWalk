@@ -54,13 +54,14 @@ router.get('/', function(req, res) {
         }
     }, applyMiddleware(thunk, logger));
 
-    // store.dispatch(fetchArticles('recent', 1, {
-    //     sort: 'date',
-    //     limit: 20,
-    //     published: true
-    // })).then(() => {
+    store.dispatch(fetchArticles('featured', 1, {
+        sort: 'date',
+        limit: 12,
+        published: true,
+        featured: true
+    })).then(() => {
         res.send(generatePage(HomePage, store));
-    // });
+    });
 });
 
 import api from './api'

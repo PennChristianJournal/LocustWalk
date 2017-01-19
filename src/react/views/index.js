@@ -5,6 +5,7 @@ import ArticleGroup from '../components/article-group'
 import ArchivePanel from '../components/panels/archive'
 import SistersPanel from '../components/panels/sisters'
 import ArticleThumb from '../components/article-thumb'
+import FeatureSlider from '../components/feature-slider'
 
 const HomePage = () =>
     <PageLayout id="home-page"
@@ -24,7 +25,7 @@ const HomePage = () =>
             published: true,
             featured: true
         }}>
-            {articles => <div></div>}
+            {articles => <FeatureSlider articles={articles} />}
         </ArticleGroup>
         ]}
 

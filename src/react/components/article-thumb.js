@@ -11,7 +11,7 @@ export default class ArticleThumb extends Component {
                 <div className="thumb">
                     <a href={`/articles/${article.slug}`}>
                         <div className="thumb-aspect" style={{
-                            backgroundImage: article.thumb
+                            backgroundImage: `url("/files/${article.thumb}")`
                         }}></div>
                     </a>
                 </div>
