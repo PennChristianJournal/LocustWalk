@@ -14,62 +14,54 @@ import slugs from 'slugs'
 // );
 
 const Schema = mongoose.Schema({
-    title: {
-        type: String,
-        required: true
-    },
-    is_published: {
-        type: Boolean,
-        default: false,
-        index: true
-    },
-    is_featured: {
-        type: Boolean,
-        index: true,
-        default: false
-    },
-    date: {
-        type: Date,
-        index: true
-    },
-    author: String,
-    heading_override: {
-        type: String,
-        default: ''
-    },
-    slug: {
-        type: String,
-        index: {
-            unique: true,
-            sparse: true
-        }
-    },
-    doc_id: {
-        type: String,
-        index: true,
-        required: true
-    },
-    cover_id: String,
-    thumb_id: String,
-    content: {
-        type: String,
-        default: ''
-    },
-    parent: {
-        type: mongoose.Schema.Types.ObjectId,
-        index: true
+  title: {
+    type: String,
+    required: true
+  },
+  is_published: {
+    type: Boolean,
+    default: false,
+    index: true
+  },
+  is_featured: {
+    type: Boolean,
+    index: true,
+    default: false
+  },
+  date: {
+    type: Date,
+    index: true
+  },
+  author: String,
+  content: {
+    type: String,
+    required: true,
+    $p: {
+      widget: 'textarea',
+      display: 'e'
     }
+  },
+  heading_override: {
+    type: String,
+    default: ''
+  },
+  slug: {
+    type: String,
+    index: {
+      unique: true,
+      sparse: true
+    }
+  },
+  pending_attachments: [String],
+  cover: String,
+  thumb: String, 
+  parent: {
+    type: mongoose.Schema.Types.ObjectId,
+    index: true
+  }
 }, {
-    timestamps: true
-});
-
-Schema.virtual('cover').get(function() {
-    return `/files/${this._id}_cover`
-});
-
-Schema.virtual('thumb').get(function() {
-    return `/files/${this._id}_thumb`
-});
+  timestamps: true
+})
 
 Schema.pre('save', function(next) {
     var self = this;

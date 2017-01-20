@@ -3,12 +3,16 @@ import React, { Component } from 'react'
 import {articleHeading} from '../helpers/article'
 import moment from 'moment'
 import {htmlPreview} from '../helpers/format'
+import ArticleGroup from './article-group'
 
 class FeatureThumb extends Component {
     render() {
         var article = this.props.article
         return (
-            <div className={this.props.response ? "feature-response" : "featured"}>
+            <div 
+                className={this.props.response ? "feature-response" : "featured"}
+                style={this.props.single ? {width: '100%'} : null}>
+
                 <div className={this.props.response ? "feature-response-aspect" : "featured-block-aspect"}>
                     <div className="content">
                         <a href={`/articles/${article.slug}`}>
@@ -50,9 +54,30 @@ export default class FeatureBlock extends Component {
                 </div>
                 <div className="feature-block-aspect">
                     <div className="content">
-                        <FeatureThumb article={article} />
-                        <FeatureThumb article={article} response />
-                        <FeatureThumb article={article} response />
+                        <ArticleGroup name={`response.${article._id}`} query={{
+                            sort: 'date',
+                            limit: 2,
+                            published: true,
+                            parent: article._id
+                        }}>
+                            {articles => {
+                                if (articles.length == 2) {
+                                    return (
+                                        <div>
+                                            <FeatureThumb article={article} />
+                                            <FeatureThumb article={articles[0]} response />
+                                            <FeatureThumb article={articles[1]} response />
+                                        </div>
+                                    )
+                                } else {
+                                    return (
+                                        <div>
+                                            <FeatureThumb article={article} single />
+                                        </div>
+                                    )
+                                } 
+                            }} 
+                        </ArticleGroup>
                     </div>
                 </div>
             </div>

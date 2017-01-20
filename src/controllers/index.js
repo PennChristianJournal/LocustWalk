@@ -44,15 +44,7 @@ export function generatePage(Page, store) {
 import HomePage from '../react/views/index'
 router.get('/js/bundle.js', browserify(`${__dirname}/../react/views/index.js`));
 router.get('/', function(req, res) {
-    const store = createStore(reducer, {
-        metadata: {
-            title: 'Locust Walk - Penn Christian Journal',
-            description: 'Locust Walk is a student-led Christian publication that exists to present the perspectives of faith and non-faith worldviews on questions of truth and purpose. Through active dialogue within the University of Pennsylvania, we seek to build relationships modeled after the life and teachings of Jesus Christ who informs our understanding of cultural engagement, reconciliation, and community. We pledge to cultivate an environment where the pursuit of solidarity in diversity can lay a foundation for conversation conducted with love and mutual respect.',
-            image: '/img/social-share.png',
-            imageWidth: 1280,
-            imageHeight: 667
-        }
-    }, applyMiddleware(thunk, logger));
+    const store = createStore(reducer, applyMiddleware(thunk));
 
     store.dispatch(fetchArticles('featured', 1, {
         sort: 'date',
@@ -66,5 +58,36 @@ router.get('/', function(req, res) {
 
 import api from './api'
 router.use('/api', api);
+
+
+import File from '../models/file'
+import mkdirp from 'mkdirp'
+import fs from 'fs'
+router.get('/files/:id', function(req, res, next) {
+  var assetPath = `${__dirname}/../../public/files/${req.params.id}`
+  fs.exists(assetPath, (exists) => {
+    if (exists) {
+      return next()
+    } else {
+      File.findOne({_id: req.params.id}, function(err, file, stream) {
+        if (err) console.log(err)
+        if (file) {
+          process.nextTick(function() {
+            mkdirp(`${__dirname}/../../public/files`, function(err) {
+              if (err) console.log(err)
+              var wstream = fs.createWriteStream(assetPath)
+              stream.pipe(wstream)
+            })
+          })
+          res.writeHead(200, {'Content-Type': file.contentType })
+          stream.pipe(res)
+        } else {
+          res.status(404)
+          res.type('txt').send('Not found')
+        }
+      })
+    }
+  })
+})
 
 export default router;

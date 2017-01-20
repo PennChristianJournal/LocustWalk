@@ -83,7 +83,7 @@ import reducer from '../reducers'
 
 if (typeof document !== 'undefined') {
     const state = window.__STATE__;
-    const store = createStore(reducer, state, applyMiddleware(thunk, logger));
+    const store = createStore(reducer, state, applyMiddleware(thunk));
     render(
         <Provider store={store}><HomePage /></Provider>,
         document.getElementById('root')

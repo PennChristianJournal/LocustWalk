@@ -6,7 +6,8 @@ import Article from '../../models/article'
 function makeQuery(req) {
     var q = {
         is_published: req.query.published,
-        is_featured: req.query.featured
+        is_featured: req.query.featured,
+        parent: req.query.parent
     };
 
     for (let name in q) {
@@ -20,17 +21,6 @@ function makeQuery(req) {
 }
 
 router.get('/', (req, res) => {
-    var query = Article.find(makeQuery(req));
-    if (req.query.limit) query = query.limit(parseInt(req.query.limit));
-    if (req.query.sort) query = query.sort({[req.query.sort]: -1});
-    
-    query.exec((err, articles) => {
-        if (err) console.log(err);
-        res.send(articles);
-    });
-});
-
-router.get('/metadata', (req, res) => {
     var query = Article.find(makeQuery(req));
     if (req.query.limit) query = query.limit(parseInt(req.query.limit));
     if (req.query.sort) query = query.sort({[req.query.sort]: -1});

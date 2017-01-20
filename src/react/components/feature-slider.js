@@ -20,6 +20,7 @@ export default class FeatureSlider extends Component {
         const count = this.props.articles.length
         if (count > 1 && typeof this.interval === 'undefined') {
             this.interval = setInterval(() => {
+                console.log(1)
                 if (this.state.autoscroll) {
                     var idx = this.state.idx + 1;
                     if (idx >= count) idx = 0
