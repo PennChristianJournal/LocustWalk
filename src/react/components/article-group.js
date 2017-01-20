@@ -6,12 +6,12 @@ import { fetchArticlesIfNeeded } from '../actions/articles'
 class ArticleGroup extends Component {
 
     componentDidMount() {
-        this.props.setPage(this.props.page || 1);
+        this.props.setPage(this.props.page || 0);
     }
 
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.page !== this.props.page) {
-            this.props.setPage(this.props.page || 1);
+            this.props.setPage(this.props.page || 0);
         }
     }
 
@@ -26,7 +26,7 @@ ArticleGroup.propTypes = {
 
 export default connect((state, ownProps) => {
     const group = state.articles[ownProps.name] || {};
-    const page = ownProps.page || 1;
+    const page = ownProps.page || 0;
     const pagegroup = group[page] || {};
     const ids = pagegroup.articles || [];
     return {

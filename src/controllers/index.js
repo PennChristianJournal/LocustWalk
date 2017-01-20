@@ -15,7 +15,7 @@ import reducer from '../react/reducers/index'
 import browserify from 'browserify-middleware'
 import babelify from 'babelify'
 
-import { fetchArticles } from '../react/actions/articles'
+import { fetchArticles, invalidateArticles } from '../react/actions/articles'
 
 browserify.settings({
     transform: [
@@ -46,12 +46,13 @@ router.get('/js/bundle.js', browserify(`${__dirname}/../react/views/index.js`));
 router.get('/', function(req, res) {
     const store = createStore(reducer, applyMiddleware(thunk));
 
-    store.dispatch(fetchArticles('featured', 1, {
+    store.dispatch(fetchArticles('featured', 0, {
         sort: 'date',
-        limit: 12,
+        limit: 1,
         published: true,
         featured: true
     })).then(() => {
+        store.dispatch(invalidateArticles('featured', 0))
         res.send(generatePage(HomePage, store));
     });
 });

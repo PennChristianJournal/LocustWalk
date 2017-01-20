@@ -3,6 +3,7 @@ import fetch from 'isomorphic-fetch'
 
 export const REQUEST_ARTICLES = 'REQUEST_ARTICLES';
 export const RECEIVE_ARTICLES = 'RECEIVE_ARTICLES';
+export const INVALIDATE_ARTICLES = 'INVALIDATE_ARTICLES';
 
 function requestArticles(name, page) {
     return {
@@ -21,7 +22,7 @@ function receiveArticles(name, page, articles) {
     }
 }
 
-export function fetchArticles(name, page = 1, params = {}) {
+export function fetchArticles(name, page = 0, params = {}) {
     params = Object.keys(params).map(function(k) {
         return encodeURIComponent(k) + '=' + encodeURIComponent(params[k])
     }).join('&');
@@ -44,12 +45,20 @@ function shouldFetchArticles(state, name, page) {
     return !state.articles[name][page].valid
 }
 
-export function fetchArticlesIfNeeded(name, page = 1, params = {}) {
+export function fetchArticlesIfNeeded(name, page = 0, params = {}) {
     return (dispatch, getState) => {
         if (shouldFetchArticles(getState(), name, page, params)) {
             return dispatch(fetchArticles(name, page, params))
         } else {
             return Promise.resolve()
         }
+    }
+}
+
+export function invalidateArticles(name, page = 0) {
+    return {
+        type: INVALIDATE_ARTICLES,
+        name,
+        page
     }
 }
