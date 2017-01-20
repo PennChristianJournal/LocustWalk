@@ -13,7 +13,7 @@ class FeatureThumb extends Component {
                 className={this.props.response ? "feature-response" : "featured"}
                 style={this.props.single ? {width: '100%'} : null}>
 
-                <div className={this.props.response ? "feature-response-aspect" : "featured-block-aspect"}>
+                <div className={this.props.response ? "feature-response-aspect" : this.props.single ? "featured-block-aspect" : "featured-aspect"}>
                     <div className="content">
                         <a href={`/articles/${article.slug}`}>
                             <div className="bg-img" style={{backgroundImage: `url("/files/${article.thumb}")`}}></div>
@@ -27,7 +27,7 @@ class FeatureThumb extends Component {
                                         <span className="date">{moment(article.date).format('MMM, DD YYYY')}</span>
                                         <br />
                                         {this.props.response ? null : 
-                                        <span className="preview p">{htmlPreview(article.content, 140)}</span>
+                                        <span className="preview p" dangerouslySetInnerHTML={{__html: htmlPreview(article.content, 140)}}></span>
                                         }
                                     </p>
                                 </div>

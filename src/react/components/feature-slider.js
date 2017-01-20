@@ -55,7 +55,7 @@ export default class FeatureSlider extends Component {
     slideRight() {
         this.setState({
             autoscroll: false,
-            idx: Math.min(this.props.articles.length, this.state.idx + 1)
+            idx: Math.min(this.props.articles.length - 1, this.state.idx + 1)
         })
     }
 
