@@ -42,6 +42,7 @@ export function generatePage(Page, store) {
 }
 
 import HomePage from '../react/views/index'
+
 router.get('/js/bundle.js', browserify(`${__dirname}/../react/views/index.js`));
 router.get('/', function(req, res) {
     const store = createStore(reducer, applyMiddleware(thunk));
@@ -55,6 +56,15 @@ router.get('/', function(req, res) {
         store.dispatch(invalidateArticles('featured', 0))
         res.send(generatePage(HomePage, store));
     });
+});
+import AboutPage from '../react/views/about'
+
+router.get('/about/js/bundle.js', browserify(`${__dirname}/../react/views/about.js`));
+router.get('/about', function(req, res) {
+    const store = createStore(reducer, applyMiddleware(thunk));
+
+        res.send(generatePage(AboutPage,store));
+
 });
 
 import api from './api'

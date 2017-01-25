@@ -1,4 +1,3 @@
-
 import React from 'react'
 import PageLayout from '../templates/page-layout'
 import ArticleGroup from '../components/article-group'
@@ -7,44 +6,17 @@ import SistersPanel from '../components/panels/sisters'
 import ArticleThumb from '../components/article-thumb'
 import FeatureSlider from '../components/feature-slider'
 
-const HomePage = () =>
-    <PageLayout id="home-page"
+const AboutPage = () =>
+    <PageLayout id="about-page"
         top={[
-        <div className="row">
-            <div className="col-md-12 col-sm-12">
-                <div className="tile tile-vertical blue-theme announcement">
-                    <p>Now accepting response pieces to any feature article for our first print edition to be released Jan 2017. Send your submissions to <a href="mailto:pennchristianjournal@gmail.com">pennchristianjournal@gmail.com</a>.</p>
-                    <p>Interested in writing a feature article for 2017? Send an email to <a href="mailto:pennchristianjournal@gmail.com">pennchristianjournal@gmail.com</a>.</p>
-                </div>
-            </div>
-        </div>
-        ,
-        <ArticleGroup name="featured" query={{
-            sort: 'date',
-            limit: 12,
-            published: true,
-            featured: true
-        }}>
-            {articles => <FeatureSlider articles={articles} />}
-        </ArticleGroup>
+
         ]}
 
-        main={
-        <ArticleGroup name="recent" query={{
-                sort: 'date',
-                limit: 20,
-                published: true
-            }}>
-            {articles =>
-                <div className="tile tile-vertical white-theme">
-                    <h2 className="strong">Recent Articles</h2>
-                    {articles.map((article, i) => {
-                        return <ArticleThumb article={article} key={i} />
-                    })}
-                </div>
-            }
-        </ArticleGroup>
-        }
+        main={[
+        <h1 className="strong">Our Mission</h1>,
+          <p className="thin">Our Mission</p>
+
+        ]}
 
         side={[
         <div className="row">
@@ -71,8 +43,7 @@ const HomePage = () =>
     />
 ;
 
-export default HomePage
-
+export default AboutPage
 import { render } from 'react-dom'
 import { createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
@@ -85,7 +56,7 @@ if (typeof document !== 'undefined') {
     const state = window.__STATE__;
     const store = createStore(reducer, state, applyMiddleware(thunk, logger));
     render(
-        <Provider store={store}><HomePage /></Provider>,
+        <Provider store={store}><AboutPage /></Provider>,
         document.getElementById('root')
     )
 }
