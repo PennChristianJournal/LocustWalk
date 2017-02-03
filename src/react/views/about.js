@@ -23,7 +23,8 @@ const AboutPage = () =>
           <h2 className="strong">Statement of Faith</h2><p>We believe in one God,<br />
 the Father almighty,<br />
 maker of heaven and earth,<br />
-of all things visible and invisible.<br />
+of all things visible and invisible.<br /></p>
+<p>
 And in one Lord Jesus Christ,<br />
 the only Son of God,<br />
 begotten from the Father before all ages,<br />

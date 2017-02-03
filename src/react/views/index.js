@@ -74,4 +74,4 @@ const HomePage = () =>
 export default HomePage
 
 import {mount} from '../helpers/page'
-mount(HomePage)
+mount(HomePage) 
