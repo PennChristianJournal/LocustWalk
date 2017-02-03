@@ -31,6 +31,15 @@ export function generatePage(Page, store, clientScript) {
             <body>
                 <script>window.__STATE__ = ${JSON.stringify(store.getState())};</script>
                 <div id="root">${renderToString(page)}</div>
+                <script>
+                (function() {
+                    if (window.location.pathname.endsWith('/') === false) {
+                        var re = new RegExp("\/?(#|$)");
+                        var url = window.location.href.replace(re, '/$1');
+                        window.history.replaceState(null, document.title, url);
+                    }
+                })();
+                </script>
                 <script src="js/bundle.js"></script>
             </body>
         </html>

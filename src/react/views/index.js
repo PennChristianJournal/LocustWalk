@@ -73,19 +73,5 @@ const HomePage = () =>
 
 export default HomePage
 
-import { render } from 'react-dom'
-import { createStore, applyMiddleware } from 'redux'
-import thunk from 'redux-thunk'
-import createLogger from 'redux-logger'
-const logger = createLogger();
-import { Provider } from 'react-redux'
-import reducer from '../reducers'
-
-if (typeof document !== 'undefined') {
-    const state = window.__STATE__;
-    const store = createStore(reducer, state, applyMiddleware(thunk, logger));
-    render(
-        <Provider store={store}><HomePage /></Provider>,
-        document.getElementById('root')
-    )
-}
+import {mount} from '../helpers/page'
+mount(HomePage)
