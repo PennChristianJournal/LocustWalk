@@ -7,7 +7,9 @@ function makeQuery(req) {
     var q = {
         is_published: req.query.published,
         is_featured: req.query.featured,
-        parent: req.query.parent
+        parent: req.query.parent,
+        _id: req.query._id,
+        slug: req.query.slug
     };
 
     for (let name in q) {

@@ -1,6 +1,14 @@
 
-import React, {Component} from 'react'
+import React from 'react'
+import PageLayout from '../templates/page-layout'
 
-export default class ArticlePage extends Component {
+const ArticlePage = () => 
+    <PageLayout>
+        hi
+    </PageLayout>
+;
 
-}
+export default ArticlePage
+
+import {mount} from '../helpers/page'
+mount(ArticlePage)
