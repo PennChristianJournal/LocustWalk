@@ -34,6 +34,14 @@ class Head extends Component {
     }
 }
 
-export default connect(state => {
-    return Object.assign({}, state.metadata);
+export default connect((state, ownProps) => {
+    const {metadata} = ownProps;
+    const {meta, link, title} = metadata || {};
+
+    var props = Object.assign({}, state.metadata);
+    if (title) props.title = title;
+    if (meta) props.meta = props.meta.concat(meta);
+    if (link) props.link = props.link.concat(link);
+
+    return props
 })(Head)

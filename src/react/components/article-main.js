@@ -18,27 +18,27 @@ export default class ArticleMain extends Component {
         const article = this.props.article;
         return (
             <div className="article" data-article-id={article._id}>
-                <div className="container">
-                    <Optional test={article.cover}>
-                        <div>
-                            <div className="article-cover" style={{backgroundImage: `url("/files/${article.cover}")`}} />
-                            <div className="nav-mask">
-                                <div className="article-cover-blur" style={{backgroundImage: `url("/files/${article.cover}")`}}></div>
-                                <div className="nav-mask-bg" />
-                            </div>
+                <Optional test={article.cover}>
+                    <div>
+                        <div className="article-cover" style={{backgroundImage: `url("/files/${article.cover}")`}} />
+                        <div className="nav-mask">
+                            <div className="article-cover-blur" style={{backgroundImage: `url("/files/${article.cover}")`}}></div>
+                            <div className="nav-mask-bg" />
                         </div>
-                    </Optional>
-                    <Optional test={!article.cover}>
-                        <div>
-                            <style>{`
-                                nav.navbar {
-                                    background-color: #222;
-                                }
-                            `}</style>
-                            <div style={{marginTop: '80px'}} />
-                        </div>
-                    </Optional>
+                    </div>
+                </Optional>
+                <Optional test={!article.cover}>
+                    <div>
+                        <style>{`
+                            nav.navbar {
+                                background-color: #222;
+                            }
+                        `}</style>
+                        <div style={{marginTop: '80px'}} />
+                    </div>
+                </Optional>
 
+                <div className="container">
                     <Optional test={article.parent}>
                         <ArticleGroup name="parent" query={{
                             _id: article.parent,

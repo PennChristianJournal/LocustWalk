@@ -23,7 +23,7 @@ import reducer from '../react/reducers/index'
 
 export function generatePage(Page, store, clientScript) {
     const page = <Provider store={store}><Page /></Provider>;
-    const head = <Provider store={store}><Head /></Provider>;
+    const head = <Provider store={store}><Head metadata={Page.metadata}/></Provider>;
     return `
         <!doctype html>
         <html>

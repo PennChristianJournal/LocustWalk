@@ -73,5 +73,15 @@ const HomePage = () =>
 
 export default HomePage
 
+HomePage.metadata = Object.assign({}, PageLayout.metadata, {
+    link: [
+        {
+            href: '/css/home.css',
+            rel: 'stylesheet',
+            type: 'text/css'
+        }
+    ]
+})
+
 import {mount} from '../helpers/page'
 mount(HomePage)

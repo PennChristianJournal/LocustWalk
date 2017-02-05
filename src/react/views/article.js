@@ -20,5 +20,15 @@ const ArticlePage = () =>
 
 export default ArticlePage
 
+ArticlePage.metadata = Object.assign({}, ArticleLayout.metadata, {
+    link: [
+        {
+            href: '/css/article.css',
+            rel: 'stylesheet',
+            type: 'text/css'
+        }
+    ]
+})
+
 import {mount} from '../helpers/page'
 mount(ArticlePage)
