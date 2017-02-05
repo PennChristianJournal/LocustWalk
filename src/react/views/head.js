@@ -1,25 +1,34 @@
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import Optional from '../components/optional'
+
+function flatten(arr) {
+    return arr.reduce((a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), [])
+}
 
 class Head extends Component {
     render() {
         return (
             <head>
-                <link rel="icon" type="image/x-icon" href="/img/favicon.ico" />
-
-                <meta property="og:site_name" content="Penn Christian Journal"></meta>
-
-                <title>{this.props.title}</title>
-                <meta property="og:title" content={this.props.title}></meta>
-                <meta property="twitter:title" content={this.props.title}></meta>
-
-                <link href="https://fonts.googleapis.com/css?family=Lato:900,400,400italic,700,300" rel="stylesheet" type="text/css" />
-                <link href="https://fonts.googleapis.com/css?family=Roboto:400,400italic,700" rel="stylesheet" type="text/css" />
-                <link href="/bower_components/normalize-css/normalize.css" rel="stylesheet" type="text/css" />
-                <link href="/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
-                <link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-                <link href="/css/main.css" rel="stylesheet" type="text/css" />
+            {flatten([
+                this.props.link.map(function(props) {
+                    return <link {...props} />
+                }),
+                this.props.meta.map(function(props) {
+                    const {property, properties, ...rest} = props;
+                    if (property) {
+                        return <meta property={property} {...rest}></meta>
+                    } else if (properties) {
+                        return properties.map(function(property) {
+                            return <meta property={property} {...rest}></meta>
+                        })
+                    } else {
+                        return <meta {...rest}></meta>
+                    }
+                }),
+                <Optional test={this.props.title}><title>{this.props.title}</title></Optional>
+            ])}
             </head>
         )
     }

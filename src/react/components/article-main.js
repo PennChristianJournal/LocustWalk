@@ -20,19 +20,23 @@ export default class ArticleMain extends Component {
             <div className="article" data-article-id={article._id}>
                 <div className="container">
                     <Optional test={article.cover}>
-                        <div className="article-cover" style={{backgroundImage: `url("/files/${article.cover}")`}} />
-                        <div className="nav-mask">
-                            <div className="article-cover-blur" style={{backgroundImage: `url("/files/${article.cover}")`}}></div>
-                            <div className="nav-mask-bg" />
+                        <div>
+                            <div className="article-cover" style={{backgroundImage: `url("/files/${article.cover}")`}} />
+                            <div className="nav-mask">
+                                <div className="article-cover-blur" style={{backgroundImage: `url("/files/${article.cover}")`}}></div>
+                                <div className="nav-mask-bg" />
+                            </div>
                         </div>
                     </Optional>
                     <Optional test={!article.cover}>
-                        <style>{`
-                            nav.navbar {
-                                background-color: #222;
-                            }
-                        `}</style>
-                        <div style={{marginTop: '80px'}} />
+                        <div>
+                            <style>{`
+                                nav.navbar {
+                                    background-color: #222;
+                                }
+                            `}</style>
+                            <div style={{marginTop: '80px'}} />
+                        </div>
                     </Optional>
 
                     <Optional test={article.parent}>

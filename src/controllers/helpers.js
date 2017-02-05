@@ -46,9 +46,6 @@ export function generatePage(Page, store, clientScript) {
     `
 }
 
-import ArticlePage from '../react/views/article'
-const clientScript = `${__dirname}/../react/views/article.js`;
-
 export function definePageRoute(router, route, page, clientScript, callback) {
     const script = browserify(clientScript);
     router.get(path.join(route, 'js/bundle.js'), script);
