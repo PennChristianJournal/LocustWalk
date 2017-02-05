@@ -16,6 +16,7 @@ class ArticleGroup extends Component {
     }
 
     render() {
+        if (!this.props.articles.length) return null;
         return this.props.children(this.props.articles);
     }
 }

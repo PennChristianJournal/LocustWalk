@@ -28,7 +28,10 @@ router.get('/', (req, res) => {
     if (req.query.sort) query = query.sort({[req.query.sort]: -1});
     
     query.exec((err, articles) => {
-        if (err) console.log(err);
+        if (err) {
+            console.log(err);
+            res.send([]);
+        }
         res.send(articles);
     });
 });
