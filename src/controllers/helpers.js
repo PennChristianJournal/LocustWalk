@@ -38,9 +38,13 @@ export function generatePage(Page, store, clientScript) {
                         var url = window.location.href.replace(re, '/$1');
                         window.history.replaceState(null, document.title, url);
                     }
+
+                    var s = document.createElement('script');
+                    s.type = 'text/javascript';
+                    s.src = 'js/bundle.js';
+                    document.head.appendChild(s);
                 })();
                 </script>
-                <script src="js/bundle.js"></script>
             </body>
         </html>
     `
