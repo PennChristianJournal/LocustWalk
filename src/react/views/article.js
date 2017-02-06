@@ -23,7 +23,22 @@ export default ArticlePage
 ArticlePage.metadata = Object.assign({}, ArticleLayout.metadata, {
     link: [
         {
+            href: '/bower_components/medium-editor/dist/css/themes/default.css',
+            rel: 'stylesheet',
+            type: 'text/css'  
+        },
+        {
+            href: '/bower_components/medium-editor-insert-plugin/dist/css/medium-editor-insert-plugin.min.css',
+            rel: 'stylesheet',
+            type: 'text/css'
+        },
+        {
             href: '/css/article.css',
+            rel: 'stylesheet',
+            type: 'text/css'
+        },
+        {
+            href: '/css/article-thumb.css',
             rel: 'stylesheet',
             type: 'text/css'
         }

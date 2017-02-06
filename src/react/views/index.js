@@ -79,6 +79,11 @@ HomePage.metadata = Object.assign({}, PageLayout.metadata, {
             href: '/css/home.css',
             rel: 'stylesheet',
             type: 'text/css'
+        },
+        {
+            href: '/css/article-thumb.css',
+            rel: 'stylesheet',
+            type: 'text/css'
         }
     ]
 })
