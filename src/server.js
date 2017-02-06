@@ -22,6 +22,14 @@ server.use(cookieParser());
 import rootController from './controllers/index'
 server.use('/', rootController);
 
+import sassMiddleware from 'node-sass-middleware'
+server.use(sassMiddleware({
+  src: path.join(__dirname, ''),
+  dest: path.join(__dirname, '../public/css'),
+  debug: true,
+  outputStyle: 'compressed',
+}), express.static(path.join(__dirname, '../public/css')));
+
 server.use(express.static(`${__dirname}/../public`));
 
 server.use(passport.initialize());
