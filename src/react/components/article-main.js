@@ -59,15 +59,11 @@ export default class ArticleMain extends Component {
                     }}>
                         { responses =>
                             <Optional test={responses && responses.length}>
-                                <div className="tile tile-vertical gray-theme">
+                                <div>
                                     <h1 className="strong">Discussion</h1>
-                                    {responses.map((response, i) => {
-                                        return (
-                                            <div className="discussion tile tile-vertical gray-theme" key={i}>
-                                                <ArticleThumb article={response} />
-                                            </div>
-                                        )
-                                    })}
+                                    <div className="discussion tile tile-vertical gray-theme">
+                                        {responses.map((response, i) => <ArticleThumb article={response} key={i} /> )}
+                                    </div>
                                 </div>
                             </Optional>
                         }
