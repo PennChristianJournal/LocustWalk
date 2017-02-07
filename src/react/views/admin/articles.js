@@ -2,15 +2,15 @@
 import React from 'react'
 import AdminLayout from '../../templates/admin/admin-layout'
 
-const AdminHome = () => (
+const ArticlesList = () => (
     <AdminLayout id="admin-page">
-        <div>This is the admin panel</div>
+        <div>This is the articles panel</div>
     </AdminLayout>
 )
 
-export default AdminHome
+export default ArticlesList
 
-AdminHome.metadata = Object.assign({}, AdminLayout.metadata)
+ArticlesList.metadata = Object.assign({}, AdminLayout.metadata)
 
 import {mount} from '../../helpers/page'
-mount(AdminHome)
+mount(ArticlesList)

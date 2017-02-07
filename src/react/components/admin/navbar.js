@@ -11,7 +11,7 @@ export default () =>
                     <span className="icon-bar" />
                     <span className="icon-bar" />
                 </button>
-                <a className="navbar-brand" href="/">
+                <a className="navbar-brand" href="/admin">
                     <img src="/img/logo-horizontal.svg" />
                     <h1 className="strong" style={{display: "none"}}>Locust<span className="thin">Walk Admin</span></h1>
                 </a>
