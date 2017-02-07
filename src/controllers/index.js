@@ -28,4 +28,7 @@ router.use('/files', FilesController)
 import ArticleController from './articles'
 router.use('/articles', ArticleController)
 
+import AdminController from './admin'
+router.use('/admin', AdminController)
+
 export default router;
