@@ -22,13 +22,18 @@ function articleGroupPage(state = {
     }
 }
 
-function articleGroup(state = {}, action) {
+function articleGroup(state = [], action) {
     switch (action.type) {
         case REQUEST_ARTICLES:
         case RECEIVE_ARTICLES:
-            return Object.assign({}, state, {
-                [action.page]: articleGroupPage(state[action.page], action)
-            })
+            const group = articleGroupPage(state[action.page], action);
+            if (group.articles.length) {
+                return Object.assign([], state, {
+                    [action.page]: group
+                })
+            } else {
+                return Object.assign([], state);
+            }
     }
 }
 

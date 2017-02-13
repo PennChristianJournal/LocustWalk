@@ -26,7 +26,7 @@ ArticleGroup.propTypes = {
 };
 
 export default connect((state, ownProps) => {
-    const group = state.articles[ownProps.name] || {};
+    const group = state.articles[ownProps.name] || [];
     const page = ownProps.page || 0;
     const pagegroup = group[page] || {};
     const ids = pagegroup.articles || [];
