@@ -20,11 +20,24 @@ definePageRoute(router, '/', HomePage, `${__dirname}/../react/views/index.js`, f
         render();
     });
 });
+
 import AboutPage from '../react/views/about'
 definePageRoute(router, '/about', AboutPage, `${__dirname}/../react/views/about.js`,
 function(req, res, store, render) {
   render();
 });
+import StaffPage from '../react/views/staff'
+definePageRoute(router, '/staff', StaffPage, `${__dirname}/../react/views/staff.js`,
+function(req, res, store, render) {
+  render();
+});
+
+import SubmissionsPage from '../react/views/submissions'
+definePageRoute(router, '/submissions', SubmissionsPage, `${__dirname}/../react/views/submissions.js`,
+function(req, res, store, render) {
+  render();
+});
+
 
 import api from './api'
 router.use('/api', api);
