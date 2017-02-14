@@ -4,6 +4,7 @@ import AdminLayout from '../../templates/admin/admin-layout'
 import ArticleGroupInfinite from '../../components/article-group-infinite'
 import moment from 'moment'
 import queryString from 'query-string'
+import { debounce } from 'underscore'
 
 export default class ArticleListPage extends Component {
     constructor(props) {
@@ -23,12 +24,12 @@ export default class ArticleListPage extends Component {
         })
         
         var that = this;
-        window.addEventListener('scroll', () => {
+        window.addEventListener('mousewheel', debounce((e) => {
             let docHeight = document.body.clientHeight || document.documentElement.clientHeight;
-            if (window.scrollY + window.innerHeight > docHeight - 50) {
+            if (e.deltaY > 0 && window.scrollY + window.innerHeight > docHeight - 50) {
                 that.refs.articles.getWrappedInstance().fetchMore();
             }
-        });
+        }, 20, true));
     }
 
     render() {
@@ -58,7 +59,7 @@ export default class ArticleListPage extends Component {
                                 {articles.map((article, i) => {
                                     return (
                                         <tr key={i}>
-                                            <td><a href={`/admin/articles/${article._id}/edit`}>{article.title}</a></td>
+                                            <td><a href={`/admin/articles/${article._id}/edit`} dangerouslySetInnerHTML={{__html: article.title}}></a></td>
                                             <td><a href={`/articles/${article._id}`}><i className="fa fa-link" /></a></td>
                                             <td>{article.is_featured ? <i className="fa fa-star" /> : null}</td>
                                             <td>{article.is_published ? <i className="fa fa-check" /> : null}</td>
