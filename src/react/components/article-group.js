@@ -35,6 +35,10 @@ export default connect((state, ownProps) => {
     }
 }, (dispatch, ownProps) => {
     return {
-        setPage: page => dispatch(fetchArticlesIfNeeded(ownProps.name, page, ownProps.query))
+        setPage: page => {
+            if (ownProps.query) {
+                dispatch(fetchArticlesIfNeeded(ownProps.name, page, ownProps.query))
+            }
+        }
     }
 })(ArticleGroup)

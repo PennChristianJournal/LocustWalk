@@ -1,13 +1,12 @@
 
 import React, {Component} from 'react'
-import AdminLayout from '../../templates/admin/admin-layout'
-import ArticleGroupInfinite from '../../components/article-group-infinite'
-import SidePanel from '../../components/admin/side-panel'
-import ArticleSidebar from '../../components/admin/article-sidebar'
-import Table from '../../components/admin/table'
+import AdminLayout from '../../../templates/admin/admin-layout'
+import ArticleGroupInfinite from '../../../components/article-group-infinite'
+import SidePanel from '../../../components/admin/side-panel'
+import ArticleSidebar from '../../../components/admin/article-sidebar'
+import Table from '../../../components/admin/table'
 import moment from 'moment'
 import queryString from 'query-string'
-import { debounce } from 'underscore'
 
 export default class ArticleListPage extends Component {
     constructor(props) {
@@ -40,7 +39,7 @@ export default class ArticleListPage extends Component {
 
     render() {
         return (
-            <AdminLayout id="admin-page" sidebar={<ArticleSidebar article={this.state.article} />} sidebarOpen={this.state.article} >
+            <AdminLayout id="admin-page" sidebar={<ArticleSidebar imagePreviews article={this.state.article} />} sidebarOpen={this.state.article} >
                 <div className="admin-list-view">
                     <div className="admin-list-header">
                         <h1>
@@ -86,5 +85,5 @@ export default class ArticleListPage extends Component {
 
 ArticleListPage.metadata = Object.assign({}, AdminLayout.metadata)
 
-import {mount} from '../../helpers/page'
+import {mount} from '../../../helpers/page'
 mount(ArticleListPage)

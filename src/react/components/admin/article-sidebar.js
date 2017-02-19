@@ -43,15 +43,33 @@ export default class ArticleSidebar extends Component {
         const article = this.props.article || {};
         return (
             <div className="admin-sidebar">
-                <form key={article._id} action={`/admin/articles/${article._id}/edit`} method="post" encType="multipart/form-data">
+                {this.props.gdriveSync ? 
+                <form className="form" action="sync" method="POST">
+                    <div className="form-group">
+                        <label>Pull from Google Drive</label>
+                        <div className="row">
+                            <div className="col-sm-6">
+                                <input className="form-control" id="doc-search" placeholder="Document Title" />
+                            </div>
+                            <div className="col-sm-6">
+                                <input className="form-control" id="doc-id-input" name="doc_id" placeholder="Document ID" readOnly />      
+                            </div>
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <button className="btn btn-default" type="submit" onClick={function() {return confirm('Content on this page will be replaced. Are you sure?')}}>Sync</button>
+                    </div>
+                </form>
+                : null}
+                <form className="form" key={article._id} action={`/admin/articles/${article._id}/edit`} method="post" encType="multipart/form-data">
                     <div className="form-group">
                         <label htmlFor="cover-photo-input">Cover Photo</label>
-                        <img src={article.cover ? `/files/${article.cover}` : ''} />
+                        { this.props.imagePreviews ? <img src={article.cover ? `/files/${article.cover}` : ''} /> : null }
                         <input id="cover-photo-input" name="cover" type="file" accept="image/*" />
                     </div>
                     <div className="form-group">
                         <label htmlFor="thumbnail-input">Thumbnail</label>
-                        <img src={article.thumb ? `/files/${article.thumb}` : ''} />
+                        { this.props.imagePreviews ? <img src={article.thumb ? `/files/${article.thumb}` : ''} /> : null }
                         <input id="thumbnail-input" name="thumb" type="file" accept="image/*" />
                     </div>
                     <div className="form-group">
@@ -79,6 +97,17 @@ export default class ArticleSidebar extends Component {
                         <input id="slug-input" name="slug" type="text" className="form-control" placeholder="Slug" defaultValue={article.slug} />
                     </div>
                     <div className="form-group">
+                        <label htmlFor="response-to-input">Response To</label>
+                        <div className="row">
+                            <div className="col-sm-6">
+                                <input id="response-to-input" type="text" className="form-control" placeholder="Response To..." defaultValue={article.parent} />
+                            </div>
+                            <div className="col-sm-6">
+                                <input name="parent" type="text" readOnly className="form-control" placeholder="Article ID" value={article.parent || ''} />
+                            </div>
+                        </div>
+                    </div>
+                    <div className="form-group">
                         <label htmlFor="date-input">Post Date</label>
                         <input id="date-input" name="date" type="text" className="form-control" disabled={this.state.dateNow} onChange={function(){}} value={moment(this.state.dateNow ? this.state.date : article.date).format('MMM DD, YYYY [at] H:mm:ss')} />
                         <div className="checkbox">
@@ -90,7 +119,9 @@ export default class ArticleSidebar extends Component {
                     </div>
                     <div className="form-group">
                         <label htmlFor="heading-input">Heading Override</label>
-                        <input id="heading-input" name="heading_override" type="text" className="form-control" placeholder="Jun 2016 Special Feature (leave blank for automatic" defaultValue={article.heading_override} />
+                        <input id="heading-input" name="heading_override" type="text" className="form-control" placeholder="Jun 2016 Special Feature" 
+                            defaultValue={article.heading_override || moment(this.state.dateNow ? this.state.date : article.date).format('MMM YYYY [Feature Article]')} 
+                        />
                     </div>
                     <button className="btn btn-primary" type="submit">Save</button>
                 </form>

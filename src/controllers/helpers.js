@@ -15,7 +15,9 @@ browserify.settings({
         function(file) { return babelify(file, {presets: ['es2015', 'react']})}
     ],
     extensions: ['.js', '.jsx'],
-    grep: /\.jsx?$/
+    grep: /\.jsx?$/,
+    cache: true,
+    precompile: true
 });
 
 import Head from '../react/views/head'

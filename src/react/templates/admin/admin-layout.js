@@ -12,18 +12,6 @@ class AdminLayout extends Component {
         }
     }
 
-    componentDidMount() {
-        // const onResize = () => {
-        //     const navbar = document.getElementById('navbar');
-        //     this.setState({
-        //         offsetTop: navbar.offsetHeight
-        //     })
-        // }
-
-        // window.addEventListener('resize', onResize);
-        // onResize();
-    }
-
     render() {
         return (
             <div className="admin-layout" id={this.props.id}>
@@ -71,6 +59,11 @@ AdminLayout.metadata = {
     link: [
         {
             href: '/css/admin.css',
+            rel: 'stylesheet',
+            type: 'text/css'
+        },
+        {
+            href: '/css/admin-sidebar.css',
             rel: 'stylesheet',
             type: 'text/css'
         }

@@ -1,6 +1,10 @@
 @import 'variables';
 @import 'mixins';
 
+.article-layout {
+  position: relative;
+}
+
 .container-wide {
   @media (min-width: 1200px) {
     .container {

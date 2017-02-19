@@ -5,17 +5,19 @@ import ArticleThumb from './article-thumb'
 import Optional from './optional'
 import moment from 'moment'
 
-const ResponseTo = (article) => (
-    <div className="response-to" data-article-id={article._id}>
-        <h2>In Response To:&nbsp;
-            <a className="response-title" href={`/articles/${article.slug}`} dangerouslySetInnerHTML={{__html: article.title}}></a>
-        </h2>
-    </div>
+const ResponseTo = (article = {}) => (
+    <Optional test={article.title}>
+        <div className="response-to" data-article-id={article._id}>
+            <h2>In Response To:&nbsp;
+                <a className="response-title" href={`/articles/${article.slug}`} dangerouslySetInnerHTML={{__html: article.title}}></a>
+            </h2>
+        </div>
+    </Optional>
 )
 
 export default class ArticleMain extends Component {
     render() {
-        const article = this.props.article;
+        const article = this.props.article || {};
         return (
             <div className="article" data-article-id={article._id}>
                 <Optional test={article.cover}>
