@@ -37,6 +37,11 @@ definePageRoute(router, '/submissions', SubmissionsPage, `${__dirname}/../react/
 function(req, res, store, render) {
   render();
 });
+import SubscribePage from '../react/views/subscribe'
+definePageRoute(router, '/subscribe', SubscribePage, `${__dirname}/../react/views/subscribe.js`,
+function(req, res, store, render) {
+  render();
+});
 
 
 import api from './api'

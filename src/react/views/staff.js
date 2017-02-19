@@ -13,271 +13,268 @@ const StaffPage = () =>
         ]}
 
         main={[
-            <div className="tile tile-vertical white-theme">
-        <h2 className="strong">Staff</h2>
-          <table class="tg">
-    <tr>
-      <th class="tg-yw4l">Name</th>
-      <th class="tg-yw4l">Position</th>
-      <th class="tg-yw4l">Contact Information</th>
-    </tr>
-    <tr>
-      <td class="tg-yw4l">Esther Jou</td>
-      <td class="tg-yw4l">Editor-in-Chief</td>
-      <td class="tg-yw4l">jouest@sas.upenn.edu</td>
-    </tr>
-    <tr>
-      <td class="tg-yw4l">Patricia Jia</td>
-      <td class="tg-yw4l">Associate Editor</td>
-      <td class="tg-yw4l">patjia@sas.upenn.edu</td>
-    </tr>
-    <tr>
-      <td class="tg-yw4l">Philip Jung</td>
-      <td class="tg-yw4l">Associate Editor</td>
-      <td class="tg-yw4l">juji@sas.upenn.edu</td>
-    </tr>
-    <tr>
-      <td class="tg-yw4l">Wendy Zhou</td>
-      <td class="tg-yw4l">Communications Chair</td>
-      <td class="tg-yw4l">hongyuz@sas.upenn.edu</td>
-    </tr>
-    <tr>
-      <td class="tg-yw4l">Michael Ruan</td>
-      <td class="tg-yw4l">Business Manager</td>
-      <td class="tg-yw4l">mruan@wharton.upenn.edu</td>
-    </tr>
-    <tr>
-      <td class="tg-yw4l">Sarah Tang</td>
-      <td class="tg-yw4l">Design Editor</td>
-      <td class="tg-yw4l">sartang@sas.upenn.edu</td>
-    </tr>
-    <tr>
-      <td class="tg-yw4l">Austin Eng</td>
-      <td class="tg-yw4l">Webmaster</td>
-      <td class="tg-yw4l">aen@seas.upenn.edu</td>
-    </tr>
-    <tr>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l"></td>
-    </tr>
-  
-    <tr>
-      <th class="tg-yw4l">Writers</th>
-      <th class="tg-yw4l"></th>
-      <th class="tg-yw4l"></th>
-    </tr>
-    <tr>
-      <td class="tg-yw4l">Joanna Xue</td>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l">Joxue@sas.upenn.edu</td>
-    </tr>
-    <tr>
-      <td class="tg-yw4l">Emma Hetrick</td>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l">ehetrick@sas.upenn.edu</td>
-    </tr>
-    <tr>
-      <td class="tg-yw4l">Grace Cho</td>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l">chograce@nursing.upenn.edu</td>
-    </tr>
-    <tr>
-      <td class="tg-yw4l">Sean Noh</td>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l">sean.d.noh@gmail.com</td>
-    </tr>
-    <tr>
-      <td class="tg-yw4l">Joyce Xu</td>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l">joycexu@sas.upenn.edu</td>
-    </tr>
-    <tr>
-      <td class="tg-yw4l">Wesley Chow</td>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l">chowyinh@sas.upenn.edu</td>
-    </tr>
-    <tr>
-      <td class="tg-yw4l">Phoebe Low</td>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l">phoebe.low13@gmail.com</td>
-    </tr>
-    <tr>
-      <td class="tg-yw4l">Andrew Wang</td>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l">andrwang@sas.upenn.edu</td>
-    </tr>
-    <tr>
-      <td class="tg-yw4l">Summer Osborn</td>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l">osborns@sas.upenn.edu</td>
-    </tr>
-    <tr>
-      <td class="tg-yw4l">Henrique Laurino</td>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l">hlauri@wharton.upenn.edu</td>
-    </tr>
-    <tr>
-      <td class="tg-yw4l">James Supplee</td>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l">suppleej@sas.upenn.edu</td>
-    </tr>
-    <tr>
-      <td class="tg-yw4l">Mark Hoover</td>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l">hooverm@sas.upenn.edu</td>
-    </tr>
-    <tr>
-      <td class="tg-yw4l">Isaac Han</td>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l"></td>
-    </tr>
-    <tr>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l"></td>
-    </tr>
-    <tr>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l"></td>
-    </tr>
-    <tr>
-      <th class="tg-yw4l">Editors</th>
-      <th class="tg-yw4l"></th>
-      <th class="tg-yw4l"></th>
-    </tr>
-    <tr>
-      <td class="tg-yw4l">Connie Miller</td>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l">comiller@sas.upenn.edu</td>
-    </tr>
-    <tr>
-      <td class="tg-yw4l">Emily Schutsky</td>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l">eschutsk@gmail.com</td>
-    </tr>
-    <tr>
-      <td class="tg-yw4l">Ken Teoh</td>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l">teoh@sas.upenn.edu</td>
-    </tr>
-    <tr>
-      <td class="tg-yw4l">Sebastian De Armas</td>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l">johnsde@sas.upenn.edu</td>
-    </tr>
-    <tr>
-      <td class="tg-yw4l">Hannah Victor</td>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l">vhannah@law.upenn.edu</td>
-    </tr>
-    <tr>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l"></td>
-    </tr>
-    <tr>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l"></td>
-    </tr>
-    <tr>
-      <th class="tg-yw4l">Design</th>
-      <th class="tg-yw4l"></th>
-      <th class="tg-yw4l"></th>
-    </tr>
-    <tr>
-      <td class="tg-yw4l">Vivian Dai</td>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l">vdai@sas.upenn.edu</td>
-    </tr>
-    <tr>
-      <td class="tg-yw4l">Andrew Min</td>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l">andrewkm@sas.upenn.edu</td>
-    </tr>
-    <tr>
-      <td class="tg-yw4l">Wesley Chow</td>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l">chowyinh@sas.upenn.edu</td>
-    </tr>
-    <tr>
-      <td class="tg-yw4l">Phoebe Low</td>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l">phlo@sas.upenn.edu</td>
-    </tr>
-    <tr>
-      <td class="tg-yw4l">Sophia Chao</td>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l">csophia@nursing.upenn.edu</td>
-    </tr>
-    <tr>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l"></td>
-    </tr>
-    <tr>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l"></td>
-    </tr>
-    <tr>
-      <th class="tg-yw4l">Web</th>
-      <th class="tg-yw4l"></th>
-      <th class="tg-yw4l"></th>
-    </tr>
-    <tr>
-      <td class="tg-yw4l">Will Yeung</td>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l">tsuny@sas.upenn.edu</td>
-    </tr>
-    <tr>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l"></td>
-    </tr>
-    <tr>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l"></td>
-    </tr>
-    <tr>
-      <th class="tg-yw4l">Business</th>
-      <th class="tg-yw4l"></th>
-      <th class="tg-yw4l"></th>
-    </tr>
-    <tr>
-      <td class="tg-yw4l">Timothy Chang</td>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l">timchang@wharton.upenn.edu</td>
-    </tr>
-    <tr>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l"></td>
-    </tr>
-    <tr>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l"></td>
-    </tr>
-    <tr>
-      <th class="tg-yw4l">Communications</th>
-      <th class="tg-yw4l"></th>
-      <th class="tg-yw4l"></th>
-    </tr>
-    <tr>
-      <td class="tg-yw4l">Joyce Xu</td>
-      <td class="tg-yw4l"></td>
-      <td class="tg-yw4l">joycexu@sas.upenn.edu</td>
-    </tr>
-</table>
-
-
-
-</div>
-
+          <div>
+		<h2>Staff</h2>
+		<table>
+			<tbody>
+				<tr>
+					<th>Name</th>
+					<th>Position</th>
+					<th>Contact Information</th>
+				</tr>
+				<tr>
+					<td>Esther Jou</td>
+					<td>Editor-in-Chief</td>
+					<td>jouest@sas.upenn.edu</td>
+				</tr>
+				<tr>
+					<td>Patricia Jia</td>
+					<td>Associate Editor</td>
+					<td>patjia@sas.upenn.edu</td>
+				</tr>
+				<tr>
+					<td>Philip Jung</td>
+					<td>Associate Editor</td>
+					<td>juji@sas.upenn.edu</td>
+				</tr>
+				<tr>
+					<td>Wendy Zhou</td>
+					<td>Communications Chair</td>
+					<td>hongyuz@sas.upenn.edu</td>
+				</tr>
+				<tr>
+					<td>Michael Ruan</td>
+					<td>Business Manager</td>
+					<td>mruan@wharton.upenn.edu</td>
+				</tr>
+				<tr>
+					<td>Sarah Tang</td>
+					<td>Design Editor</td>
+					<td>sartang@sas.upenn.edu</td>
+				</tr>
+				<tr>
+					<td>Austin Eng</td>
+					<td>Webmaster</td>
+					<td>aen@seas.upenn.edu</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<th>Writers</th>
+					<th></th>
+					<th></th>
+				</tr>
+				<tr>
+					<td>Joanna Xue</td>
+					<td></td>
+					<td>Joxue@sas.upenn.edu</td>
+				</tr>
+				<tr>
+					<td>Emma Hetrick</td>
+					<td></td>
+					<td>ehetrick@sas.upenn.edu</td>
+				</tr>
+				<tr>
+					<td>Grace Cho</td>
+					<td></td>
+					<td>chograce@nursing.upenn.edu</td>
+				</tr>
+				<tr>
+					<td>Sean Noh</td>
+					<td></td>
+					<td>sean.d.noh@gmail.com</td>
+				</tr>
+				<tr>
+					<td>Joyce Xu</td>
+					<td></td>
+					<td>joycexu@sas.upenn.edu</td>
+				</tr>
+				<tr>
+					<td>Wesley Chow</td>
+					<td></td>
+					<td>chowyinh@sas.upenn.edu</td>
+				</tr>
+				<tr>
+					<td>Phoebe Low</td>
+					<td></td>
+					<td>phoebe.low13@gmail.com</td>
+				</tr>
+				<tr>
+					<td>Andrew Wang</td>
+					<td></td>
+					<td>andrwang@sas.upenn.edu</td>
+				</tr>
+				<tr>
+					<td>Summer Osborn</td>
+					<td></td>
+					<td>osborns@sas.upenn.edu</td>
+				</tr>
+				<tr>
+					<td>Henrique Laurino</td>
+					<td></td>
+					<td>hlauri@wharton.upenn.edu</td>
+				</tr>
+				<tr>
+					<td>James Supplee</td>
+					<td></td>
+					<td>suppleej@sas.upenn.edu</td>
+				</tr>
+				<tr>
+					<td>Mark Hoover</td>
+					<td></td>
+					<td>hooverm@sas.upenn.edu</td>
+				</tr>
+				<tr>
+					<td>Isaac Han</td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<th>Editors</th>
+					<th></th>
+					<th></th>
+				</tr>
+				<tr>
+					<td>Connie Miller</td>
+					<td></td>
+					<td>comiller@sas.upenn.edu</td>
+				</tr>
+				<tr>
+					<td>Emily Schutsky</td>
+					<td></td>
+					<td>eschutsk@gmail.com</td>
+				</tr>
+				<tr>
+					<td>Ken Teoh</td>
+					<td></td>
+					<td>teoh@sas.upenn.edu</td>
+				</tr>
+				<tr>
+					<td>Sebastian De Armas</td>
+					<td></td>
+					<td>johnsde@sas.upenn.edu</td>
+				</tr>
+				<tr>
+					<td>Hannah Victor</td>
+					<td></td>
+					<td>vhannah@law.upenn.edu</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<th>Design</th>
+					<th></th>
+					<th></th>
+				</tr>
+				<tr>
+					<td>Vivian Dai</td>
+					<td></td>
+					<td>vdai@sas.upenn.edu</td>
+				</tr>
+				<tr>
+					<td>Andrew Min</td>
+					<td></td>
+					<td>andrewkm@sas.upenn.edu</td>
+				</tr>
+				<tr>
+					<td>Wesley Chow</td>
+					<td></td>
+					<td>chowyinh@sas.upenn.edu</td>
+				</tr>
+				<tr>
+					<td>Phoebe Low</td>
+					<td></td>
+					<td>phlo@sas.upenn.edu</td>
+				</tr>
+				<tr>
+					<td>Sophia Chao</td>
+					<td></td>
+					<td>csophia@nursing.upenn.edu</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<th>Web</th>
+					<th></th>
+					<th></th>
+				</tr>
+				<tr>
+					<td>Will Yeung</td>
+					<td></td>
+					<td>tsuny@sas.upenn.edu</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<th>Business</th>
+					<th></th>
+					<th></th>
+				</tr>
+				<tr>
+					<td>Timothy Chang</td>
+					<td></td>
+					<td>timchang@wharton.upenn.edu</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<th>Communications</th>
+					<th></th>
+					<th></th>
+				</tr>
+				<tr>
+					<td>Joyce Xu</td>
+					<td></td>
+					<td>joycexu@sas.upenn.edu</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
         ]}
 
         side={[
@@ -315,10 +312,11 @@ import { Provider } from 'react-redux'
 import reducer from '../reducers'
 
 if (typeof document !== 'undefined') {
+
     const state = window.__STATE__;
     const store = createStore(reducer, state, applyMiddleware(thunk, logger));
     render(
-        <Provider store={store}><AboutPage /></Provider>,
+        <Provider store={store}><StaffPage /></Provider>,
         document.getElementById('root')
     )
 }

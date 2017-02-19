@@ -16,11 +16,11 @@ const SubmissionsPage = () =>
             <div className="tile tile-vertical white-theme">
   <h2 className="strong">Article Submission</h2>
 
-    <div class="text">
+    <div className="text">
     <p>We are accepting article, artwork and photography submissions for our online and our first print edition to be released Spring 2017.</p>
     <p>For our online edition, Locust Walk follows a structured response model which allows us to capture the dialogue within our Penn community. Feature articles are published the first Sunday of each month and weekly blog-style articles responding to the feature content are published each following Sunday. A separate print publication will be released bi-annually at the beginning of each semester.</p>
     <p>Please use the following guides to direct your writing:</p>
-    <ul class = "list"></ul>
+    <ul className = "list"></ul>
 
 <li><a href="/writers-guide-feature">Feature Article Submissions</a></li>
   <li>

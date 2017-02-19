@@ -97,6 +97,7 @@ import { Provider } from 'react-redux'
 import reducer from '../reducers'
 
 if (typeof document !== 'undefined') {
+
     const state = window.__STATE__;
     const store = createStore(reducer, state, applyMiddleware(thunk, logger));
     render(
