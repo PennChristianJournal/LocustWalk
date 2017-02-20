@@ -13,18 +13,18 @@ class ArticleEdit extends Component {
         const MediumEditor = require('medium-editor')
         MediumEditorInsertPlugin($)
 
-        var titleDiv = $(`div[data-article-id="${this.props.article._id}"] .article-title`);
+        // var titleDiv = $(`div[data-article-id="${this.props.article._id}"] .article-title`);
         var contentDiv = $(`div[data-article-id="${this.props.article._id}"] .article-content`);
 
-        var titleEditor = new MediumEditor(titleDiv, {
-            placeholder: {
-                text: 'New Article',
-                hideOnClick: false
-            },
-            toolbar: false,
-            disableReturn: true,
-            disableDoubleReturn: true
-        });
+        // var titleEditor = new MediumEditor(titleDiv, {
+        //     placeholder: {
+        //         text: 'New Article',
+        //         hideOnClick: false
+        //     },
+        //     toolbar: false,
+        //     disableReturn: true,
+        //     disableDoubleReturn: true
+        // });
 
         var contentEditor = new MediumEditor(contentDiv, {
             placeholder: {

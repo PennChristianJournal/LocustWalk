@@ -1,5 +1,5 @@
 
-import { REQUEST_ARTICLES, RECEIVE_ARTICLES, INVALIDATE_ARTICLES } from '../actions/articles'
+import { REQUEST_ARTICLES, RECEIVE_ARTICLES, INVALIDATE_ARTICLES, UPDATE_ARTICLE } from '../actions/articles'
 
 function articleGroupPage(state = {
     requesting: false,
@@ -57,6 +57,14 @@ export default function articles(state = { __DB__: {} }, action) {
         case INVALIDATE_ARTICLES:
             var newState = Object.assign({}, state);
             state[action.name][action.page].valid = false;
+            return newState;
+
+        case UPDATE_ARTICLE:
+            newState = Object.assign({}, state);
+            var articleState = newState.__DB__[action.id];
+            articleState = Object.assign(articleState, {
+                [action.property]: action.value
+            });
             return newState;
 
         default:

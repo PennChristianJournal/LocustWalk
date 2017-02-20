@@ -4,6 +4,7 @@ import fetch from 'isomorphic-fetch'
 export const REQUEST_ARTICLES = 'REQUEST_ARTICLES';
 export const RECEIVE_ARTICLES = 'RECEIVE_ARTICLES';
 export const INVALIDATE_ARTICLES = 'INVALIDATE_ARTICLES';
+export const UPDATE_ARTICLE = 'UPDATE_ARTICLE';
 
 function requestArticles(name, page) {
     return {
@@ -60,5 +61,14 @@ export function invalidateArticles(name, page = 0) {
         type: INVALIDATE_ARTICLES,
         name,
         page
+    }
+}
+
+export function updateArticle(id, property, value) {
+    return {
+        type: UPDATE_ARTICLE,
+        id,
+        property,
+        value
     }
 }
