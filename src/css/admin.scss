@@ -1,0 +1,45 @@
+@import 'variables';
+
+.admin-list-view {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+
+    .admin-list-header {
+        overflow: hidden;
+        height: 70px;
+    }
+
+    .admin-list-content {
+        position: absolute;
+        top: 70px;
+        bottom: 0px;
+        width: 100%;
+    }
+
+    table {
+        height: 100%;
+        margin: 0;
+
+        thead {
+            display: block;
+            position: absolute;
+            background-color: $base;
+            z-index: 1;
+        }
+
+        tbody {
+            display: block;
+            height: 100%;
+            overflow: auto;
+            position: absolute;
+            top: 0px;
+            padding-top: 36px;
+            
+            tr:hover {
+                background-color: $light-gray;
+                cursor: pointer;
+            }
+        }
+    }
+}

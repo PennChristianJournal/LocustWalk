@@ -1,5 +1,5 @@
 
-import { REQUEST_ARTICLES, RECEIVE_ARTICLES, INVALIDATE_ARTICLES } from '../actions/articles'
+import { REQUEST_ARTICLES, RECEIVE_ARTICLES, INVALIDATE_ARTICLES, UPDATE_ARTICLE } from '../actions/articles'
 
 function articleGroupPage(state = {
     requesting: false,
@@ -22,13 +22,18 @@ function articleGroupPage(state = {
     }
 }
 
-function articleGroup(state = {}, action) {
+function articleGroup(state = [], action) {
     switch (action.type) {
         case REQUEST_ARTICLES:
         case RECEIVE_ARTICLES:
-            return Object.assign({}, state, {
-                [action.page]: articleGroupPage(state[action.page], action)
-            })
+            const group = articleGroupPage(state[action.page], action);
+            if (group.articles.length) {
+                return Object.assign([], state, {
+                    [action.page]: group
+                })
+            } else {
+                return Object.assign([], state);
+            }
     }
 }
 
@@ -52,6 +57,14 @@ export default function articles(state = { __DB__: {} }, action) {
         case INVALIDATE_ARTICLES:
             var newState = Object.assign({}, state);
             state[action.name][action.page].valid = false;
+            return newState;
+
+        case UPDATE_ARTICLE:
+            newState = Object.assign({}, state);
+            var articleState = newState.__DB__[action.id];
+            articleState = Object.assign(articleState, {
+                [action.property]: action.value
+            });
             return newState;
 
         default:
