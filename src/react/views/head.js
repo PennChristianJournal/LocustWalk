@@ -15,17 +15,10 @@ class Head extends Component {
                 this.props.link.map(function(props) {
                     return <link {...props} />
                 }),
-                this.props.meta.map(function(props) {
-                    const {property, properties, ...rest} = props;
-                    if (property) {
-                        return <meta property={property} {...rest}></meta>
-                    } else if (properties) {
-                        return properties.map(function(property) {
-                            return <meta property={property} {...rest}></meta>
-                        })
-                    } else {
-                        return <meta {...rest}></meta>
-                    }
+                Object.keys(this.props.metadata).map(key => {
+                    const tag = this.props.metadata[key];
+                    console.log(key, tag)
+                    return <meta property={key} {...tag}></meta>
                 }),
                 <Optional test={this.props.title}><title>{this.props.title}</title></Optional>
             ])}
@@ -40,7 +33,26 @@ export default connect((state, ownProps) => {
 
     var props = Object.assign({}, state.metadata);
     if (title) props.title = title;
+    
+    props.metadata = {};
     if (meta) props.meta = props.meta.concat(meta);
+    if (props.meta) {
+        props.meta.forEach(obj => {
+            const {property, properties, ...rest} = obj;
+            if (property) {
+                Object.assign(props.metadata, {
+                    [property]: rest
+                })
+            } else if (properties) {
+                properties.forEach(property => {
+                    Object.assign(props.metadata, {
+                        [property]: rest
+                    })
+                })
+            }
+        })
+    }
+
     if (link) props.link = props.link.concat(link);
 
     return props

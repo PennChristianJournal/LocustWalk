@@ -23,9 +23,9 @@ const SubmissionsPage = () =>
     <p>Please use the following guides to direct your writing:</p>
     <ul className = "list"></ul>
 
-<li><a href="/writers-guide-feature">Feature Article Submissions</a></li>
+<li><a href="/submissions/writers-guide-feature">Feature Article Submissions</a></li>
   <li>
-      <a href="/writers-guide-response">Response Article Submissions</a>
+      <a href="/submissions/writers-guide-response">Response Article Submissions</a>
     </li>
     </div>
     <h2 className = "strong"> Artwork and photography submissions</h2>

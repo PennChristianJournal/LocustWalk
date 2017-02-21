@@ -37,12 +37,24 @@ definePageRoute(router, '/submissions', SubmissionsPage, `${__dirname}/../react/
 function(req, res, store, render) {
   render();
 });
+
+import WritersGuideFeaturePage from '../react/views/writers-guide-feature'
+definePageRoute(router, '/submissions/writers-guide-feature', WritersGuideFeaturePage, `${__dirname}/../react/views/writers-guide-feature.js`,
+function(req, res, store, render) {
+  render();
+});
+
+import WritersGuideResponsePage from '../react/views/writers-guide-response'
+definePageRoute(router, '/submissions/writers-guide-response', WritersGuideResponsePage, `${__dirname}/../react/views/writers-guide-response.js`,
+function(req, res, store, render) {
+  render();
+});
+
 import SubscribePage from '../react/views/subscribe'
 definePageRoute(router, '/subscribe', SubscribePage, `${__dirname}/../react/views/subscribe.js`,
 function(req, res, store, render) {
   render();
 });
-
 
 import api from './api'
 router.use('/api', api);
