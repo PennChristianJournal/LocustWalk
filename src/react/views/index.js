@@ -4,6 +4,7 @@ import PageLayout from '../templates/page-layout'
 import ArticleGroup from '../components/article-group'
 import ArchivePanel from '../components/panels/archive'
 import SistersPanel from '../components/panels/sisters'
+import SocialPanel from '../components/panels/social'
 import ArticleThumb from '../components/article-thumb'
 import FeatureSlider from '../components/feature-slider'
 
@@ -55,13 +56,7 @@ const HomePage = () =>
         ,
         <div className="row">
             <div className="col-md-12 col-xs-6">
-                <div className="tile tile-vertical blue-theme">
-                    <h2 className="strong">Social Media</h2>
-                    <p>Connect with us on social media to stay up to date with new content and announcements.</p>
-                    <div className="logo">
-                        <a href="//www.facebook.com/PennChristianJournal/"><img src="/img/facebook-logo.png" style={{width: "100%"}} /></a>
-                    </div>
-                </div>
+                <SocialPanel />
             </div>
             <div className="col-md-12 col-xs-6">
                 <ArchivePanel />
@@ -89,4 +84,4 @@ HomePage.metadata = Object.assign({}, PageLayout.metadata, {
 })
 
 import {mount} from '../helpers/page'
-mount(HomePage)
+mount(HomePage) 
