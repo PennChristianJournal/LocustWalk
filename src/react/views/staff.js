@@ -14,8 +14,8 @@ const StaffPage = () =>
         ]}
 
         main={[
-          <div>
-		<h2>Staff</h2>
+          <div className="tile tile-vertical white-theme">
+		<h2 className="strong">Staff</h2>
 		<table>
 			<tbody>
 				<tr>
