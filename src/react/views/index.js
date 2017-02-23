@@ -2,13 +2,15 @@
 import React from 'react'
 import PageLayout from '../templates/page-layout'
 import ArticleGroup from '../components/article-group'
+import ArticleGroupInfinite from '../components/article-group-infinite'
 import ArchivePanel from '../components/panels/archive'
 import SistersPanel from '../components/panels/sisters'
 import SocialPanel from '../components/panels/social'
 import ArticleThumb from '../components/article-thumb'
 import FeatureSlider from '../components/feature-slider'
+import {debounce} from 'underscore'
 
-const HomePage = () =>
+const HomePage = () => (
     <PageLayout id="home-page"
         top={[
         <div className="row">
@@ -31,20 +33,21 @@ const HomePage = () =>
         ]}
 
         main={
-        <ArticleGroup name="recent" query={{
+        <ArticleGroupInfinite name="recent" initialPages={1} query={{
                 sort: 'date',
-                limit: 20,
+                limit: 10,
                 published: true
             }}>
-            {articles =>
+            {(articles, group) =>
                 <div className="tile tile-vertical white-theme">
                     <h2 className="strong">Recent Articles</h2>
                     {articles.map((article, i) => {
                         return <ArticleThumb article={article} key={i} />
                     })}
+                    <button className="btn btn-default center-block" onClick={group.fetchMore.bind(group)}>Load More</button>
                 </div>
             }
-        </ArticleGroup>
+        </ArticleGroupInfinite>
         }
 
         side={[
@@ -64,7 +67,7 @@ const HomePage = () =>
         </div>
         ]}
     />
-;
+)
 
 export default HomePage
 

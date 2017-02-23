@@ -15,7 +15,7 @@ class ArticleGroupInfinite extends Component {
 
     render() {
         if (!this.props.articles) return null;
-        return this.props.children(this.props.articles);
+        return this.props.children(this.props.articles, this);
     }
 }
 
