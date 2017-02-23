@@ -5,6 +5,7 @@ import ArticleGroup from '../article-group'
 import { updateArticle } from '../../actions/articles'
 import { invalidateArticles } from '../../actions/articles'
 import moment from 'moment'
+import {getFileURL} from '../../helpers/file'
 
 class ArticleSidebar extends Component {
     constructor(props) {
@@ -43,6 +44,15 @@ class ArticleSidebar extends Component {
         })
     }
 
+    handleImageChange(prop, event) {
+        var file = event.target.files[0];
+        var blob = '';
+        if (file) {
+            blob = URL.createObjectURL(file);
+        }
+        this.props.updateArticle(prop, blob);
+    }
+
     render() {
         const article = this.props.article || {};
         return (
@@ -68,13 +78,13 @@ class ArticleSidebar extends Component {
                 <form className="form" key={article._id} action={`/admin/articles/${article._id}/edit`} method="post" encType="multipart/form-data">
                     <div className="form-group">
                         <label htmlFor="cover-photo-input">Cover Photo</label>
-                        { this.props.imagePreviews ? <img src={article.cover ? `/files/${article.cover}` : ''} /> : null }
-                        <input id="cover-photo-input" name="cover" type="file" accept="image/*" />
+                        { this.props.imagePreviews ? <img src={article.cover ? getFileURL(article.cover, article.cover_preview_img) : ''} /> : null }
+                        <input id="cover-photo-input" name="cover" type="file" accept="image/*" onChange={this.handleImageChange.bind(this, 'cover_preview_img')} />
                     </div>
                     <div className="form-group">
                         <label htmlFor="thumbnail-input">Thumbnail</label>
-                        { this.props.imagePreviews ? <img src={article.thumb ? `/files/${article.thumb}` : ''} /> : null }
-                        <input id="thumbnail-input" name="thumb" type="file" accept="image/*" />
+                        { this.props.imagePreviews ? <img src={article.thumb ? getFileURL(article.thumb, article.thumb_preview_img) : ''} /> : null }
+                        <input id="thumbnail-input" name="thumb" type="file" accept="image/*" onChange={this.handleImageChange.bind(this, 'thumb_preview_img')} />
                     </div>
                     <div className="form-group">
                         <div className="checkbox">

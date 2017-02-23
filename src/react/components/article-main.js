@@ -4,6 +4,7 @@ import ArticleGroup from './article-group'
 import ArticleThumb from './article-thumb'
 import Optional from './optional'
 import moment from 'moment'
+import {getFileURL} from '../helpers/file'
 
 const ResponseTo = (article = {}) => (
     <Optional test={article.title}>
@@ -22,9 +23,9 @@ export default class ArticleMain extends Component {
             <div className="article" data-article-id={article._id}>
                 <Optional test={article.cover}>
                     <div>
-                        <div className="article-cover" style={{backgroundImage: `url("/files/${article.cover}")`}} />
+                        <div className="article-cover" style={{backgroundImage: `url(${getFileURL(article.cover, article.cover_preview_img)})`}} />
                         <div className="nav-mask">
-                            <div className="article-cover-blur" style={{backgroundImage: `url("/files/${article.cover}")`}}></div>
+                            <div className="article-cover-blur" style={{backgroundImage: `url(${getFileURL(article.cover, article.cover_preview_img)})`}}></div>
                             <div className="nav-mask-bg" />
                         </div>
                     </div>
