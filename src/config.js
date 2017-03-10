@@ -45,11 +45,11 @@ iterateNestedProperties(template, function(names) {
 });
 
 try {
-    fs.accessSync(jsonPath, fs.constants.R_OK | fs.constants.W_OK);
+    fs.accessSync(jsonPath, (fs.constants || fs).R_OK | (fs.constants || fs).W_OK);
     json = require(jsonPath);
     Object.assign(config, json);
 } catch (e) {
-
+    console.warn(`${jsonPath} not accessible`);
 }
 
 export default config;
