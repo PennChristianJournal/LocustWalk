@@ -8,6 +8,10 @@ import logger from 'morgan'
 import path from 'path'
 import mongoose from 'mongoose'
 import http from 'http'
+import config from './config'
+import redis from 'redis'
+import connectRedis from 'connect-redis';
+const RedisStore = connectRedis(session);
 
 const server = express();
 server.set('port', process.env.PORT || 3000);
@@ -19,13 +23,31 @@ server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({ extended: false }));
 server.use(cookieParser());
 
-import rootController from './controllers/index'
-server.use('/', rootController);
+const redisStore = new RedisStore({
+    client: redis.createClient(config.REDIS_URL || 'redis://127.0.0.1:6379')
+})
+server.use(session({
+    secret: config.setup.cookie_secret,
+    saveUninitialized: true,
+    resave: true
+    // store: redisStore
+}));
+
+import sassMiddleware from 'node-sass-middleware'
+server.use(sassMiddleware({
+  src: path.join(__dirname, ''),
+  dest: path.join(__dirname, '../public/css'),
+  debug: true,
+  outputStyle: 'compressed',
+}), express.static(path.join(__dirname, '../public/css')));
 
 server.use(express.static(`${__dirname}/../public`));
 
 server.use(passport.initialize());
 server.use(passport.session());
+
+import rootController from './controllers/index'
+server.use('/', rootController);
 
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/locustwalk', function(err) {
     if (err) throw err;

@@ -5,6 +5,7 @@ import ArchivePanel from '../components/panels/archive'
 import SistersPanel from '../components/panels/sisters'
 import ArticleThumb from '../components/article-thumb'
 import FeatureSlider from '../components/feature-slider'
+import SocialPanel from '../components/panels/social'
 
 const SubscribePage = () =>
     <PageLayout id="submission-page"
@@ -88,13 +89,7 @@ const SubscribePage = () =>
         ,
         <div className="row">
             <div className="col-md-12 col-xs-6">
-                <div className="tile tile-vertical blue-theme">
-                    <h2 className="strong">Social Media</h2>
-                    <p>Connect with us on social media to stay up to date with new content and announcements.</p>
-                    <div className="logo">
-                        <a href="//www.facebook.com/PennChristianJournal/"><img src="/img/facebook-logo.png" style={{width: "100%"}} /></a>
-                    </div>
-                </div>
+                <SocialPanel />
             </div>
             <div className="col-md-12 col-xs-6">
                 <ArchivePanel />
@@ -105,19 +100,5 @@ const SubscribePage = () =>
 ;
 
 export default SubscribePage
-import { render } from 'react-dom'
-import { createStore, applyMiddleware } from 'redux'
-import thunk from 'redux-thunk'
-import createLogger from 'redux-logger'
-const logger = createLogger();
-import { Provider } from 'react-redux'
-import reducer from '../reducers'
-
-if (typeof document !== 'undefined') {
-    const state = window.__STATE__;
-    const store = createStore(reducer, state, applyMiddleware(thunk, logger));
-    render(
-        <Provider store={store}><SubscribePage /></Provider>,
-        document.getElementById('root')
-    )
-}
+import {mount} from '../helpers/page'
+mount(SubscribePage) 

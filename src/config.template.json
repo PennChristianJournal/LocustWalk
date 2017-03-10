@@ -5,9 +5,11 @@
     "admin_email": "",
     "admin_pass": "",
     "root": "",
-    "google_client_secret": "",
-    "google_client_id": "",
     "emails": ""
+  },
+  "google": {
+    "client_secret": "",
+    "client_id": ""
   },
   "jwt": {
     "type": "",

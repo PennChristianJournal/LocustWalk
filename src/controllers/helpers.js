@@ -15,7 +15,9 @@ browserify.settings({
         function(file) { return babelify(file, {presets: ['es2015', 'react']})}
     ],
     extensions: ['.js', '.jsx'],
-    grep: /\.jsx?$/
+    grep: /\.jsx?$/,
+    cache: true,
+    precompile: true
 });
 
 import Head from '../react/views/head'
@@ -23,7 +25,7 @@ import reducer from '../react/reducers/index'
 
 export function generatePage(Page, store, clientScript) {
     const page = <Provider store={store}><Page /></Provider>;
-    const head = <Provider store={store}><Head /></Provider>;
+    const head = <Provider store={store}><Head metadata={Page.metadata}/></Provider>;
     return `
         <!doctype html>
         <html>
@@ -38,16 +40,17 @@ export function generatePage(Page, store, clientScript) {
                         var url = window.location.href.replace(re, '/$1');
                         window.history.replaceState(null, document.title, url);
                     }
+
+                    var s = document.createElement('script');
+                    s.type = 'text/javascript';
+                    s.src = 'js/bundle.js';
+                    document.head.appendChild(s);
                 })();
                 </script>
-                <script src="js/bundle.js"></script>
             </body>
         </html>
     `
 }
-
-import ArticlePage from '../react/views/article'
-const clientScript = `${__dirname}/../react/views/article.js`;
 
 export function definePageRoute(router, route, page, clientScript, callback) {
     const script = browserify(clientScript);

@@ -23,13 +23,34 @@ function makeQuery(req) {
 }
 
 router.get('/', (req, res) => {
+    var limit = parseInt(req.query.limit);
+    var page = parseInt(req.query.page);
+    var sort = req.query.sort;
+
     var query = Article.find(makeQuery(req));
-    if (req.query.limit) query = query.limit(parseInt(req.query.limit));
-    if (req.query.sort) query = query.sort({[req.query.sort]: -1});
-    
+
+    if (sort) query = query.sort({[sort]: -1});
+    if (page) {
+        query = query.skip(page * limit);
+    }
+    if (limit) query = query.limit(limit);
+
     query.exec((err, articles) => {
-        if (err) console.log(err);
-        res.send(articles);
+        if (err) {
+            console.log(err);
+            res.send([]);
+        } else {
+            res.send(articles);
+        }
+    });
+});
+
+router.get('/count', (req, res) => {
+    Article.count(makeQuery(req), (err, count) => {
+        if (err) {
+            console.log(err);
+        }
+        res.send(count);
     });
 });
 

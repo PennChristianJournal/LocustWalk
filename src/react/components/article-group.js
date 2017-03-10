@@ -16,6 +16,7 @@ class ArticleGroup extends Component {
     }
 
     render() {
+        if (!this.props.articles) return null;
         return this.props.children(this.props.articles);
     }
 }
@@ -25,7 +26,7 @@ ArticleGroup.propTypes = {
 };
 
 export default connect((state, ownProps) => {
-    const group = state.articles[ownProps.name] || {};
+    const group = state.articles[ownProps.name] || [];
     const page = ownProps.page || 0;
     const pagegroup = group[page] || {};
     const ids = pagegroup.articles || [];
@@ -34,6 +35,10 @@ export default connect((state, ownProps) => {
     }
 }, (dispatch, ownProps) => {
     return {
-        setPage: page => dispatch(fetchArticlesIfNeeded(ownProps.name, page, ownProps.query))
+        setPage: page => {
+            if (ownProps.query) {
+                dispatch(fetchArticlesIfNeeded(ownProps.name, page, ownProps.query))
+            }
+        }
     }
 })(ArticleGroup)

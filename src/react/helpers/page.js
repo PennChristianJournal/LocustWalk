@@ -7,14 +7,16 @@ const logger = createLogger();
 import { Provider } from 'react-redux'
 import reducer from '../reducers'
 
-export function mount(Page) {
+export function mount(Page, func) {
     if (typeof document !== 'undefined') {
 
         const state = window.__STATE__;
-        const store = createStore(reducer, state, applyMiddleware(thunk, logger));
+        const store = createStore(reducer, state, applyMiddleware(thunk));
         render(
             <Provider store={store}><Page /></Provider>,
             document.getElementById('root')
         )
+
+        if (typeof func !== 'undefined') func();
     }
 }

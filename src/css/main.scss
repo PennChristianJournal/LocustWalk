@@ -122,5 +122,6 @@ th, td {
   padding: 5px 10px;
 }
 
-@import 'article-thumb';
-@import 'home';
+.container {
+  max-width: 100%;
+}

@@ -2,6 +2,7 @@
 import React, { Component } from 'react'
 import moment from 'moment'
 import { htmlPreview } from '../helpers/format'
+import {getFileURL} from '../helpers/file'
 
 export default class ArticleThumb extends Component {
     render() {
@@ -11,7 +12,7 @@ export default class ArticleThumb extends Component {
                 <div className="thumb">
                     <a href={`/articles/${article.slug}`}>
                         <div className="thumb-aspect" style={{
-                            backgroundImage: `url("/files/${article.thumb}")`
+                            backgroundImage: `url(${getFileURL(article.thumb, article.thumb_preview_img)})`
                         }}></div>
                     </a>
                 </div>

@@ -2,12 +2,15 @@
 import React from 'react'
 import PageLayout from '../templates/page-layout'
 import ArticleGroup from '../components/article-group'
+import ArticleGroupInfinite from '../components/article-group-infinite'
 import ArchivePanel from '../components/panels/archive'
 import SistersPanel from '../components/panels/sisters'
+import SocialPanel from '../components/panels/social'
 import ArticleThumb from '../components/article-thumb'
 import FeatureSlider from '../components/feature-slider'
+import {debounce} from 'underscore'
 
-const HomePage = () =>
+const HomePage = () => (
     <PageLayout id="home-page"
         top={[
         <div className="row">
@@ -30,20 +33,21 @@ const HomePage = () =>
         ]}
 
         main={
-        <ArticleGroup name="recent" query={{
+        <ArticleGroupInfinite name="recent" initialPages={1} query={{
                 sort: 'date',
-                limit: 20,
+                limit: 10,
                 published: true
             }}>
-            {articles =>
+            {(articles, group) =>
                 <div className="tile tile-vertical white-theme">
                     <h2 className="strong">Recent Articles</h2>
                     {articles.map((article, i) => {
                         return <ArticleThumb article={article} key={i} />
                     })}
+                    <button className="btn btn-default center-block" onClick={group.fetchMore.bind(group)}>Load More</button>
                 </div>
             }
-        </ArticleGroup>
+        </ArticleGroupInfinite>
         }
 
         side={[
@@ -55,13 +59,7 @@ const HomePage = () =>
         ,
         <div className="row">
             <div className="col-md-12 col-xs-6">
-                <div className="tile tile-vertical blue-theme">
-                    <h2 className="strong">Social Media</h2>
-                    <p>Connect with us on social media to stay up to date with new content and announcements.</p>
-                    <div className="logo">
-                        <a href="//www.facebook.com/PennChristianJournal/"><img src="/img/facebook-logo.png" style={{width: "100%"}} /></a>
-                    </div>
-                </div>
+                <SocialPanel />
             </div>
             <div className="col-md-12 col-xs-6">
                 <ArchivePanel />
@@ -69,9 +67,24 @@ const HomePage = () =>
         </div>
         ]}
     />
-;
+)
 
 export default HomePage
+
+HomePage.metadata = Object.assign({}, PageLayout.metadata, {
+    link: [
+        {
+            href: '/css/home.css',
+            rel: 'stylesheet',
+            type: 'text/css'
+        },
+        {
+            href: '/css/article-thumb.css',
+            rel: 'stylesheet',
+            type: 'text/css'
+        }
+    ]
+})
 
 import {mount} from '../helpers/page'
 mount(HomePage) 

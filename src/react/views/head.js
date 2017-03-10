@@ -1,30 +1,59 @@
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import Optional from '../components/optional'
+
+function flatten(arr) {
+    return arr.reduce((a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), [])
+}
 
 class Head extends Component {
     render() {
         return (
             <head>
-                <link rel="icon" type="image/x-icon" href="/img/favicon.ico" />
-
-                <meta property="og:site_name" content="Penn Christian Journal"></meta>
-
-                <title>{this.props.title}</title>
-                <meta property="og:title" content={this.props.title}></meta>
-                <meta property="twitter:title" content={this.props.title}></meta>
-
-                <link href="https://fonts.googleapis.com/css?family=Lato:900,400,400italic,700,300" rel="stylesheet" type="text/css" />
-                <link href="https://fonts.googleapis.com/css?family=Roboto:400,400italic,700" rel="stylesheet" type="text/css" />
-                <link href="/bower_components/normalize-css/normalize.css" rel="stylesheet" type="text/css" />
-                <link href="/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
-                <link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-                <link href="/css/main.css" rel="stylesheet" type="text/css" />
+            {flatten([
+                this.props.link.map(function(props) {
+                    return <link {...props} />
+                }),
+                Object.keys(this.props.metadata).map(key => {
+                    const tag = this.props.metadata[key];
+                    console.log(key, tag)
+                    return <meta property={key} {...tag}></meta>
+                }),
+                <Optional test={this.props.title}><title>{this.props.title}</title></Optional>
+            ])}
             </head>
         )
     }
 }
 
-export default connect(state => {
-    return Object.assign({}, state.metadata);
+export default connect((state, ownProps) => {
+    const {metadata} = ownProps;
+    const {meta, link, title} = metadata || {};
+
+    var props = Object.assign({}, state.metadata);
+    if (title) props.title = title;
+    
+    props.metadata = {};
+    if (meta) props.meta = props.meta.concat(meta);
+    if (props.meta) {
+        props.meta.forEach(obj => {
+            const {property, properties, ...rest} = obj;
+            if (property) {
+                Object.assign(props.metadata, {
+                    [property]: rest
+                })
+            } else if (properties) {
+                properties.forEach(property => {
+                    Object.assign(props.metadata, {
+                        [property]: rest
+                    })
+                })
+            }
+        })
+    }
+
+    if (link) props.link = props.link.concat(link);
+
+    return props
 })(Head)

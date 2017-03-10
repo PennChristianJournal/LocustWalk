@@ -5,7 +5,7 @@ import ArchivePanel from '../components/panels/archive'
 import SistersPanel from '../components/panels/sisters'
 import ArticleThumb from '../components/article-thumb'
 import FeatureSlider from '../components/feature-slider'
-import SocialPanel from '../views/social'
+import SocialPanel from '../components/panels/social'
 
 const AboutPage = () =>
     <PageLayout id="about-page"
@@ -71,7 +71,9 @@ const AboutPage = () =>
         </div>
         ,
         <div className="row">
+            <div className="col-md-12 col-xs-6">
               <SocialPanel />
+            </div>
             <div className="col-md-12 col-xs-6">
                 <ArchivePanel />
             </div>
@@ -81,20 +83,5 @@ const AboutPage = () =>
 ;
 
 export default AboutPage
-import { render } from 'react-dom'
-import { createStore, applyMiddleware } from 'redux'
-import thunk from 'redux-thunk'
-import createLogger from 'redux-logger'
-const logger = createLogger();
-import { Provider } from 'react-redux'
-import reducer from '../reducers'
-
-if (typeof document !== 'undefined') {
-
-    const state = window.__STATE__;
-    const store = createStore(reducer, state, applyMiddleware(thunk, logger));
-    render(
-        <Provider store={store}><AboutPage /></Provider>,
-        document.getElementById('root')
-    )
-}
+import {mount} from '../helpers/page'
+mount(AboutPage)
