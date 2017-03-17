@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "nodemon src/server.js --exec babel-node --presets es2015,stage-2,react",
+    "start": "nodemon src/app.js --exec babel-node --presets es2015,stage-2,react",
     "build": "babel src -d dist --copy-files",
     "watch": "babel-watch --watch src src/app.js -d dist",
     "serve": "node dist/app.js",
