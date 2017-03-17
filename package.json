@@ -1,6 +1,9 @@
 {
   "scripts": {
     "start": "nodemon src/server.js --exec babel-node --presets es2015,stage-2,react",
+    "build": "babel src -d dist --copy-files",
+    "watch": "babel-watch --watch src src/app.js -d dist",
+    "serve": "node dist/app.js",
     "postinstall": "bower install"
   },
   "dependencies": {
@@ -25,6 +28,7 @@
     "moment": "^2.17.1",
     "mongoose": "^4.7.6",
     "morgan": "^1.7.0",
+    "nconf": "^0.8.4",
     "node-sass-middleware": "^0.11.0",
     "passport": "^0.3.2",
     "passport-google-oauth20": "^1.0.0",
@@ -41,10 +45,12 @@
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
+    "babel-loader": "^6.4.1",
     "babel-preset-es2015": "^6.18.0",
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-2": "^6.18.0",
-    "nodemon": "^1.11.0",
-    "node-sass": "^4.3.0"
+    "babel-watch": "^2.0.6",
+    "node-sass": "^4.3.0",
+    "nodemon": "^1.11.0"
   }
 }

@@ -2,18 +2,18 @@
 import passport from 'passport'
 import {Strategy as GoogleStrategy} from 'passport-google-oauth20'
 import path from 'path'
-import config from '../../config'
+import nconf from 'nconf'
 
 passport.use(new GoogleStrategy({
-  clientID: config.google.client_id,
-  clientSecret: config.google.client_secret,
-  callbackURL: `${config.setup.root}admin/login/callback`
+  clientID: nconf.get('GOOGLE_CLIENT_ID'),
+  clientSecret: nconf.get('GOOGLE_CLIENT_SECRET'),
+  callbackURL: `${nconf.get('SERVER_ROOT')}admin/login/callback`
 }, function(accessToken, refreshToken, profile, cb) {
   
   var emails = profile.emails.map(el => {
     return el.value
   })
-  var approved = config.setup.emails.split(' ')
+  var approved = nconf.get('ADMIN_EMAILS').split(' ')
   for (var email of emails) {
     if (approved.indexOf(email) >= 0) {
       return cb(null, profile)    

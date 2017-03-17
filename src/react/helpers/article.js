@@ -2,5 +2,6 @@
 import moment from 'moment'
 
 export function articleHeading(article) {
-    return article.heading_override || moment(article.date.toISOString()).format('MMM YYYY');
+    var date = new Date(article.date);
+    return article.heading_override || moment(date.toISOString()).format('MMM YYYY');
 }
