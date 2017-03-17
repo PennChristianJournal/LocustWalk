@@ -9,14 +9,14 @@ passport.use(new GoogleStrategy({
   clientSecret: config.google.client_secret,
   callbackURL: `${config.setup.root}admin/login/callback`
 }, function(accessToken, refreshToken, profile, cb) {
-  
+
   var emails = profile.emails.map(el => {
     return el.value
   })
   var approved = config.setup.emails.split(' ')
   for (var email of emails) {
     if (approved.indexOf(email) >= 0) {
-      return cb(null, profile)    
+      return cb(null, profile)
     }
   }
   return cb(null, false)
