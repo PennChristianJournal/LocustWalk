@@ -17,7 +17,6 @@ class Head extends Component {
                 }),
                 Object.keys(this.props.metadata).map(key => {
                     const tag = this.props.metadata[key];
-                    console.log(key, tag)
                     return <meta property={key} {...tag}></meta>
                 }),
                 <Optional test={this.props.title}><title>{this.props.title}</title></Optional>

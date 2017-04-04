@@ -1,6 +1,6 @@
 
 import { Router } from 'express'
-const router = Router();
+const router = new Router();
 
 import File from '../models/file'
 import mkdirp from 'mkdirp'

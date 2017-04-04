@@ -7,25 +7,13 @@ import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 
 import path from 'path'
-import browserify from 'browserify-middleware'
-import babelify from 'babelify'
-
-browserify.settings({
-    transform: [
-        function(file) { return babelify(file, {presets: ['es2015', 'react']})}
-    ],
-    extensions: ['.js', '.jsx'],
-    grep: /\.jsx?$/,
-    cache: true,
-    precompile: true
-});
-
-import Head from '../react/views/head'
+import Head from '../react/components/head'
 import reducer from '../react/reducers/index'
 
-export function generatePage(Page, store, clientScript) {
+export function generatePage(Page, store, clientScript, admin) {
     const page = <Provider store={store}><Page /></Provider>;
     const head = <Provider store={store}><Head metadata={Page.metadata}/></Provider>;
+
     return `
         <!doctype html>
         <html>
@@ -33,32 +21,29 @@ export function generatePage(Page, store, clientScript) {
             <body>
                 <script>window.__STATE__ = ${JSON.stringify(store.getState())};</script>
                 <div id="root">${renderToString(page)}</div>
-                <script>
-                (function() {
-                    if (window.location.pathname.endsWith('/') === false) {
-                        var re = new RegExp("\/?(#|$)");
-                        var url = window.location.href.replace(re, '/$1');
-                        window.history.replaceState(null, document.title, url);
-                    }
-
-                    var s = document.createElement('script');
-                    s.type = 'text/javascript';
-                    s.src = 'js/bundle.js';
-                    document.head.appendChild(s);
-                })();
-                </script>
+                <script type="text/javascript" src="/js/manifest.js"></script>
+                <script type="text/javascript" src="/js/react.js"></script>
+                <script type="text/javascript" src="/js/${admin ? 'admin' : 'client'}.js"></script>
+                <script type="text/javascript" src="/${clientScript}"></script>
             </body>
         </html>
     `
 }
 
-export function definePageRoute(router, route, page, clientScript, callback) {
-    const script = browserify(clientScript);
-    router.get(path.join(route, 'js/bundle.js'), script);
+function createPageRoute(router, route, page, clientScript, admin, callback) {
+    var scriptPath = path.relative(path.join(__dirname, '../react'), clientScript);
     router.get(route, function(req, res) {
         const store = createStore(reducer, applyMiddleware(thunk));
         callback(req, res, store, function() {
-            res.send(generatePage(page, store));
+            res.send(generatePage(page, store, scriptPath, admin));
         })
     });
+}
+
+export function definePageRoute(router, route, page, clientScript, callback) {
+    createPageRoute(router, route, page, clientScript, false, callback);
+}
+
+export function defineAdminPageRoute(router, route, page, clientScript, callback) {
+    createPageRoute(router, route, page, clientScript, true, callback);
 }

@@ -9,7 +9,7 @@ const ArticlePage = () =>
     <ArticleLayout>
         <ArticleGroup name="main" query={{
             limit: 1,
-            published: true
+            is_published: true
         }}>
             {articles =>
                 <ArticleMain article={articles[0]} />

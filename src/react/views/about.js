@@ -84,4 +84,4 @@ const AboutPage = () =>
 
 export default AboutPage
 import {mount} from '../helpers/page'
-mount(AboutPage)
+mount(AboutPage);

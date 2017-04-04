@@ -57,7 +57,7 @@ export default class FeatureBlock extends Component {
                         <ArticleGroup name={`response.${article._id}`} query={{
                             sort: 'date',
                             limit: 2,
-                            published: true,
+                            is_published: true,
                             parent: article._id
                         }}>
                             {articles => {

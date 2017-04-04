@@ -1,7 +1,6 @@
 node_modules
-src/config.json
-public/bower_components
-public/css
-public/files
+config.json
+public/*
+!public/img
 .idea
 dist

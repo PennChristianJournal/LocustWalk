@@ -6,6 +6,10 @@ export const RECEIVE_ARTICLES = 'RECEIVE_ARTICLES';
 export const INVALIDATE_ARTICLES = 'INVALIDATE_ARTICLES';
 export const UPDATE_ARTICLE = 'UPDATE_ARTICLE';
 
+if (process.env.APP_ENV !== 'browser') {
+    var nconf = require('nconf');
+}
+
 function requestArticles(name, page) {
     return {
         type: REQUEST_ARTICLES,
@@ -23,16 +27,21 @@ function receiveArticles(name, page, articles) {
     }
 }
 
-export function fetchArticles(name, page = 0, params = {}) {
-    params = Object.keys(params).map(function(k) {
+function clientAdapter(params) {
+    var query = Object.keys(params).map(function(k) {
         return encodeURIComponent(k) + '=' + encodeURIComponent(params[k])
     }).join('&');
 
+    var url = `${process.env.SERVER_ROOT}api/articles/?${query}`;
+    return fetch(url).then(response => response.json());
+}
+
+export function fetchArticles(name, page = 0, params = {}, getArticles = clientAdapter) {
+    params.page = page;
+
     return dispatch => {
         dispatch(requestArticles(name, page));
-        return fetch(`http://localhost:3000/api/articles/?page=${page}&${params}`)
-            .then(response => response.json())
-            .then(json => dispatch(receiveArticles(name, page, json)))
+        return getArticles(params).then(json => dispatch(receiveArticles(name, page, json)))
     }
 }
 

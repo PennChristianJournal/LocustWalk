@@ -1,7 +1,7 @@
 
 import path from 'path'
 import {Router} from 'express'
-const router = Router();
+const router = new Router();
 
 import {definePageRoute} from '../../helpers'
 

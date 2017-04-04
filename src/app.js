@@ -1,7 +1,7 @@
 import path from 'path'
 import nconf from 'nconf'
 
-nconf.argv().env().file({file: path.join(__dirname, 'config.json')});
+nconf.argv().env().file({file: path.join(__dirname, '../config.json')});
 
 nconf.defaults({
     PORT: 3000,
