@@ -1,16 +1,16 @@
 
-import React from 'react'
-import AdminLayout from '../../templates/admin/admin-layout'
+import React from 'react';
+import AdminLayout from '../../templates/admin/admin-layout';
 
 const AdminHome = () => (
-    <AdminLayout id="admin-page">
-        <div>This is the admin panel</div>
-    </AdminLayout>
-)
+  <AdminLayout id="admin-page">
+      <div>This is the admin panel</div>
+  </AdminLayout>
+);
 
-export default AdminHome
+export default AdminHome;
 
-AdminHome.metadata = Object.assign({}, AdminLayout.metadata)
+AdminHome.metadata = Object.assign({}, AdminLayout.metadata);
 
-import {mount} from '../../helpers/page'
-mount(AdminHome)
+import {mount} from '../../helpers/page';
+mount(AdminHome);

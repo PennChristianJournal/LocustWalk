@@ -4,7 +4,9 @@
     "build": "babel src -d dist --copy-files && NODE_ENV=production webpack -p",
     "serve": "node dist/app.js",
     "postinstall": "bower install",
-    "webpack": "webpack --watch"
+    "webpack": "webpack --watch",
+    "lint": "eslint src",
+    "lint-watch": "esw -w --changed src"
   },
   "dependencies": {
     "async": "^2.1.4",
@@ -49,6 +51,13 @@
   },
   "devDependencies": {
     "babel-cli": "^6.24.0",
+    "babel-eslint": "^7.2.1",
+    "eslint": "^3.19.0",
+    "eslint-config-fbjs": "^1.1.1",
+    "eslint-plugin-babel": "^4.1.1",
+    "eslint-plugin-flowtype": "^2.30.4",
+    "eslint-plugin-react": "^6.10.3",
+    "eslint-watch": "^3.0.1",
     "node-sass": "^4.3.0",
     "nodemon": "^1.11.0",
     "webpack": "^2.2.1",
