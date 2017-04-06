@@ -1,6 +1,6 @@
 
 import { Router } from 'express'
-const router = Router();
+const router = new Router();
 import Article from '../../models/article'
 
 function makeQuery(req) {
@@ -23,19 +23,9 @@ function makeQuery(req) {
 }
 
 router.get('/', (req, res) => {
-    var limit = parseInt(req.query.limit);
-    var page = parseInt(req.query.page);
-    var sort = req.query.sort;
+    req.query.is_published = true;
 
-    var query = Article.find(makeQuery(req));
-
-    if (sort) query = query.sort({[sort]: -1});
-    if (page) {
-        query = query.skip(page * limit);
-    }
-    if (limit) query = query.limit(limit);
-
-    query.exec((err, articles) => {
+    Article.queryPaginated(req.query, (err, articles) => {
         if (err) {
             console.log(err);
             res.send([]);

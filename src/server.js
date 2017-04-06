@@ -15,9 +15,20 @@ import nconf from 'nconf'
 const RedisStore = connectRedis(session);
 
 const server = express();
-server.set('port', nconf.get('PORT') || 3000);
+server.set('port', nconf.get('PORT'));
 
-var NODE_ENV = nconf.get('NODE_ENV')
+const NODE_ENV = nconf.get('NODE_ENV');
+
+if (NODE_ENV !== 'production') {
+    var compiler = require('webpack')(require('../webpack.config.js'));
+    server.use(require('webpack-dev-middleware')(compiler, {
+        publicPath: '/',
+        stats: {
+            colors: true
+        }
+    }));
+    server.use(require('webpack-hot-middleware')(compiler));
+}
 
 server.use(logger(NODE_ENV === 'development' ? 'dev' : 'common'));
 server.use(bodyParser.json());
@@ -38,11 +49,10 @@ server.use(session({
 import sassMiddleware from 'node-sass-middleware'
 server.use(sassMiddleware({
   src: path.join(__dirname, ''),
-  dest: path.join(__dirname, '../public/css'),
-  debug: NODE_ENV === 'development',
+  dest: path.join(__dirname, '../public'),
+//   debug: NODE_ENV === 'development',
   outputStyle: 'compressed',
 }), express.static(path.join(__dirname, '../public/css')));
-
 server.use(express.static(`${__dirname}/../public`));
 
 server.use(passport.initialize());
@@ -51,6 +61,8 @@ server.use(passport.session());
 import rootController from './controllers/index'
 server.use('/', rootController);
 
+mongoose.set('debug', NODE_ENV === 'development');
+mongoose.Promise = global.Promise;
 mongoose.connect(nconf.get('MONGODB_URI'), function(err) {
     if (err) throw err;
     console.log('Connected to database');

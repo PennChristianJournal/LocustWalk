@@ -27,13 +27,13 @@ function articleGroup(state = [], action) {
         case REQUEST_ARTICLES:
         case RECEIVE_ARTICLES:
             const group = articleGroupPage(state[action.page], action);
-            if (group.articles.length) {
+            // if (group.articles.length) {
                 return Object.assign([], state, {
                     [action.page]: group
                 })
-            } else {
-                return Object.assign([], state);
-            }
+            // } else {
+            //     return Object.assign([], state);
+            // }
     }
 }
 
