@@ -1,25 +1,24 @@
 
-import passport from 'passport'
-import {Strategy as GoogleStrategy} from 'passport-google-oauth20'
-import path from 'path'
-import nconf from 'nconf'
+import passport from 'passport';
+import {Strategy as GoogleStrategy} from 'passport-google-oauth20';
+import nconf from 'nconf';
 
 passport.use(new GoogleStrategy({
   clientID: nconf.get('GOOGLE_CLIENT_ID'),
   clientSecret: nconf.get('GOOGLE_CLIENT_SECRET'),
-  callbackURL: `${nconf.get('SERVER_ROOT')}admin/login/callback`
+  callbackURL: `${nconf.get('SERVER_ROOT')}admin/login/callback`,
 }, function(accessToken, refreshToken, profile, cb) {
   
   var emails = profile.emails.map(el => {
-    return el.value
-  })
-  var approved = nconf.get('ADMIN_EMAILS').split(' ')
+    return el.value;
+  });
+  var approved = nconf.get('ADMIN_EMAILS').split(' ');
   for (var email of emails) {
     if (approved.indexOf(email) >= 0) {
-      return cb(null, profile)    
+      return cb(null, profile);
     }
   }
-  return cb(null, false)
+  return cb(null, false);
 }));
 
 passport.serializeUser(function(user, cb) {
@@ -30,33 +29,33 @@ passport.deserializeUser(function(obj, cb) {
   cb(null, obj);
 });
 
-// export default passport
-
 export default function(router) {
-    router.get('/login', passport.authenticate('google', {
-    scope: ['https://www.googleapis.com/auth/userinfo.email']
-    }));
+  router.get('/login', passport.authenticate('google', {
+    scope: [
+      'https://www.googleapis.com/auth/userinfo.email',
+    ],
+  }));
 
-    router.get('/login/callback', passport.authenticate('google', {
+  router.get('/login/callback', passport.authenticate('google', {
     successRedirect: '/admin/login/success',
-    failureRedirect: '/'
-    }));
+    failureRedirect: '/',
+  }));
 
-    router.get('/login/success', function(req, res) {
-    res.redirect(req.session.lastUrl || '/')
-    });
+  router.get('/login/success', function(req, res) {
+    res.redirect(req.session.lastUrl || '/');
+  });
 
-    router.get('/logout', function(req, res) {
-    req.logout()
-    res.redirect('/')
-    });
+  router.get('/logout', function(req, res) {
+    req.logout();
+    res.redirect('/');
+  });
 
-    router.use('/', function (req, res, next) {
+  router.use('/', function(req, res, next) {
     if (!req.isAuthenticated()) {
-        req.session.lastUrl = req.originalUrl;
-        return res.redirect('/admin/login')
+      req.session.lastUrl = req.originalUrl;
+      return res.redirect('/admin/login');
     } else {
-        return next()
+      return next();
     }
-    });
+  });
 }

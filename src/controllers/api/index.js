@@ -1,8 +1,8 @@
 
-import { Router } from 'express'
+import { Router } from 'express';
 const router = new Router();
 
-import articles from './articles'
+import articles from './articles';
 router.use('/articles', articles);
 
-export default router
+export default router;

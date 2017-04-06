@@ -1,0 +1,6 @@
+{
+    "extends": "fbjs",
+    "rules": {
+        "max-len": "off"
+    }
+}
