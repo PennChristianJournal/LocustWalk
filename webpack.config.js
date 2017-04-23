@@ -57,6 +57,9 @@ module.exports = {
         }, {
             // test: /\.svg$/,
             // loader: "url-loader?limit=10000&mimetype=image/svg+xml"
+        }, {
+            test: require.resolve('medium-editor-insert-plugin'),
+            loader: 'imports-loader?define=>false'
         }]
     },
 
