@@ -44,6 +44,28 @@ block top
   .featured-view
     .featured-wrapper#feature-slide
       - var dup = new dup_date()
+      
+      .featured-block
+        .feature-month-bar
+          h2.strong.feature-month Persepctives on Time
+        .featured-block-aspect: .content
+          .featured(style='width:100%')
+            .bg-img(style='background-image: url()')
+
+      .featured-block
+        .feature-month-bar
+          h2.strong.feature-month Religion & Pop Culture
+        .featured-block-aspect: .content
+          .featured(style='width:100%')
+            .bg-img(style='background-image: url()')
+      
+      .featured-block
+        .feature-month-bar
+          h2.strong.feature-month Cory Booker 
+        .featured-block-aspect: .content
+          .featured(style='width:100%')
+            .bg-img(style='background-image: url()')
+
       each feature, index in features
         .featured-block
           .feature-month-bar
@@ -107,7 +129,7 @@ block append footer
   script.
     (function() {
       var featureIdx = 0;
-      var maxFeatures = #{features.length};
+      var maxFeatures = #{features.length + 3};
       var lBtn = document.getElementById('feature-left');
       var rBtn = document.getElementById('feature-right');
       var slide = document.getElementById('feature-slide');
