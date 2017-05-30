@@ -17,7 +17,14 @@ export function mount(Page, func) {
       <Provider store={store}>
           <Page />
       </Provider>,
-      document.getElementById('root')
+      document.getElementById('root'),
+      function() {
+        const scriptTag = document.getElementById('__STATE__');
+        if (scriptTag) {
+          scriptTag.parentElement.removeChild(scriptTag);
+        }
+        delete window.__STATE__;
+      }
     );
 
     if (typeof func !== 'undefined' && func !== null) {

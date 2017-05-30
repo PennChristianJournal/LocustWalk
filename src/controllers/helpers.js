@@ -19,7 +19,7 @@ export function generatePage(Page, store, clientScript, admin) {
       <html>
           ${renderToStaticMarkup(head)}
           <body>
-              <script>window.__STATE__ = ${JSON.stringify(store.getState())};</script>
+              <script id="__STATE__">window.__STATE__ = ${JSON.stringify(store.getState())};</script>
               <div id="root">${renderToString(page)}</div>
               <script type="text/javascript" src="/js/manifest.js"></script>
               <script type="text/javascript" src="/js/react.js"></script>

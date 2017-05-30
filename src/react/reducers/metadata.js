@@ -1,28 +1,32 @@
 
+import { RECEIVE_ARTICLES } from '../actions/articles';
+import { htmlPreview } from '../helpers/format';
+import { getFileURL } from '../helpers/file';
+
 export default function metadata(state = {
   title: 'Locust Walk - Penn Christian Journal',
-  meta: [
-    {
+  meta: {
+    description: {
       properties: ['description', 'og:description', 'twitter:description'],
       content: 'Locust Walk is a student-led Christian publication that exists to present the perspectives of faith and non-faith worldviews on questions of truth and purpose. Through active dialogue within the University of Pennsylvania, we seek to build relationships modeled after the life and teachings of Jesus Christ who informs our understanding of cultural engagement, reconciliation, and community. We pledge to cultivate an environment where the pursuit of solidarity in diversity can lay a foundation for conversation conducted with love and mutual respect.',
     },
-    {
+    image: {
       properties: ['og:image', 'twitter:image'],
       content: '/img/social-share.png',
     },
-    {
+    imageWidth: {
       properties: ['og:image:width', 'twitter:image:width'],
       content: '1280',
     },
-    {
+    imageHeight: {
       properties: ['og:image:height', 'twitter:image:height'],
       content: '667',
     },
-    {
+    siteName: {
       property: 'og:site_name',
       content: 'Penn Christian Journal',
     },
-  ],
+  },
   link: [
     {
       href: '/img/favicon.ico',
@@ -61,5 +65,35 @@ export default function metadata(state = {
     },
   ],
 }, action) {
+  switch(action.type) {
+    case RECEIVE_ARTICLES:
+      if (action.name === "main") {
+        let article = action.articles[0] || {};
+        
+        let title = `${article.title} - Locust Walk`;
+          
+        let description = Object.assign({}, state.meta.description, {
+          content: htmlPreview(article.content, 160),
+        });
+
+        let image = Object.assign({}, state.meta.image, {
+          content: getFileURL(article.thumb),
+        });
+
+        let meta = Object.assign({}, state.meta, {
+          description,
+          image,
+        });
+
+        state = Object.assign({}, state, {
+          title,
+          meta,
+        });        
+      }
+      break;
+    default:
+      break;
+  }
+
   return state;
 }
