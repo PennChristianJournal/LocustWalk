@@ -12,14 +12,6 @@ import FeatureSlider from '../components/feature-slider';
 const HomePage = () => (
     <PageLayout id="home-page"
         top={[
-          <div className="row">
-              <div className="col-md-12 col-sm-12">
-                  <div className="tile tile-vertical blue-theme announcement">
-                      <p>Now accepting response pieces to any feature article for our first print edition to be released Jan 2017. Send your submissions to <a href="mailto:pennchristianjournal@gmail.com">pennchristianjournal@gmail.com</a>.</p>
-                      <p>Interested in writing a feature article for 2017? Send an email to <a href="mailto:pennchristianjournal@gmail.com">pennchristianjournal@gmail.com</a>.</p>
-                  </div>
-              </div>
-          </div>,
           <ArticleGroup name="featured" query={{
             sort: 'date',
             limit: 12,
