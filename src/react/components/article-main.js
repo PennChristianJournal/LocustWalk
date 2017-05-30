@@ -1,5 +1,6 @@
 
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import ArticleGroup from './article-group';
 import ArticleThumb from './article-thumb';
 import Optional from './optional';
@@ -52,7 +53,7 @@ export default class ArticleMain extends Component {
                   </ArticleGroup>
               </Optional>
 
-              <h1 className="article-title strong" dangerouslySetInnerHTML={{__html: article.title}} />
+              <h1 className="article-title strong">{article.title}</h1>
               <h4 className="article-author-date thin">{article.author} &#8212; {moment(article.date).format('MMM, DD YYYY')}</h4>
               <div className="article-content" dangerouslySetInnerHTML={{__html: article.content}}></div>
 
@@ -78,5 +79,5 @@ export default class ArticleMain extends Component {
 }
 
 ArticleMain.propTypes = {
-  article: React.PropTypes.object.isRequired,
+  article: PropTypes.object.isRequired,
 };

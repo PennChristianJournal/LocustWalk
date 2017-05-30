@@ -1,5 +1,6 @@
 
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import ArticleGroup from './article-group';
 
 export default class ArticleSingle extends Component {
@@ -17,5 +18,5 @@ export default class ArticleSingle extends Component {
 }
 
 ArticleSingle.propTypes = {
-  children: React.PropTypes.func,
+  children: PropTypes.func,
 };

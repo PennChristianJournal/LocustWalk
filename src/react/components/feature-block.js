@@ -1,5 +1,6 @@
 
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {articleHeading} from '../helpers/article';
 import moment from 'moment';
 import {htmlPreview} from '../helpers/format';
@@ -41,7 +42,7 @@ class FeatureThumb extends Component {
 }
 
 FeatureThumb.propTypes = {
-  article: React.PropTypes.object.isRequired,
+  article: PropTypes.object.isRequired,
 };
 
 export default class FeatureBlock extends Component {
@@ -86,5 +87,5 @@ export default class FeatureBlock extends Component {
 }
 
 FeatureBlock.propTypes = {
-  article: React.PropTypes.object.isRequired,
+  article: PropTypes.object.isRequired,
 };

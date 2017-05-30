@@ -13,18 +13,7 @@ class ArticleEdit extends Component {
     const MediumEditor = require('medium-editor');
     MediumEditorInsertPlugin($);
 
-    // var titleDiv = $(`div[data-article-id="${this.props.article._id}"] .article-title`);
     var contentDiv = $(`div[data-article-id="${this.props.article._id}"] .article-content`);
-
-    // var titleEditor = new MediumEditor(titleDiv, {
-    //     placeholder: {
-    //         text: 'New Article',
-    //         hideOnClick: false
-    //     },
-    //     toolbar: false,
-    //     disableReturn: true,
-    //     disableDoubleReturn: true
-    // });
 
     var contentEditor = new MediumEditor(contentDiv, {
       placeholder: {
@@ -87,6 +76,7 @@ export default class ArticleEditPage extends Component {
                           <div className="row">
                               <ArticleThumb article={article} />
                           </div>
+                          <div className="row"><br /></div>
                           <div className="row">
                               <ArticleLayout>
                                   <ArticleEdit article={article} />  
