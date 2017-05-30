@@ -37,10 +37,11 @@ export default connect((state, ownProps) => {
   
   props.metadata = {};
   if (meta) {
-    props.meta = props.meta.concat(meta);
+    props.meta = Object.assign({}, props.meta, meta);
   }
   if (props.meta) {
-    props.meta.forEach(obj => {
+    Object.keys(props.meta).forEach(key => {
+      let obj = props.meta[key];
       const {property, properties, ...rest} = obj;
       if (property) {
         Object.assign(props.metadata, {

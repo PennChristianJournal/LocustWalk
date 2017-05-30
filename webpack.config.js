@@ -25,11 +25,12 @@ var entries = {};
 walk(path.join(__dirname, 'src/react/views'), function(file) {
     let relativePath = path.relative(path.join(__dirname, 'src/react'), file);
     let target = path.join(path.dirname(relativePath), path.basename(relativePath, '.js'));
-    if (process.env.NODE_ENV !== 'production') {
+    /*if (process.env.NODE_ENV !== 'production') {
         entries[target] = ['webpack-hot-middleware/client', file];
     } else {
         entries[target] = file;
-    }
+    }*/
+    entries[target] = file;
 });
 
 module.exports = {

@@ -27,7 +27,7 @@ if (NODE_ENV !== 'production') {
       colors: true,
     },
   }));
-  server.use(require('webpack-hot-middleware')(compiler));
+  //server.use(require('webpack-hot-middleware')(compiler));
 }
 
 server.use(logger(NODE_ENV === 'development' ? 'dev' : 'common'));
