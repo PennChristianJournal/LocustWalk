@@ -1,5 +1,6 @@
 
-import React, { Component } from 'react';
+import { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { fetchArticlesIfNeeded } from '../actions/articles';
 
@@ -24,7 +25,7 @@ class ArticleGroup extends Component {
 }
 
 ArticleGroup.propTypes = {
-  children: React.PropTypes.func.isRequired,
+  children: PropTypes.func.isRequired,
 };
 
 export default connect((state, ownProps) => {

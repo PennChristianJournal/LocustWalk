@@ -1,5 +1,6 @@
 
-import React, { Component } from 'react';
+import { Component } from 'react';
+import PropTypes from 'prop-types';
 
 export default class Optional extends Component {
   render() {
@@ -8,5 +9,5 @@ export default class Optional extends Component {
 }
 
 Optional.propTypes = {
-  test: React.PropTypes.any,
+  test: PropTypes.any,
 };

@@ -1,5 +1,6 @@
 
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import { htmlPreview } from '../helpers/format';
 import {getFileURL} from '../helpers/file';
@@ -18,7 +19,7 @@ export default class ArticleThumb extends Component {
           </div>
           <div className="article-thumb-content">
               <a href={`/articles/${article.slug}`}>
-                  <h2 className="title" dangerouslySetInnerHTML={{__html: article.title}} />
+                  <h2 className="title">{article.title}</h2>
               </a>
               <p className="author-date h6">
                   <span className="author">{article.author}&#8212;&nbsp;</span>
@@ -32,5 +33,5 @@ export default class ArticleThumb extends Component {
 }
 
 ArticleThumb.propTypes = {
-  article: React.PropTypes.object.isRequired,
+  article: PropTypes.object.isRequired,
 };
