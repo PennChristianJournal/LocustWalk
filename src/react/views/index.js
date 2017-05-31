@@ -15,8 +15,8 @@ const HomePage = () => (
           <ArticleGroup name="featured" query={{
             sort: 'date',
             limit: 12,
-            is_published: true,
-            is_featured: true,
+            published: true,
+            featured: true,
           }}>
               {articles => <FeatureSlider articles={articles} />}
           </ArticleGroup>,
@@ -26,7 +26,7 @@ const HomePage = () => (
           <ArticleGroupInfinite name="recent" initialPages={1} query={{
             sort: 'date',
             limit: 10,
-            is_published: true,
+            published: true,
           }}>
               {(articles, group) =>
                   <div className="tile tile-vertical white-theme">

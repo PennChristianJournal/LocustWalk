@@ -10,8 +10,8 @@ class ArchivePanel extends Component {
       <ArticleGroup name="archive_panel" query={{
         sort: 'date',
         limit: 12,
-        is_published: true,
-        is_featured: true,
+        published: true,
+        featured: true,
       }}>
           {articles =>
             <div className="tile tile-vertical gray-theme">
