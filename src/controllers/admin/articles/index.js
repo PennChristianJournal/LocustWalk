@@ -43,10 +43,10 @@ router.post('/:id/edit', function(req, res) {
   Article.findOneAndUpdate(condition, update, { new: true }, function(err, doc) {
     if (err) {
       console.warn(err.message);
-    } else {
-        //refreshes the page
-      res.redirect('back');
     }
+        //refreshes the page
+    res.redirect('back');
+
 
   });
 
