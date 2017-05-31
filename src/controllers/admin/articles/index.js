@@ -1,13 +1,13 @@
-
 import path from 'path';
 import {Router} from 'express';
 const router = new Router();
 
 import {defineAdminPageRoute} from '../../helpers';
 import Article from '../../../models/article';
-import { fetchArticles } from '../../../react/actions/articles';
+import {fetchArticles} from '../../../react/actions/articles';
 
 const AdminViews = path.join(__dirname, '../../../react/views/admin');
+
 
 import ArticlesList from '../../../react/views/admin/articles/index';
 defineAdminPageRoute(router, '/', ArticlesList, path.join(AdminViews, 'articles/index.js'), function(req, res, store, render) {
@@ -19,6 +19,38 @@ defineAdminPageRoute(router, '/:id/edit', ArticleEdit, path.join(AdminViews, 'ar
   store.dispatch(fetchArticles('main', 0, {
     _id: req.params.id,
   }, Article.queryPaginatedPromise.bind(Article))).then(render);
+}
+
+);
+
+router.post('/:id/edit', function(req, res) {
+
+  var condition = {
+    _id: req.params.id,
+  };
+
+  var update = {
+    $set: {
+      is_published: req.fields.is_published,
+      title: req.fields.title,
+      slug: req.fields.slug,
+      author: req.fields.author,
+      heading_override: req.fields.heading_override,
+    },
+
+  };
+
+  Article.findOneAndUpdate(condition, update, { new: true }, function(err, doc) {
+    if (err) {
+      console.warn(err.message);
+    }
+        //refreshes the page
+    res.redirect('back');
+
+
+  });
+
 });
+
 
 export default router;
