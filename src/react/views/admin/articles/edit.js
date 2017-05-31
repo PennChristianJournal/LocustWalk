@@ -120,6 +120,11 @@ ArticleEditPage.metadata = {
       type: 'text/css',
     },
     {
+      href: '/css/article-discussion.css',
+      rel: 'stylesheet',
+      type: 'text/css',
+    },
+    {
       href: '/css/admin-sidebar.css',
       rel: 'stylesheet',
       type: 'text/css',

@@ -57,22 +57,26 @@ export default class ArticleMain extends Component {
               <h4 className="article-author-date thin">{article.author} &#8212; {moment(article.date).format('MMM, DD YYYY')}</h4>
               <div className="article-content" dangerouslySetInnerHTML={{__html: article.content}}></div>
 
-              <ArticleGroup name="responses" query={{
-                parent: article._id,
-                published: true,
-              }}>
-                  { responses =>
-                    <Optional test={responses && responses.length}>
-                        <div>
+          </div>
+          <ArticleGroup name="responses" query={{
+            parent: article._id,
+            published: true,
+          }}>
+              { responses =>
+                <Optional test={responses && responses.length}>
+                    <div className="container-fluid white-theme discussion">
+                        <div className="container">
                             <h1 className="strong">Discussion</h1>
-                            <div className="discussion tile tile-vertical gray-theme">
-                                {responses.map((response, i) => <ArticleThumb article={response} key={i} /> )}
+                            <div className="tile tile-vertical">
+                                {responses.map((response, i) => 
+                                    <ArticleThumb article={response} key={i} />
+                                )}
                             </div>
                         </div>
-                    </Optional>
-                  }
-              </ArticleGroup>
-          </div>
+                    </div>
+                </Optional>
+              }
+          </ArticleGroup>
       </div>
     );
   }
