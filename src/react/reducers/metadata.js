@@ -65,9 +65,9 @@ export default function metadata(state = {
     },
   ],
 }, action) {
-  switch(action.type) {
+  switch (action.type) {
     case RECEIVE_ARTICLES:
-      if (action.name === "main") {
+      if (action.name === 'main') {
         let article = action.articles[0] || {};
         
         let title = `${article.title} - Locust Walk`;

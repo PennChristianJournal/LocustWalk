@@ -39,6 +39,11 @@ ArticlePage.metadata = Object.assign({}, ArticleLayout.metadata, {
       rel: 'stylesheet',
       type: 'text/css',
     },
+    {
+      href: '/css/article-discussion.css',
+      rel: 'stylesheet',
+      type: 'text/css',
+    },
   ],
 });
 
