@@ -34,7 +34,7 @@ const HomePage = () => (
                       {articles.map((article, i) => {
                         return <ArticleThumb article={article} key={i} />;
                       })}
-                      <button className="btn btn-default center-block" onClick={group.fetchMore.bind(group)}>Load More</button>
+                      {group.hasMore() ? <button className="btn btn-default center-block" onClick={group.fetchMore.bind(group)}>Load More</button> : null }
                   </div>
               }
           </ArticleGroupInfinite>

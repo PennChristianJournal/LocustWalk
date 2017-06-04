@@ -13,7 +13,8 @@ export function htmlPreview(text, length) {
   return truncate(
     text
       .replace(/<sup><a\b[^>]*>\[\d+\]<\/a><\/sup>/ig, '')
-      .replace(/(<([^>]+)>)/ig, ''),
+      .replace(/(<([^>]+)>)/ig, '')
+      .replace(/&nbsp;/ig, ' '),
     length
   );
 }

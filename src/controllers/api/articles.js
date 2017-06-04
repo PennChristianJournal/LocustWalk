@@ -25,19 +25,21 @@ router.get('/', (req, res) => {
   Article.queryPaginated(makeQuery(req.query), (err, articles) => {
     if (err) {
       console.log(err);
-      res.send([]);
+      res.json([]);
     } else {
-      res.send(articles);
+      res.json(articles);
     }
   });
 });
 
 router.get('/count', (req, res) => {
+  delete req.query.limit;
+  delete req.query.sort;
   Article.count(makeQuery(req.query), (err, count) => {
     if (err) {
       console.log(err);
     }
-    res.send(count);
+    res.json(count);
   });
 });
 
