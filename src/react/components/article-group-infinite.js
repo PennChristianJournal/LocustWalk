@@ -3,6 +3,7 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { fetchArticlesIfNeeded } from '../actions/articles';
+import { countArticles } from '../actions/articles';
 
 class ArticleGroupInfinite extends Component {
     
@@ -10,7 +11,12 @@ class ArticleGroupInfinite extends Component {
     this.props.fetchPage(this.props.pages + 1);
   }
 
+  hasMore() {
+    return (this.props.articles || []).length < this.props.count || 0;
+  }
+
   componentDidMount() {
+    this.props.getCount();
     this.props.fetchPage(Math.max(this.props.pages, this.props.initialPages));
   }
 
@@ -36,6 +42,8 @@ export default connect((state, ownProps) => {
       .map(id => state.articles.__DB__[id]),
 
     pages: group.length,
+
+    count: group.count || 0,
   };
 
 }, (dispatch, ownProps) => {
@@ -44,6 +52,9 @@ export default connect((state, ownProps) => {
       for (let i = 0; i < page; ++i) {
         dispatch(fetchArticlesIfNeeded(ownProps.name, i, ownProps.query));
       }
+    },
+    getCount: () => {
+      dispatch(countArticles(ownProps.name, ownProps.query));
     },
   };
 }, null, {

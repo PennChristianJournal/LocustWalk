@@ -5,6 +5,8 @@ export const REQUEST_ARTICLES = 'REQUEST_ARTICLES';
 export const RECEIVE_ARTICLES = 'RECEIVE_ARTICLES';
 export const INVALIDATE_ARTICLES = 'INVALIDATE_ARTICLES';
 export const UPDATE_ARTICLE = 'UPDATE_ARTICLE';
+export const GET_ARTICLE_COUNT = 'GET_ARTICLE_COUNT';
+export const RECEIVE_ARTICLE_COUNT = 'RECEIVE_ARTICLE_COUNT';
 
 function requestArticles(name, page) {
   return {
@@ -77,3 +79,28 @@ export function updateArticle(id, property, value) {
     value,
   };
 }
+
+
+function clientCountAdapter(params) {
+  var query = Object.keys(params).map(function(k) {
+    return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
+  }).join('&');
+
+  var url = `${process.env.SERVER_ROOT}api/articles/count/?${query}`;
+  return fetch(url).then(response => response.json());
+}
+
+export function countArticles(name, params = {}, countFunction = clientCountAdapter) {
+  return dispatch => {
+    dispatch({
+      type: GET_ARTICLE_COUNT,
+      name,
+    });
+    return countFunction(params).then(count => dispatch({
+      type: RECEIVE_ARTICLE_COUNT,
+      name,
+      count,
+    }));
+  };
+}
+

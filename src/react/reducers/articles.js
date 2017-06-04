@@ -1,5 +1,11 @@
 
-import { REQUEST_ARTICLES, RECEIVE_ARTICLES, INVALIDATE_ARTICLES, UPDATE_ARTICLE } from '../actions/articles';
+import { 
+  REQUEST_ARTICLES, 
+  RECEIVE_ARTICLES, 
+  INVALIDATE_ARTICLES, 
+  UPDATE_ARTICLE,
+  RECEIVE_ARTICLE_COUNT,
+} from '../actions/articles';
 
 function articleGroupPage(state = {
   requesting: false,
@@ -34,6 +40,10 @@ function articleGroup(state = [], action) {
       // } else {
       //   return Object.assign([], state);
       // }
+    case RECEIVE_ARTICLE_COUNT:
+      return Object.assign([], state, {
+        count: action.count, 
+      });
     default:
       return state;
   }
@@ -68,6 +78,11 @@ export default function articles(state = { __DB__: {} }, action) {
         [action.property]: action.value,
       });
       return newState;
+    
+    case RECEIVE_ARTICLE_COUNT:
+      return Object.assign({}, newState, {
+        [action.name]: articleGroup(newState[action.name], action),
+      });
 
     default:
       return newState;
