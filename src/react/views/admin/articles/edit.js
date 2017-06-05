@@ -80,9 +80,9 @@ export default class ArticleEditPage extends Component {
                       <div className="col-lg-9 col-sm-8 col-xs-6">
                           <div className="row">
                               <div className="container" style={{overflowY: 'auto'}}>
-                                  <div className="row">
+                                  {article.is_featured ? <div className="row">
                                       <FeatureSlider articles={[article]} />
-                                  </div>
+                                  </div> : null }
                                   <div className="row">
                                       <ArticleThumb article={article} />
                                   </div>

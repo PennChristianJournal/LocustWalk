@@ -21,6 +21,7 @@
     "connect-redis": "^3.2.0",
     "cookie-parser": "^1.4.3",
     "express": "^4.14.0",
+    "express-formidable": "^1.0.0",
     "express-session": "^1.14.2",
     "fs": "0.0.1-security",
     "googleapis": "^16.1.0",

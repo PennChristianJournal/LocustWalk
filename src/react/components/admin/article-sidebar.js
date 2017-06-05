@@ -89,7 +89,10 @@ class ArticleSidebar extends Component {
               <div className="form-group">
                   <div className="checkbox">
                       <label htmlFor="is_featured-input" className="checkbox-inline">
-                          <input id="is_featured-input" name="is_featured" type="checkbox" defaultChecked={article.is_featured || false} />
+                          <input id="is_featured-input" name="is_featured" type="checkbox" 
+                            defaultChecked={article.is_featured || false}
+                            onChange={e => this.props.updateArticle('is_featured', e.target.checked) }
+                           />
                           Featured
                       </label>
                       <label htmlFor="is_published-input" className="checkbox-inline">

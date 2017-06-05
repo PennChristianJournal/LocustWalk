@@ -26,7 +26,9 @@ function receiveArticles(name, page, articles) {
 }
 
 function clientAdapter(params) {
-  var query = Object.keys(params).map(function(k) {
+  var query = Object.keys(params).filter(function(k) {
+    return !(params[k] === null || params[k] === undefined);
+  }).map(function(k) {
     return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
   }).join('&');
 
@@ -39,7 +41,6 @@ export function fetchArticles(name, page = 0, params = {}, getArticles = clientA
 
   return dispatch => {
     dispatch(requestArticles(name, page));
-    if (params._id === null) console.log(name, 'is null!');
     return getArticles(params).then(json => dispatch(receiveArticles(name, page, json)));
   };
 }

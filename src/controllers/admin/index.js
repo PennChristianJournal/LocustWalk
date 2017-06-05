@@ -8,6 +8,9 @@ auth(router);
 
 import {defineAdminPageRoute} from '../helpers';
 
+import formidable from 'express-formidable';
+router.use(formidable());
+
 const AdminViews = path.join(__dirname, '../../react/views/admin');
 
 import AdminHome from '../../react/views/admin/index';
