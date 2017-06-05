@@ -32,10 +32,13 @@ router.post('/:id/edit', function(req, res) {
   var update = {
     $set: {
       is_published: req.fields.is_published,
+      is_featured: req.fields.is_featured,
       title: req.fields.title,
       slug: req.fields.slug,
       author: req.fields.author,
       heading_override: req.fields.heading_override,
+      content: req.fields.content,
+      parent: req.fields.parent,
     },
 
   };
