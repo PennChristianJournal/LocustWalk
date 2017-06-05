@@ -39,6 +39,7 @@ export function fetchArticles(name, page = 0, params = {}, getArticles = clientA
 
   return dispatch => {
     dispatch(requestArticles(name, page));
+    if (params._id === null) console.log(name, 'is null!');
     return getArticles(params).then(json => dispatch(receiveArticles(name, page, json)));
   };
 }
@@ -103,4 +104,3 @@ export function countArticles(name, params = {}, countFunction = clientCountAdap
     }));
   };
 }
-
