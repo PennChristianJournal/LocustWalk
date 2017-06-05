@@ -1,6 +1,7 @@
 
 import React, {Component} from 'react';
 import ArticleGroup from '../../../components/article-group';
+import FeatureSlider from '../../../components/feature-slider';
 import ArticleMain from '../../../components/article-main';
 import ArticleThumb from '../../../components/article-thumb';
 import ArticleLayout from '../../../templates/article-layout';
@@ -69,18 +70,29 @@ export default class ArticleEditPage extends Component {
                   <div className="row">
                       <div className="col-lg-3 col-sm-4 col-xs-6">
                           <div className="row">
-                              <ArticleSidebar article={article} gdriveSync />
+                              <div className="container-fluid">
+                                  <div className="row">
+                                      <ArticleSidebar article={article} gdriveSync />
+                                  </div>
+                              </div>
                           </div>
                       </div>
                       <div className="col-lg-9 col-sm-8 col-xs-6">
                           <div className="row">
-                              <ArticleThumb article={article} />
-                          </div>
-                          <div className="row"><br /></div>
-                          <div className="row">
-                              <ArticleLayout>
-                                  <ArticleEdit article={article} />  
-                              </ArticleLayout>
+                              <div className="container" style={{overflowY: 'auto'}}>
+                                  <div className="row">
+                                      <FeatureSlider articles={[article]} />
+                                  </div>
+                                  <div className="row">
+                                      <ArticleThumb article={article} />
+                                  </div>
+                                  <div className="row"><br /></div>
+                                  <div className="row">
+                                      <ArticleLayout>
+                                          <ArticleEdit article={article} />  
+                                      </ArticleLayout>
+                                  </div>
+                              </div>
                           </div>
                       </div>
                   </div>
@@ -126,6 +138,11 @@ ArticleEditPage.metadata = {
     },
     {
       href: '/css/admin-sidebar.css',
+      rel: 'stylesheet',
+      type: 'text/css',
+    },
+    {
+      href: '/css/home.css',
       rel: 'stylesheet',
       type: 'text/css',
     },
