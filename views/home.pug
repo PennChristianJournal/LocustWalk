@@ -41,60 +41,68 @@ block append head
   link(href='/css/article-thumb.css' rel='stylesheet' type='text/css')
 
 block top
+  .row
+    .col-md-12.col-sm-12
+      .tile.tile-vertical.blue-theme.announcement
+        p: a(href="https://issuu.com/locustwalk/docs/17_7284_u_of_penn_locust_walk_sprin/20") Check out our latest print edition here!
+
   .featured-view
     .featured-wrapper#feature-slide
       - var dup = new dup_date()
-      
-      .featured-block
-        .feature-month-bar
-          h2.strong.feature-month Persepctives on Time
-        .featured-block-aspect: .content
-          .featured(style='width:100%')
-            .bg-img(style='background-image: url()')
 
       .featured-block
         .feature-month-bar
-          h2.strong.feature-month Religion & Pop Culture
+          h2.strong.feature-month #{dup.handle("Religion & Pop Culture")}
         .featured-block-aspect: .content
-          .featured(style='width:100%')
-            .bg-img(style='background-image: url()')
+          .bg-img(style='background-image: url("/img/religion-and-pop-culture.png"); height: 100%; width: 100%; background-size: contain; background-repeat: no-repeat; background-position: 50% 50%')
       
       .featured-block
         .feature-month-bar
-          h2.strong.feature-month Cory Booker 
+          h2.strong.feature-month #{dup.handle("Our Vision")}
         .featured-block-aspect: .content
-          .featured(style='width:100%')
-            .bg-img(style='background-image: url()')
+          .featured(style='width: 100%')
+            .featured-block-aspect: .content
+              - var vp = {}
+              - vp.date = new Date("June 02, 2016")
+              - vp.content = "A familiar thought shared by students at Penn is how rarely we acknowledge one another on Locust Walk. “Hey, [insert name] (but don’t if you’re not too sure), how have you been?” as we rush our overworked selves to a more demanding, perhaps promising appointment. We all feel the need to head somewhere. We’re told that the culmination of our four years should prepare us to answer: Where is your destination and what is your plan? Neither of those questions demands us to consider the other faces on Locust Walk. Can we find community in a culture that glorifies the individual? Should we even bother searching for a model of community? If so, what would that community look like?"
+              - vp.slug = "our-vision"
+              - vp.author = "Esther Jou"
+              - vp.id = "574eff30bcc2571100ccadaa"
+              - vp.thumb = "57536269a264c81100940ffb"
+              - vp.title = "A Compass, a Bridge, and a Covenant"
+              +featured_article(vp, true)
+
 
       each feature, index in features
-        .featured-block
-          .feature-month-bar
-            - var featureHeading = dup.handle(moment(feature.date.toISOString()).format('MMM YYYY'))
-            if (feature.heading_override && feature.heading_override.length > 0)
-              h2.strong.feature-month #{feature.heading_override}
-            else
-              h2.strong.feature-month #{featureHeading}
-          .featured-block-aspect: .content
-            if !feature.responses || feature.responses.length < 2
-              .featured(style='width:100%')
-                .featured-block-aspect: .content
-                  +featured_article(feature, true)
-            else
-              .featured
-                .featured-aspect: .content
-                  +featured_article(feature, true)
+        if feature.heading_override.indexOf("Series") == -1
+          .featured-block
+            .feature-month-bar
+              - var featureHeading = dup.handle(moment(feature.date.toISOString()).format('MMM YYYY'))
+              if (feature.heading_override && feature.heading_override.length > 0)
+                h2.strong.feature-month #{feature.heading_override}
+              else
+                h2.strong.feature-month #{featureHeading}
+            .featured-block-aspect: .content
+              if !feature.responses || feature.responses.length < 2
+                .featured(style='width:100%')
+                  .featured-block-aspect: .content
+                    +featured_article(feature, true)
+              else
+                .featured
+                  .featured-aspect: .content
+                    +featured_article(feature, true)
 
-            if !feature.responses || feature.responses.length < 2
+              if !feature.responses || feature.responses.length < 2
 
-            else 
-              .feature-response
-                .feature-response-aspect: .content
-                  if feature.responses && feature.responses[0]
-                    +featured_article(feature.responses[0], false)
-              .feature-response
-                .feature-response-aspect: .content
-                  if feature.responses && feature.responses[1]
-                    +featured_article(feature.responses[1], false)
+              else 
+                .feature-response
+                  .feature-response-aspect: .content
+                    if feature.responses && feature.responses[0]
+                      +featured_article(feature.responses[0], false)
+                .feature-response
+                  .feature-response-aspect: .content
+                    if feature.responses && feature.responses[1]
+                      +featured_article(feature.responses[1], false)
       - var first_count = dup.first_count()
     .feature-nav
       a#feature-left(href='#'): i.fa.fa-chevron-left
@@ -129,7 +137,7 @@ block append footer
   script.
     (function() {
       var featureIdx = 0;
-      var maxFeatures = #{features.length + 3};
+      var maxFeatures = #{features.length + 2 - 7};
       var lBtn = document.getElementById('feature-left');
       var rBtn = document.getElementById('feature-right');
       var slide = document.getElementById('feature-slide');
@@ -152,16 +160,16 @@ block append footer
         }
       }
 
-      if (#{first_count} > 1) {
+      if (true || #{first_count} > 1) {
         var interval = setInterval(function() {
           if (autoscroll) {
             featureIdx += 1
-            if (featureIdx >= #{first_count}) featureIdx = 0
+            if (featureIdx >= maxFeatures) featureIdx = 0
             slide.style.left = featureIdx * -100 + '%'
           } else {
             clearInterval(interval)
           }
-        }, 5000)
+        }, 5000);
       }
 
     })()
