@@ -74,7 +74,7 @@ block top
 
 
       each feature, index in features
-        if feature.heading_override.indexOf("Series") == -1
+        if true || feature.heading_override.indexOf("Series") == -1
           .featured-block
             .feature-month-bar
               - var featureHeading = dup.handle(moment(feature.date.toISOString()).format('MMM YYYY'))
@@ -137,7 +137,7 @@ block append footer
   script.
     (function() {
       var featureIdx = 0;
-      var maxFeatures = #{features.length + 2 - 7};
+      var maxFeatures = #{features.length + 2};
       var lBtn = document.getElementById('feature-left');
       var rBtn = document.getElementById('feature-right');
       var slide = document.getElementById('feature-slide');
