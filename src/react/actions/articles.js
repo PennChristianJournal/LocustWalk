@@ -83,6 +83,7 @@ export function updateArticle(id, property, value) {
 }
 
 
+
 function clientCountAdapter(params) {
   var query = Object.keys(params).map(function(k) {
     return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
@@ -105,4 +106,3 @@ export function countArticles(name, params = {}, countFunction = clientCountAdap
     }));
   };
 }
-
