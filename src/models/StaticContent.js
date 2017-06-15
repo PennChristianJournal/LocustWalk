@@ -8,13 +8,15 @@ const Schema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  sections: [{
-    type: String
+  contentMD: {
+    type: String,
     required: true,
-
-}]
+  },
+  contentHTML:[{
+    type: String,
+    required: false,
+  }],
 
 });
 
-
-export default mongoose.model('ArticleSideBar', Schema);
+export default mongoose.model('siteinfo', Schema);
