@@ -5,7 +5,7 @@ const router = new Router();
 import {defineAdminPageRoute} from '../../helpers';
 import Article from '../../../models/article';
 import {fetchArticles} from '../../../react/actions/articles';
-
+const formidable = require('express-formidable');
 const AdminViews = path.join(__dirname, '../../../react/views/admin');
 
 
@@ -23,7 +23,10 @@ defineAdminPageRoute(router, '/:id/edit', ArticleEdit, path.join(AdminViews, 'ar
 
 );
 
+
+router.use(formidable());
 router.post('/:id/edit', function(req, res) {
+  console.log("here" + req.params);
 
   var condition = {
     _id: req.params.id,
