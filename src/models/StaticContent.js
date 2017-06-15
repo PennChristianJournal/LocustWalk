@@ -17,6 +17,7 @@ const Schema = new mongoose.Schema({
     required: false,
   },
 
+
 });
 
 export default mongoose.model('siteinfo', Schema);
