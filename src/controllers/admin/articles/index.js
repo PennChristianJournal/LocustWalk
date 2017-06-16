@@ -1,5 +1,6 @@
 import path from 'path';
 import {Router} from 'express';
+import mongoose from 'mongoose';
 const router = new Router();
 
 import {defineAdminPageRoute} from '../../helpers';
@@ -50,17 +51,22 @@ router.post('/:id/edit', function(req, res) {
       content: req.fields.content,
       parent: req.fields.parent,
     },
-
   };
+
+  if (!mongoose.Types.ObjectId.isValid(req.fields.parent)) {
+    delete update.$set.parent;
+  }
+
+  if (!req.fields.content) {
+    delete update.$set.content;
+  }
 
   Article.findOneAndUpdate(condition, update, { new: true }, function(err, doc) {
     if (err) {
       console.warn(err.message);
     }
-        //refreshes the page
+    //refreshes the page
     res.redirect('back');
-
-
   });
 
 });

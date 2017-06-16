@@ -53,11 +53,20 @@ class ArticleSidebar extends Component {
     this.props.updateArticle(prop, blob);
   }
 
+  handleSubmit(event) {
+    if (this.props.contentEdit && this.props.getArticleContent) {
+      const articleContent = this.props.getArticleContent();
+      if (articleContent) {
+        event.target.content.value = articleContent;
+      }
+    }
+  }
+
   render() {
     const article = this.props.article || {};
     return (
       <div className="admin-sidebar">
-          {this.props.gdriveSync ? 
+          {this.props.gdriveSync ?
           <form className="form" action="sync" method="POST">
               <div className="form-group">
                   <label>Pull from Google Drive</label>
@@ -66,7 +75,7 @@ class ArticleSidebar extends Component {
                           <input className="form-control" id="doc-search" placeholder="Document Title" />
                       </div>
                       <div className="col-sm-6">
-                          <input className="form-control" id="doc-id-input" name="doc_id" placeholder="Document ID" readOnly />      
+                          <input className="form-control" id="doc-id-input" name="doc_id" placeholder="Document ID" readOnly />
                       </div>
                   </div>
               </div>
@@ -75,7 +84,8 @@ class ArticleSidebar extends Component {
               </div>
           </form>
           : null}
-          <form className="form" key={article._id} action={`/admin/articles/${article._id}/edit`} method="post" encType="multipart/form-data">
+          <form onSubmit={this.handleSubmit.bind(this)} className="form" key={article._id} action={`/admin/articles/${article._id}/edit`} method="post" encType="multipart/form-data">
+              {this.props.contentEdit ? <input type="hidden" name="content" /> : null }
               <div className="form-group">
                   <label htmlFor="cover-photo-input">Cover Photo</label>
                   { this.props.imagePreviews ? <img src={article.cover ? getFileURL(article.cover, article.cover_preview_img) : ''} /> : null }
@@ -89,7 +99,7 @@ class ArticleSidebar extends Component {
               <div className="form-group">
                   <div className="checkbox">
                       <label htmlFor="is_featured-input" className="checkbox-inline">
-                          <input id="is_featured-input" name="is_featured" type="checkbox" 
+                          <input id="is_featured-input" name="is_featured" type="checkbox"
                             defaultChecked={article.is_featured || false}
                             onChange={e => this.props.updateArticle('is_featured', e.target.checked) }
                            />
@@ -103,19 +113,19 @@ class ArticleSidebar extends Component {
               </div>
               <div className="form-group">
                   <label htmlFor="title-input">Title</label>
-                  <input id="title-type" name="title" type="text" className="form-control" placeholder="Article Title" 
-                      defaultValue={article.title} 
+                  <input id="title-type" name="title" type="text" className="form-control" placeholder="Article Title"
+                      defaultValue={article.title}
                       onChange={ e => this.props.updateArticle('title', e.target.value) } />
               </div>
               <div className="form-group">
                   <label htmlFor="author-input">Author</label>
-                  <input id="author-input" name="author" type="text" className="form-control" placeholder="Author" 
+                  <input id="author-input" name="author" type="text" className="form-control" placeholder="Author"
                       defaultValue={article.author}
                       onChange={ e => this.props.updateArticle('author', e.target.value) } />
               </div>
               <div className="form-group">
                   <label htmlFor="slug-input">Slug</label>
-                  <input id="slug-input" name="slug" type="text" className="form-control" placeholder="Slug" 
+                  <input id="slug-input" name="slug" type="text" className="form-control" placeholder="Slug"
                       defaultValue={article.slug}
                       onChange={ e => this.props.updateArticle('slug', e.target.value) } />
               </div>
@@ -134,7 +144,7 @@ class ArticleSidebar extends Component {
                               </ArticleGroup>
                           </div>
                           <div className="col-sm-6">
-                              <input name="parent" type="text" readOnly className="form-control" placeholder="Article ID" 
+                              <input name="parent" type="text" readOnly className="form-control" placeholder="Article ID"
                                   defaultValue={article.parent || ''}
                                   onChange={ e => {
                                     this.props.updateArticle('parent', e.target.value);
@@ -145,8 +155,8 @@ class ArticleSidebar extends Component {
               </div>
               <div className="form-group">
                   <label htmlFor="date-input">Post Date</label>
-                  <input id="date-input" name="date" type="text" className="form-control" 
-                      disabled={this.state.dateNow} 
+                  <input id="date-input" name="date" type="text" className="form-control"
+                      disabled={this.state.dateNow}
                       onChange={ e => this.props.updateArticle('date', moment(e.target.value, 'MMM DD, YYYY [at] H:mm:ss')) }
                       defaultValue={moment(this.state.dateNow ? this.state.date : article.date).format('MMM DD, YYYY [at] H:mm:ss')} />
                   <div className="checkbox">
@@ -158,8 +168,8 @@ class ArticleSidebar extends Component {
               </div>
               <div className="form-group">
                   <label htmlFor="heading-input">Heading Override</label>
-                  <input id="heading-input" name="heading_override" type="text" className="form-control" placeholder="Jun 2016 Special Feature" 
-                      defaultValue={article.heading_override || moment(this.state.dateNow ? this.state.date : article.date).format('MMM YYYY [Feature Article]')} 
+                  <input id="heading-input" name="heading_override" type="text" className="form-control" placeholder="Jun 2016 Special Feature"
+                      defaultValue={article.heading_override || moment(this.state.dateNow ? this.state.date : article.date).format('MMM YYYY [Feature Article]')}
                       onChange={ e => this.props.updateArticle('heading_override', e.target.value) }
                   />
               </div>
@@ -178,6 +188,6 @@ export default connect(null, function(dispatch, ownProps) {
 
     updateArticle: function(property, value) {
       dispatch(updateArticle(ownProps.article._id, property, value));
-    },    
+    },
   };
 })(ArticleSidebar);

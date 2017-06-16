@@ -10,4 +10,6 @@ nconf.defaults({
   MONGODB_URI: 'mongodb://localhost:27017/locustwalk',
 });
 
+process.on('unhandledRejection', r => console.log(r));
+
 require('./server');
