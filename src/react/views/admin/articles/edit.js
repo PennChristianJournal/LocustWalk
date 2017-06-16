@@ -10,37 +10,42 @@ import MediumEditorInsertPlugin from 'medium-editor-insert-plugin';
 import $ from 'jquery';
 
 class ArticleEdit extends Component {
+  constructor(props) {
+    super(props);
+    this.contentEditor = undefined;
+  }
+
   componentDidMount() {
     const MediumEditor = require('medium-editor');
     MediumEditorInsertPlugin($);
 
     var contentDiv = $(`div[data-article-id="${this.props.article._id}"] .article-content`);
 
-    var contentEditor = new MediumEditor(contentDiv, {
+    this.contentEditor = new MediumEditor(contentDiv, {
       placeholder: {
         text: 'Article content...',
         hideOnClick: false,
       },
       toolbar: {
         buttons: [
-          'bold', 
-          'italic', 
-          'underline', 
-          'anchor', 
-          'h2', 
-          'h3', 
-          'quote', 
-          'superscript', 
-          'justifyLeft', 
-          'justifyCenter', 
-          'justifyRight', 
+          'bold',
+          'italic',
+          'underline',
+          'anchor',
+          'h2',
+          'h3',
+          'quote',
+          'superscript',
+          'justifyLeft',
+          'justifyCenter',
+          'justifyRight',
           'justifyFull',
         ],
       },
     });
 
     contentDiv.mediumInsert({
-      editor: contentEditor,
+      editor: this.contentEditor,
       addons: {
         images: {
           fileUploadOptions: {
@@ -60,6 +65,10 @@ class ArticleEdit extends Component {
 }
 
 export default class ArticleEditPage extends Component {
+  getArticleContent() {
+    return this.articleEdit.contentEditor.serialize()['element-0'].value;
+  }
+
   render() {
     return (
       <ArticleGroup name="main">
@@ -72,7 +81,7 @@ export default class ArticleEditPage extends Component {
                           <div className="row">
                               <div className="container-fluid">
                                   <div className="row">
-                                      <ArticleSidebar article={article} gdriveSync />
+                                      <ArticleSidebar getArticleContent={this.getArticleContent.bind(this)} article={article} gdriveSync contentEdit />
                                   </div>
                               </div>
                           </div>
@@ -89,7 +98,7 @@ export default class ArticleEditPage extends Component {
                                   <div className="row"><br /></div>
                                   <div className="row">
                                       <ArticleLayout>
-                                          <ArticleEdit article={article} />  
+                                          <ArticleEdit ref={(el) => this.articleEdit = el} article={article} />
                                       </ArticleLayout>
                                   </div>
                               </div>
