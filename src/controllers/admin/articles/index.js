@@ -15,6 +15,8 @@ defineAdminPageRoute(router, '/', ArticlesList, path.join(AdminViews, 'articles/
 });
 
 import ArticleEdit from '../../../react/views/admin/articles/edit';
+
+
 defineAdminPageRoute(router, '/:id/edit', ArticleEdit, path.join(AdminViews, 'articles/edit.js'), function(req, res, store, render) {
   store.dispatch(fetchArticles('main', 0, {
     _id: req.params.id,
@@ -24,10 +26,11 @@ defineAdminPageRoute(router, '/:id/edit', ArticleEdit, path.join(AdminViews, 'ar
 );
 
 
+
+
+
 router.use(formidable());
 router.post('/:id/edit', function(req, res) {
-  console.log("here" + req.params);
-
   var condition = {
     _id: req.params.id,
   };
@@ -58,5 +61,9 @@ router.post('/:id/edit', function(req, res) {
 
 });
 
+router.post('/', function(req,res){
+  res.send('POST request to the homepage');
+
+});
 
 export default router;
