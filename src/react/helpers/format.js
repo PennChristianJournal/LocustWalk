@@ -1,5 +1,8 @@
 
 export function truncate(text, length, noelipsis) {
+  if (!text) {
+    return '';
+  }
   if (text.length < length) {
     return text;
   }
@@ -10,6 +13,9 @@ export function truncate(text, length, noelipsis) {
 }
 
 export function htmlPreview(text, length) {
+  if (!text) {
+    return '';
+  }
   return truncate(
     text
       .replace(/<sup><a\b[^>]*>\[\d+\]<\/a><\/sup>/ig, '')
