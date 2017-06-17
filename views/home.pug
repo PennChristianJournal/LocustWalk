@@ -50,30 +50,30 @@ block top
     .featured-wrapper#feature-slide
       - var dup = new dup_date()
 
-      .featured-block
-        .feature-month-bar
-          h2.strong.feature-month #{dup.handle("Religion & Pop Culture")}
-        .featured-block-aspect: .content
-          .bg-img(style='background-image: url("/img/religion-and-pop-culture.png"); height: 100%; width: 100%; background-size: contain; background-repeat: no-repeat; background-position: 50% 50%')
-      
-      .featured-block
-        .feature-month-bar
-          h2.strong.feature-month #{dup.handle("Our Vision")}
-        .featured-block-aspect: .content
-          .featured(style='width: 100%')
-            .featured-block-aspect: .content
-              - var vp = {}
-              - vp.date = new Date("June 02, 2016")
-              - vp.content = "A familiar thought shared by students at Penn is how rarely we acknowledge one another on Locust Walk. “Hey, [insert name] (but don’t if you’re not too sure), how have you been?” as we rush our overworked selves to a more demanding, perhaps promising appointment. We all feel the need to head somewhere. We’re told that the culmination of our four years should prepare us to answer: Where is your destination and what is your plan? Neither of those questions demands us to consider the other faces on Locust Walk. Can we find community in a culture that glorifies the individual? Should we even bother searching for a model of community? If so, what would that community look like?"
-              - vp.slug = "our-vision"
-              - vp.author = "Esther Jou"
-              - vp.id = "574eff30bcc2571100ccadaa"
-              - vp.thumb = "57536269a264c81100940ffb"
-              - vp.title = "A Compass, a Bridge, and a Covenant"
-              +featured_article(vp, true)
-
-
       each feature, index in features
+        if index == 1
+          .featured-block
+            .feature-month-bar
+              h2.strong.feature-month #{dup.handle("Religion & Pop Culture")}
+            .featured-block-aspect: .content
+              .bg-img(style='background-image: url("/img/religion-and-pop-culture.png"); height: 100%; width: 100%; background-size: contain; background-repeat: no-repeat; background-position: 50% 50%')
+          
+          .featured-block
+            .feature-month-bar
+              h2.strong.feature-month #{dup.handle("Our Vision")}
+            .featured-block-aspect: .content
+              .featured(style='width: 100%')
+                .featured-block-aspect: .content
+                  - var vp = {}
+                  - vp.date = new Date("June 02, 2016")
+                  - vp.content = "A familiar thought shared by students at Penn is how rarely we acknowledge one another on Locust Walk. “Hey, [insert name] (but don’t if you’re not too sure), how have you been?” as we rush our overworked selves to a more demanding, perhaps promising appointment. We all feel the need to head somewhere. We’re told that the culmination of our four years should prepare us to answer: Where is your destination and what is your plan? Neither of those questions demands us to consider the other faces on Locust Walk. Can we find community in a culture that glorifies the individual? Should we even bother searching for a model of community? If so, what would that community look like?"
+                  - vp.slug = "our-vision"
+                  - vp.author = "Esther Jou"
+                  - vp.id = "574eff30bcc2571100ccadaa"
+                  - vp.thumb = "57536269a264c81100940ffb"
+                  - vp.title = "A Compass, a Bridge, and a Covenant"
+                  +featured_article(vp, true)
+
         if true || feature.heading_override.indexOf("Series") == -1
           .featured-block
             .feature-month-bar
