@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "nodemon src/app.js --exec babel-node --presets es2015,react,stage-2",
+    "start": "nodemon --ignore jwt.json src/app.js --exec babel-node --presets es2015,react,stage-2",
     "babel": "babel src -d dist --copy-files",
     "build": "npm run babel && cd dist && NODE_ENV=production webpack -p",
     "serve": "node dist/app.js",
@@ -23,6 +23,7 @@
     "cheerio": "^0.22.0",
     "connect-redis": "^3.2.0",
     "cookie-parser": "^1.4.3",
+    "corejs-typeahead": "^1.1.1",
     "eslint-config-fbjs": "^1.1.1",
     "eslint-plugin-babel": "^3.3.",
     "eslint-plugin-react": "^5.2.2",
@@ -34,7 +35,7 @@
     "gridfs-stream": "^1.1.1",
     "gutil": "^1.6.4",
     "isomorphic-fetch": "^2.2.1",
-    "jquery": "^3.1.1",
+    "jquery": "^3.2.1",
     "medium-editor": "^5.22.2",
     "medium-editor-insert-plugin": "^2.4.0",
     "mkdirp": "^0.5.1",

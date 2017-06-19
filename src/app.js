@@ -30,9 +30,7 @@ if (NODE_ENV !== 'production') {
   var compiler = require('webpack')(require('./webpack.config.js'));
   server.use(require('webpack-dev-middleware')(compiler, {
     publicPath: '/',
-    stats: {
-      colors: true,
-    },
+    noInfo: true,
   }));
   //server.use(require('webpack-hot-middleware')(compiler));
 }

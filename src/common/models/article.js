@@ -1,17 +1,5 @@
 import mongoose from 'mongoose';
 import slugs from 'slugs';
-// import google from 'googleapis'
-// import cheerio from 'cheerio'
-// import config from '../config'
-//
-// fs.writeFileSync(`${__root}/jwt.json`, JSON.stringify(config.jwt));
-//
-// var jwtClient = new google.auth.JWT(
-//     config.jwt.client_email,
-//     'jwt.json',
-//     config.jwt.private_key,
-//     ['https://www.googleapis.com/auth/drive']
-// );
 
 const Schema = new mongoose.Schema({
   title: {
