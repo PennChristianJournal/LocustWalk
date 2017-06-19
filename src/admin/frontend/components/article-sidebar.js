@@ -6,6 +6,7 @@ import { updateArticle } from '~/common/frontend/actions/articles';
 import { invalidateArticles } from '~/common/frontend/actions/articles';
 import moment from 'moment';
 import {getFileURL} from '~/common/frontend/helpers/file';
+import $ from 'jquery';
 
 class ArticleSidebar extends Component {
   constructor(props) {
@@ -26,6 +27,31 @@ class ArticleSidebar extends Component {
 
   componentDidMount() {
     this.timerID = setInterval(() => this.tick(), 1000);
+    
+    const Bloodhound = require('corejs-typeahead');
+    const documentSearch = new Bloodhound({
+      datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+      queryTokenizer: Bloodhound.tokenizers.whitespace,
+      remote: {
+        url: '/admin/articles/docs/search?name=%QUERY',
+        wildcard: '%QUERY',
+      }
+    });
+    documentSearch.initialize();
+
+    const $docSearch = $('#doc-search');
+    $docSearch.typeahead(null, {
+      hint: true,
+      highlight: true,
+      minLength: 1,
+      source: documentSearch.ttAdapter(),
+      display: 'name',
+    });
+    $docSearch.on('typeahead:selected typeahead:autocompleted', function(e, datum) {
+      $('#doc-id-input').val(datum.id)
+    });
+
+    $('.tt-input').attr('autocomplete', 'off');
   }
 
   componentWillUnmount() {
@@ -67,7 +93,45 @@ class ArticleSidebar extends Component {
     return (
       <div className="admin-sidebar">
           {this.props.gdriveSync ?
-          <form className="form" action="sync" method="POST">
+          <form className="form" action="sync" method="POST" onSubmit={this.props.syncArticle}>
+              <style dangerouslySetInnerHTML={{__html: `
+                .twitter-typeahead {
+                  display: block!important;
+                }
+
+                .tt-dropdown-menu { 
+                  width: 100%;
+                  & > div {
+                    padding: 5px;
+                    border-radius: 5px;
+                    box-shadow: 0 0 10px 0 black;
+                    background-color: white;
+                  }
+                }
+                .tt-suggestion {
+                  padding: 2px 10px;
+                  line-height: 24px;
+                  color: #333;
+                  p {
+                    margin: 0;
+                  }
+                }
+
+                .tt-suggestion.tt-cursor,.tt-suggestion:hover {
+                  color: #fff;
+                  background-color: #0097cf;
+                }
+
+                .tt-hint {
+                  color: #999
+                }
+
+                .tt-menu {
+                  width: 100%;
+                  background-color: white;
+                  border: 1px solid gray;
+                }
+              `}} />
               <div className="form-group">
                   <label>Pull from Google Drive</label>
                   <div className="row">
@@ -80,7 +144,7 @@ class ArticleSidebar extends Component {
                   </div>
               </div>
               <div className="form-group">
-                  <button className="btn btn-default" type="submit" onClick={function() { return confirm('Content on this page will be replaced. Are you sure?'); }}>Sync</button>
+                  <button className="btn btn-default" type="submit">Sync</button>
               </div>
           </form>
           : null}
@@ -188,6 +252,16 @@ export default connect(null, function(dispatch, ownProps) {
 
     updateArticle: function(property, value) {
       dispatch(updateArticle(ownProps.article._id, property, value));
+    },
+
+    syncArticle: function(event) {
+      event.preventDefault();
+      const docId = event.target.elements['doc-id-input'].value;
+      if (docId && confirm('Content on this page will be replaced. Are you sure?')) {
+        $.post(`/admin/articles/docs/sync/${docId}`, function(content) {
+          dispatch(updateArticle(ownProps.article._id, 'content', content));
+        });
+      }
     },
   };
 })(ArticleSidebar);

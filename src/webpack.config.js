@@ -67,7 +67,7 @@ module.exports = {
   },
 
   plugins: [
-    process.env.NODE_ENV !== 'production' ? new BundleAnalyzerPlugin() : null,
+    process.env.NODE_ENV !== 'production' ? new BundleAnalyzerPlugin({openAnalyzer: false}) : null,
     process.env.NODE_ENV !== 'production' ? new webpack.HotModuleReplacementPlugin() : null,
     new webpack.DefinePlugin({
       'process.env': ['APP_ENV', 'SERVER_ROOT', 'NODE_ENV']
