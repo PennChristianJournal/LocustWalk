@@ -5,14 +5,11 @@ import nconf from 'nconf';
 import redis from 'redis';
 import connectRedis from 'connect-redis';
 import cookieParser from 'cookie-parser';
-import bodyParser from 'body-parser';
 import session from 'express-session';
 import passport from 'passport';
 
 const server = express();
 
-server.use(bodyParser.json());
-server.use(bodyParser.urlencoded({ extended: false }));
 server.use(cookieParser());
 
 const RediStore = connectRedis(session);
