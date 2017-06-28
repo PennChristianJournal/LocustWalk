@@ -41,6 +41,7 @@ const Schema = new mongoose.Schema({
     },
   },
   pending_attachments: [String],
+  attachments: [mongoose.Schema.Types.ObjectId],
   cover: String,
   thumb: String,
   parent: {

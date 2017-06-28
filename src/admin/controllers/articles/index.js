@@ -6,6 +6,11 @@ import Renderer from '~/renderer';
 import mongoose from 'mongoose';
 import formidable from 'express-formidable';
 import Article from '~/common/models/article';
+import fs from 'fs';
+import async from 'async';
+import SmallFile from '~/common/models/smallFile';
+import {getFileURL} from '~/common/frontend/helpers/file';
+import path from 'path';
 import {getJWTClient, getGoogleDriveClient} from '~/admin/googleAPIs';
 import cheerio from 'cheerio';
 const driveClient = getJWTClient(['https://www.googleapis.com/auth/drive']);
@@ -19,8 +24,7 @@ router.get('/:id/edit', (req, res) => {
   Renderer.render(req, res, views['admin-articles-edit']);
 });
 
-router.post('/:id/edit', formidable());
-router.post('/:id/edit', function(req, res) {
+router.post('/:id/edit', formidable(), (req, res) => {
   var condition = {
     _id: req.params.id,
   };
@@ -46,12 +50,87 @@ router.post('/:id/edit', function(req, res) {
     delete update.$set.content;
   }
 
-  Article.findOneAndUpdate(condition, update, { new: true }, function(err, doc) {
+  Article.findOneAndUpdate(condition, update, { new: true }, (err, doc) => {
     if (err) {
       console.warn(err.message);
     }
     //refreshes the page
     res.redirect('back');
+  });
+});
+
+router.post('/:id/imageupload', formidable(), (req, res) => {
+  const file = req.files && req.files['files[]'];
+  if (file) {
+    fs.readFile(file.path, (err, data) => {
+      if (err) {
+        console.error(err);
+        res.status(500);
+        return res.send(err.toString());
+      }
+
+      SmallFile.create({
+        data,
+        contentType: file.type || mime.lookup(file.name),
+      }, (err, smallFile) => {
+        if (err) {
+          smallFile.remove();
+          if (err) {
+            console.error(err);
+            res.status(500);
+            return res.send(err.toString());
+          }
+        }
+
+        Article.findByIdAndUpdate(req.params.id, {
+          $push: {
+            attachments: smallFile._id,
+          },
+        }, {
+          safe: true,
+          new: true,
+        }, (err, article) => {
+          return res.send({ 
+            files: [{ url: getFileURL(smallFile._id) }],
+          });
+        });
+      });
+    });
+  } else {
+    return res.end(400);
+  }
+});
+
+router.post('/:id/imagedelete', formidable(), (req, res) => {
+  const url = req.fields && req.fields.file;
+  const id = path.basename(url);
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.end();
+  }
+
+  async.parallel([
+    function(cb) {
+      SmallFile.findByIdAndRemove(id, cb);
+    },
+    function(cb) {
+      Article.findByIdAndUpdate(req.params.id, {
+        $pull: {
+          attachments: id,
+        }  
+      }, {
+        new: true,
+        safe: true
+      }, cb);
+    },
+  ], (err, results) => {
+    if (err) {
+      console.error(err);
+      res.status(500);
+      return res.send(err.toString());
+    } else {
+      return res.end();
+    }
   });
 });
 

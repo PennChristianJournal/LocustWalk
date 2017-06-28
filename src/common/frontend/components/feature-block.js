@@ -5,6 +5,7 @@ import {articleHeading} from '../helpers/article';
 import moment from 'moment';
 import {htmlPreview} from '../helpers/format';
 import ArticleGroup from './article-group';
+import {getFileURL} from '../helpers/file';
 
 class FeatureThumb extends Component {
   render() {
@@ -17,9 +18,9 @@ class FeatureThumb extends Component {
           <div className={this.props.response ? 'feature-response-aspect' : this.props.single ? 'featured-block-aspect' : 'featured-aspect'}>
               <div className="content">
                   <a href={`/articles/${article.slug}`}>
-                      <div className="bg-img" style={{backgroundImage: `url("/files/${article.thumb}")`}}></div>
+                      <div className="bg-img" style={{backgroundImage: `url(${getFileURL(article.thumb, article.thumb_preview_img)})`}}></div>
                       <div className="title-box">
-                          <div className="title-img" style={{backgroundImage: `url("/files/${article.thumb}")`}}></div>
+                          <div className="title-img" style={{backgroundImage: `url(${getFileURL(article.thumb, article.thumb_preview_img)})`}}></div>
                           <div className="title-bg-darken"></div>
                           <div className="title-content">
                               <h2 className="title" dangerouslySetInnerHTML={{__html: article.title}} />
