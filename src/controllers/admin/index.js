@@ -2,6 +2,7 @@
 import path from 'path';
 import {Router} from 'express';
 const router = new Router();
+import StaticContent from '../../models/StaticContent';
 
 import auth from './auth';
 auth(router);
@@ -19,7 +20,38 @@ defineAdminPageRoute(router, '/', AdminHome, path.join(AdminViews, 'index.js'), 
   render();
 });
 
+
+
+router.post('/', function(req,res){
+  var name = {
+    name: req.fields.name,
+    contentMD: req.fields.markdown,
+    contentHTML: req.fields.html
+
+
+  }
+console.log(req);
+var newDocument = new StaticContent(name);
+newDocument.save(function (err) {
+
+});
+  res.redirect('back');
+
+
+
+});
+router.get('/', function(req,res){
+
+StaticContent.findOne({}, function(err,obj) { console.log(obj); });
+res.redirect('back');
+
+
+
+});
+
 import ArticlesController from './articles';
 router.use('/articles', ArticlesController);
+
+
 
 export default router;

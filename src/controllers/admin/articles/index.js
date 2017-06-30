@@ -4,17 +4,23 @@ const router = new Router();
 
 import {defineAdminPageRoute} from '../../helpers';
 import Article from '../../../models/article';
-import {fetchArticles} from '../../../react/actions/articles';
 
+import {fetchArticles} from '../../../react/actions/articles';
+const formidable = require('express-formidable');
 const AdminViews = path.join(__dirname, '../../../react/views/admin');
 
 
 import ArticlesList from '../../../react/views/admin/articles/index';
 defineAdminPageRoute(router, '/', ArticlesList, path.join(AdminViews, 'articles/index.js'), function(req, res, store, render) {
+  console.log("ASDASDASd");
+
+
   render();
 });
 
 import ArticleEdit from '../../../react/views/admin/articles/edit';
+
+
 defineAdminPageRoute(router, '/:id/edit', ArticleEdit, path.join(AdminViews, 'articles/edit.js'), function(req, res, store, render) {
   store.dispatch(fetchArticles('main', 0, {
     _id: req.params.id,
@@ -23,8 +29,12 @@ defineAdminPageRoute(router, '/:id/edit', ArticleEdit, path.join(AdminViews, 'ar
 
 );
 
-router.post('/:id/edit', function(req, res) {
 
+
+
+
+router.use(formidable());
+router.post('/:id/edit', function(req, res) {
   var condition = {
     _id: req.params.id,
   };
@@ -54,6 +64,7 @@ router.post('/:id/edit', function(req, res) {
   });
 
 });
+
 
 
 export default router;

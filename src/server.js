@@ -1,7 +1,6 @@
 
 import express from 'express';
 import cookieParser from 'cookie-parser';
-import bodyParser from 'body-parser';
 import session from 'express-session';
 import passport from 'passport';
 import logger from 'morgan';
@@ -31,8 +30,6 @@ if (NODE_ENV !== 'production') {
 }
 
 server.use(logger(NODE_ENV === 'development' ? 'dev' : 'common'));
-server.use(bodyParser.json());
-server.use(bodyParser.urlencoded({ extended: false }));
 server.use(cookieParser());
 
 const redisStore = new RedisStore({
