@@ -91,7 +91,7 @@ router.post('/:id/imageupload', formidable(), (req, res) => {
           safe: true,
           new: true,
         }, (err, article) => {
-          return res.send({ 
+          return res.send({
             files: [{ url: getFileURL(smallFile._id) }],
           });
         });
@@ -118,7 +118,7 @@ router.post('/:id/imagedelete', formidable(), (req, res) => {
       Article.findByIdAndUpdate(req.params.id, {
         $pull: {
           attachments: id,
-        }  
+        }
       }, {
         new: true,
         safe: true
@@ -132,6 +132,16 @@ router.post('/:id/imagedelete', formidable(), (req, res) => {
     } else {
       return res.end();
     }
+  });
+});
+
+router.get('/search', (req, res) => {
+  var regex = new RegExp(`^${req.query.title}`);
+  Article.find({
+    title: regex
+  }, (err, articles) => {
+    if (err) console.log(err);
+    res.send(articles);
   });
 });
 
