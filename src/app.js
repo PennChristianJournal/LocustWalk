@@ -46,7 +46,26 @@ server.use(express.static(`${__dirname}/../public`));
 server.use('/admin', require('./admin/server'));
 server.use('/', require('./common/server'));
 
-mongoose.set('debug', NODE_ENV === 'development');
+function truncateObject(obj) {
+  if (obj) {
+    for (var prop in obj) {
+      if (obj.hasOwnProperty(prop)) {
+        if (obj[prop].length && obj[prop].length > 100) {
+          obj[prop].length = 100;
+        }
+      }
+    }
+  }
+}
+
+mongoose.set('debug', function(collection, method, query, doc, options) {
+  if (NODE_ENV === 'development') {
+    truncateObject(query);
+    truncateObject(doc);
+
+    console.dir([collection, method, doc, options], {colors: true, depth: 4});
+  }
+});
 mongoose.Promise = global.Promise;
 mongoose.connect(nconf.get('MONGODB_URI'), function(err) {
   if (err) {
