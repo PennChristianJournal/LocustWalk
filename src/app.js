@@ -62,8 +62,9 @@ mongoose.set('debug', function(collection, method, query, doc, options) {
   if (NODE_ENV === 'development') {
     truncateObject(query);
     truncateObject(doc);
+    truncateObject(options);
 
-    console.dir([collection, method, doc, options], {colors: true, depth: 4});
+    console.dir([collection, method, query, doc, options], {colors: true, depth: 4});
   }
 });
 mongoose.Promise = global.Promise;
