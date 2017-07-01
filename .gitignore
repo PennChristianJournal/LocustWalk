@@ -6,3 +6,4 @@ public/*
 dist
 .vscode/
 jwt.json
+tmp/

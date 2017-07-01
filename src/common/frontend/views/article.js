@@ -4,7 +4,7 @@ import ArticleGroup from '../components/article-group';
 import ArticleMain from '../components/article-main';
 import ArticleLayout from '../templates/article-layout';
 
-const ArticlePage = () => 
+const ArticlePage = () =>
   <ArticleLayout>
     <ArticleGroup name="main" query={ArticlePage.articleQueries.main}>
       { articles => <ArticleMain article={articles[0]} /> }
@@ -26,7 +26,7 @@ ArticlePage.metadata = Object.assign({}, ArticleLayout.metadata, {
     {
       href: '/bower_components/medium-editor/dist/css/themes/default.css',
       rel: 'stylesheet',
-      type: 'text/css',  
+      type: 'text/css',
     },
     {
       href: '/bower_components/medium-editor-insert-plugin/dist/css/medium-editor-insert-plugin.min.css',
@@ -50,6 +50,3 @@ ArticlePage.metadata = Object.assign({}, ArticleLayout.metadata, {
     },
   ],
 });
-
-import {mount} from '../helpers/page';
-mount(ArticlePage);

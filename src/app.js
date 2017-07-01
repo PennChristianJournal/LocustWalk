@@ -32,7 +32,7 @@ if (NODE_ENV !== 'production') {
     publicPath: '/',
     noInfo: true,
   }));
-  //server.use(require('webpack-hot-middleware')(compiler));
+  server.use(require('webpack-hot-middleware')(compiler));
 }
 
 import sassMiddleware from 'node-sass-middleware';

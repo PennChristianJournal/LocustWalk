@@ -294,6 +294,3 @@ const StaffPage = () =>
 ;
 
 export default StaffPage;
-
-import {mount} from '../helpers/page';
-mount(StaffPage);

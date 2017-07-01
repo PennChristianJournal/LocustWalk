@@ -14,6 +14,7 @@ export function mount(Page, func) {
 
     const state = window.__STATE__;
     const store = createStore(reducer, state, middleware);
+
     render(
       <Provider store={store}>
           <Page />
@@ -31,5 +32,6 @@ export function mount(Page, func) {
     if (typeof func !== 'undefined' && func !== null) {
       func();
     }
+
   }
 }

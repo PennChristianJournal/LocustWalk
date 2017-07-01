@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import AdminLayout from '~/admin/frontend/templates/admin-layout';
 import ArticleGroupInfinite from '~/common/frontend/components/article-group-infinite';
-import ArticleSidebar from '~/admin/frontend/components/article-sidebar';
+import ArticleEditPanel from '~/admin/frontend/components/article-edit-panel';
 import Table from '~/admin/frontend/components/table';
 import moment from 'moment';
 import queryString from 'query-string';
@@ -38,7 +38,7 @@ export default class ArticleListPage extends Component {
 
   render() {
     return (
-      <AdminLayout id="admin-page" sidebar={<ArticleSidebar imagePreviews article={this.state.article} />} sidebarOpen={this.state.article} >
+      <AdminLayout id="admin-page" sidebar={<ArticleEditPanel imagePreviews article={this.state.article} />} sidebarOpen={this.state.article} >
           <div className="admin-list-view">
               <div className="admin-list-header">
                   <h1>
@@ -83,6 +83,3 @@ export default class ArticleListPage extends Component {
 }
 
 ArticleListPage.metadata = Object.assign({}, AdminLayout.metadata);
-
-import {mount} from '~/common/frontend/helpers/page';
-mount(ArticleListPage);

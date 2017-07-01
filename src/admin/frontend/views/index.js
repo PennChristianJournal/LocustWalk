@@ -11,6 +11,3 @@ const AdminHome = () => (
 export default AdminHome;
 
 AdminHome.metadata = Object.assign({}, AdminLayout.metadata);
-
-import {mount} from '~/common/frontend/helpers/page';
-mount(AdminHome);
