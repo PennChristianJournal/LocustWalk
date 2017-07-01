@@ -6,6 +6,7 @@ import ArticleEditPanel from '~/admin/frontend/components/article-edit-panel';
 import Table from '~/admin/frontend/components/table';
 import moment from 'moment';
 import queryString from 'query-string';
+import {debounce} from 'underscore';
 
 export default class ArticleListPage extends Component {
   constructor(props) {
@@ -24,16 +25,43 @@ export default class ArticleListPage extends Component {
       sort: params.sort || this.state.sort,
       page: params.page || this.state.page,
     });
+
+    const container = this.refs.list;
+    const table = container.childNodes[0];
+    table.addEventListener('mousewheel', debounce((e) => {
+      if (e.deltaY > 0 && table.scrollTop + table.offsetHeight > table.scrollHeight - 50) {
+        this.loadMoreArticles(true);
+      }
+    }, 20, true));
   }
 
-  fetchArticles() {
-    this.refs.articles.getWrappedInstance().fetchMore();
+  fetchArticles(cb) {
+    this.refs.articles.getWrappedInstance().fetchMore(cb);
+  }
+
+  hasMoreArticles() {
+    return this.refs.articles.getWrappedInstance().hasMore();
   }
 
   setArticle(article) {
     this.setState({
       article,
     });
+  }
+
+  loadMoreArticles() {
+    const container = this.refs.list;
+    const table = container.childNodes[0];
+    const body = table.childNodes[1];
+    const tableBottom = table.offsetTop + table.offsetHeight;
+    const bodyBottom = body.offsetTop + body.offsetHeight;
+
+    const atBottom = table.scrollTop + table.offsetHeight > table.scrollHeight - 50;
+    const bodyShort = bodyBottom < tableBottom;
+
+    if ((bodyShort || atBottom) && this.hasMoreArticles()) {
+      this.fetchArticles(this.loadMoreArticles.bind(this));
+    }
   }
 
   render() {
@@ -46,11 +74,12 @@ export default class ArticleListPage extends Component {
                       <a className="pull-right btn btn-primary" href="/admin/articles/new">New Article</a>
                   </h1>
               </div>
-              <div className="admin-list-content">
+              <div className="admin-list-content" ref="list">
                   <ArticleGroupInfinite initialPages={1} ref="articles" name="articles" query={{
                     sort: this.state.sort,
                     limit: 10,
-                  }}>
+                  }}
+                  initialLoad={this.loadMoreArticles.bind(this)}>
                       {articles => (
                           <Table className="table table-striped" head={
                               <tr>
@@ -60,8 +89,9 @@ export default class ArticleListPage extends Component {
                                   <th><i className="fa fa-check" /></th>
                                   <th>Posted</th>
                               </tr>
-                          } onScrollBottom={this.fetchArticles.bind(this)}>
+                          }>
                               {articles.map((article, i) => {
+                                const last = (i == articles.length - 1);
                                 return (
                                   <tr key={i} onClick={() => this.setArticle(article) }>
                                       <td><a href={`/admin/articles/${article._id}/edit`} dangerouslySetInnerHTML={{__html: article.title}}></a></td>
