@@ -2,6 +2,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import ArticleGroup from '~/common/frontend/components/article-group';
+import Optional from '~/common/frontend/components/optional';
 import TypeaheadInput from './typeahead-input';
 import { updateArticle } from '~/common/frontend/actions/articles';
 import { invalidateArticles } from '~/common/frontend/actions/articles';
@@ -13,8 +14,11 @@ class ArticleSidebar extends Component {
   constructor(props) {
     super(props);
     const article = props.article || {};
+
+    this.originalDate = article.date;
+
     this.state = {
-      dateNow: Boolean(article.date),
+      dateNow: !article.is_published,
       date: new Date(),
     };
   }
@@ -22,7 +26,8 @@ class ArticleSidebar extends Component {
   componentWillReceiveProps(nextProps) {
     const article = nextProps.article || {};
     this.state = {
-      dateNow: Boolean(article.date),
+      dateNow: !article.is_published,
+      date: new Date(),
     };
   }
 
@@ -68,86 +73,86 @@ class ArticleSidebar extends Component {
     const article = this.props.article || {};
     return (
       <div className="admin-sidebar">
-          {this.props.gdriveSync ?
-          <form className="form" action="sync" method="POST" onSubmit={this.props.syncArticle}>
-              <style dangerouslySetInnerHTML={{__html: `
-                .twitter-typeahead {
-                  display: block!important;
-                }
+          <Optional test={this.props.gdriveSync}>
+            <form className="form" action="sync" method="POST" onSubmit={this.props.syncArticle}>
+                <style dangerouslySetInnerHTML={{__html: `
+                  .twitter-typeahead {
+                    display: block!important;
+                  }
 
-                .tt-dropdown-menu {
-                  width: 100%;
-                  & > div {
-                    padding: 5px;
-                    border-radius: 5px;
-                    box-shadow: 0 0 10px 0 black;
+                  .tt-dropdown-menu {
+                    width: 100%;
+                    & > div {
+                      padding: 5px;
+                      border-radius: 5px;
+                      box-shadow: 0 0 10px 0 black;
+                      background-color: white;
+                    }
+                  }
+                  .tt-suggestion {
+                    padding: 2px 10px;
+                    line-height: 24px;
+                    color: #333;
+                    p {
+                      margin: 0;
+                    }
+                  }
+
+                  .tt-suggestion.tt-cursor,.tt-suggestion:hover {
+                    color: #fff;
+                    background-color: #0097cf;
+                  }
+
+                  .tt-hint {
+                    color: #999
+                  }
+
+                  .tt-menu {
+                    width: 100%;
                     background-color: white;
+                    border: 1px solid gray;
                   }
-                }
-                .tt-suggestion {
-                  padding: 2px 10px;
-                  line-height: 24px;
-                  color: #333;
-                  p {
-                    margin: 0;
-                  }
-                }
+                `}} />
 
-                .tt-suggestion.tt-cursor,.tt-suggestion:hover {
-                  color: #fff;
-                  background-color: #0097cf;
-                }
+                <div className="form-group">
+                    <label>Pull from Google Drive</label>
+                    <div className="row">
+                        <div className="col-sm-6">
+                            <TypeaheadInput
+                              className="form-control" placeholder="Document Title"
 
-                .tt-hint {
-                  color: #999
-                }
+                              typeaheadConfig={{
+                                hint: true,
+                                highlight: true,
+                                minLength: 1,
+                                display: 'name',
+                              }}
 
-                .tt-menu {
-                  width: 100%;
-                  background-color: white;
-                  border: 1px solid gray;
-                }
-              `}} />
+                              createBloodhoundConfig={function(Bloodhound) {
+                                return new Bloodhound({
+                                  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+                                  queryTokenizer: Bloodhound.tokenizers.whitespace,
+                                  remote: {
+                                    url: '/admin/articles/docs/search?name=%QUERY',
+                                    wildcard: '%QUERY',
+                                  }
+                                });
+                              }}
 
-              <div className="form-group">
-                  <label>Pull from Google Drive</label>
-                  <div className="row">
-                      <div className="col-sm-6">
-                          <TypeaheadInput
-                            className="form-control" placeholder="Document Title"
-
-                            typeaheadConfig={{
-                              hint: true,
-                              highlight: true,
-                              minLength: 1,
-                              display: 'name',
-                            }}
-
-                            createBloodhoundConfig={function(Bloodhound) {
-                              return new Bloodhound({
-                                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-                                queryTokenizer: Bloodhound.tokenizers.whitespace,
-                                remote: {
-                                  url: '/admin/articles/docs/search?name=%QUERY',
-                                  wildcard: '%QUERY',
-                                }
-                              });
-                            }}
-
-                            target="#doc-id-input"
-                            targetField="id"
-                          />
-                      </div>
-                      <div className="col-sm-6">
-                          <input className="form-control" id="doc-id-input" name="doc_id" placeholder="Document ID" readOnly />
-                      </div>
-                  </div>
-              </div>
-              <div className="form-group">
-                  <button className="btn btn-default" type="submit">Sync</button>
-              </div>
-          </form>
-          : null}
+                              target="#doc-id-input"
+                              targetField="id"
+                            />
+                        </div>
+                        <div className="col-sm-6">
+                            <input className="form-control" id="doc-id-input" name="doc_id" placeholder="Document ID" readOnly />
+                        </div>
+                    </div>
+                </div>
+                <div className="form-group">
+                    <button className="btn btn-default" type="submit">Sync</button>
+                </div>
+            </form>
+          </Optional>
           <form onSubmit={this.handleSubmit.bind(this)} className="form" key={article._id} action={`/admin/articles/${article._id}/edit`} method="post" encType="multipart/form-data">
               {this.props.contentEdit ? <input type="hidden" name="content" /> : null }
               <div className="form-group">
@@ -244,16 +249,23 @@ class ArticleSidebar extends Component {
               </div>
               <div className="form-group">
                   <label htmlFor="date-input">Post Date</label>
-                  <input id="date-input" name="date" type="text" className="form-control"
-                      disabled={this.state.dateNow}
-                      onChange={ e => this.props.updateArticle('date', moment(e.target.value, 'MMM DD, YYYY [at] H:mm:ss')) }
-                      defaultValue={moment(this.state.dateNow ? this.state.date : article.date).format('MMM DD, YYYY [at] H:mm:ss')} />
-                  <div className="checkbox">
-                      <label className="checkbox-inline">
-                          <input type="checkbox" checked={this.state.dateNow} onChange={this.dateNowToggled.bind(this)} />
-                          Now
-                      </label>
+                  <input type="text" className="form-control"
+                    disabled={this.state.dateNow}
+                    onChange={ e => this.props.updateArticle('date', moment(e.target.value || this.originalDate))}
+                  />
+                  <div>
+                    <span>{moment(this.state.dateNow ? this.state.date : article.date).format('MMM DD, YYYY [at] H:mm:ss')}</span>
+                    <span className="pull-right">
+                      <span className="checkbox" style={{margin: 0}}>
+                          <label className="checkbox-inline">
+                              <input type="checkbox" checked={this.state.dateNow} onChange={this.dateNowToggled.bind(this)} /> Now
+                          </label>
+                      </span>
+                    </span>
                   </div>
+                  <input id="date-input" name="date" type="hidden" className="form-control"
+                      value={moment(this.state.dateNow ? this.state.date : article.date).format('MMM DD, YYYY [at] H:mm:ss')} />
+
               </div>
               <div className="form-group">
                   <label htmlFor="heading-input">Heading Override</label>
