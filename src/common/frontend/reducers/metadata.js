@@ -2,6 +2,8 @@
 import { RECEIVE_ARTICLES } from '../actions/articles';
 import { htmlPreview } from '../helpers/format';
 import { getFileURL } from '../helpers/file';
+import nconf from 'nconf';
+import urljoin from 'url-join';
 
 export default function metadata(state = {
   title: 'Locust Walk - Penn Christian Journal',
@@ -12,7 +14,7 @@ export default function metadata(state = {
     },
     image: {
       properties: ['og:image', 'twitter:image'],
-      content: '/img/social-share.png',
+      content: urljoin(nconf.get('SERVER_ROOT'), '/img/social-share.png'),
     },
     imageWidth: {
       properties: ['og:image:width', 'twitter:image:width'],
@@ -25,6 +27,15 @@ export default function metadata(state = {
     siteName: {
       property: 'og:site_name',
       content: 'Penn Christian Journal',
+    },
+    author: {
+      properties: ['author'],
+    },
+    type: {
+      property: 'og:type',
+    },
+    publishedTime: {
+      property: 'article:published_time',
     },
   },
   link: [
@@ -69,26 +80,41 @@ export default function metadata(state = {
     case RECEIVE_ARTICLES:
       if (action.name === 'main') {
         let article = action.articles[0] || {};
-        
+
         let title = `${article.title} - Locust Walk`;
-          
+
         let description = Object.assign({}, state.meta.description, {
           content: htmlPreview(article.content, 160),
         });
 
         let image = Object.assign({}, state.meta.image, {
-          content: getFileURL(article.thumb),
+          content: urljoin(nconf.get('SERVER_ROOT'), getFileURL(article.thumb)),
+        });
+
+        let author = Object.assign({}, state.meta.author, {
+          content: article.author,
+        });
+
+        let type = Object.assign({}, state.meta.type, {
+          content: 'article',
+        });
+
+        let publishedTime = Object.assign({}, state.meta.publishedTime, {
+          content: (new Date(article.date)).toISOString(),
         });
 
         let meta = Object.assign({}, state.meta, {
           description,
           image,
+          author,
+          type,
+          publishedTime,
         });
 
         state = Object.assign({}, state, {
           title,
           meta,
-        });        
+        });
       }
       break;
     default:
