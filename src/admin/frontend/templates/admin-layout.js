@@ -24,23 +24,7 @@ class AdminLayout extends Component {
             paddingTop: `${this.state.offsetTop}px`,
           }}> 
               <div className="container" style={{height: '100%'}}>
-                  {
-                      this.props.sidebarOpen ?
-                      <div className="row" style={{height: '100%'}}>
-                          <div className="col-lg-9 col-md-8 col-xs-6" style={{height: '100%'}}>
-                              {this.props.children}
-                          </div>
-                          <div className="col-lg-3 col-md-4 col-xs-6" style={{height: '100%'}}>
-                              {this.props.sidebar}
-                          </div>
-                      </div>
-                      :
-                      <div className="row" style={{height: '100%'}}>
-                          <div className="col-lg-12" style={{height: '100%'}}>
-                              {this.props.children}
-                          </div>
-                      </div>
-                  }
+                  {this.props.children}
               </div>
           </div>
       

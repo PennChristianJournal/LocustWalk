@@ -20,15 +20,6 @@ export default class Table extends Component {
   componentDidMount() {
     window.addEventListener('resize', this.sizeHeader.bind(this));
     this.sizeHeader();
-
-    this.refs.body.addEventListener('mousewheel', debounce(function(e) {
-      var {scrollTop, scrollHeight, offsetHeight} = this.refs.body;
-      if (e.deltaY > 0 && scrollTop + offsetHeight > scrollHeight - 50) {
-        if (this.props.onScrollBottom) {
-          this.props.onScrollBottom();
-        }
-      }
-    }.bind(this), 20, true));
   }
 
   componentDidUpdate() {

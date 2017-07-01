@@ -4,11 +4,12 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { fetchArticlesIfNeeded } from '../actions/articles';
 import { countArticles } from '../actions/articles';
+import Promise from 'bluebird';
 
 class ArticleGroupInfinite extends Component {
-    
-  fetchMore() {
-    this.props.fetchPage(this.props.pages + 1);
+
+  fetchMore(cb) {
+    this.props.fetchPage(this.props.pages + 1, cb);
   }
 
   hasMore() {
@@ -17,7 +18,7 @@ class ArticleGroupInfinite extends Component {
 
   componentDidMount() {
     this.props.getCount();
-    this.props.fetchPage(Math.max(this.props.pages, this.props.initialPages));
+    this.props.fetchPage(Math.max(this.props.pages, this.props.initialPages), this.props.initialLoad);
   }
 
   render() {
@@ -34,7 +35,7 @@ ArticleGroupInfinite.propTypes = {
 
 export default connect((state, ownProps) => {
   const group = state.articles[ownProps.name] || [];
-  
+
   return {
     articles: group
       .map(pagegroup => pagegroup.articles || [])
@@ -48,9 +49,13 @@ export default connect((state, ownProps) => {
 
 }, (dispatch, ownProps) => {
   return {
-    fetchPage: (page) => {
+    fetchPage: (page, cb) => {
+      var promises = [];
       for (let i = 0; i < page; ++i) {
-        dispatch(fetchArticlesIfNeeded(ownProps.name, i, ownProps.query));
+        promises.push(dispatch(fetchArticlesIfNeeded(ownProps.name, i, ownProps.query)));
+      }
+      if (cb) {
+        Promise.all(promises).then(cb);
       }
     },
     getCount: () => {
