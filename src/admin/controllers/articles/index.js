@@ -21,6 +21,16 @@ const router = new Router();
 
 const views = ViewEngine.getViews('admin');
 
+router.get('/new', (req, res) => {
+  var article = new Article({});
+  article.save({validateBeforeSave: false}, (err, article) => {
+    if (err) {
+      console.log(err);
+    }
+    res.redirect(`/admin/articles/${article._id}/edit`);
+  });
+});
+
 router.get('/:id/edit', (req, res) => {
   Renderer.preloadArticles(req, 'main', 1, { _id: req.params.id }, false);
   Renderer.render(req, res, views['admin-articles-edit']);

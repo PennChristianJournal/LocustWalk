@@ -100,7 +100,7 @@ export default function metadata(state = {
         });
 
         let publishedTime = Object.assign({}, state.meta.publishedTime, {
-          content: (new Date(article.date)).toISOString(),
+          content: article.date && (new Date(article.date)).toISOString(),
         });
 
         let meta = Object.assign({}, state.meta, {

@@ -1,6 +1,5 @@
 
 import React, {Component} from 'react';
-import {debounce} from 'underscore';
 
 export default class Table extends Component {
   constructor(props) {

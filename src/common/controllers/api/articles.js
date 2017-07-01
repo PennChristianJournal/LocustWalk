@@ -3,8 +3,10 @@ import { Router } from 'express';
 const router = new Router();
 import Article from '../../models/article';
 
-function makeQuery(query) {
-  var q = Object.assign({}, query, {is_published: true});
+function makeQuery(req, query) {
+  var q = Object.assign({}, query, {
+    is_published: query.is_published && !req.isAuthenticated(),
+  });
 
   for (let name in q) {
     if (q.hasOwnProperty(name)) {
@@ -17,7 +19,7 @@ function makeQuery(query) {
 }
 
 router.get('/', (req, res) => {
-  Article.queryPaginated(makeQuery(req.query), (err, articles) => {
+  Article.queryPaginated(makeQuery(req, req.query), (err, articles) => {
     if (err) {
       console.log(err);
       res.json([]);
@@ -30,7 +32,7 @@ router.get('/', (req, res) => {
 router.get('/count', (req, res) => {
   delete req.query.limit;
   delete req.query.sort;
-  Article.count(makeQuery(req.query), (err, count) => {
+  Article.count(makeQuery(req, req.query), (err, count) => {
     if (err) {
       console.log(err);
     }

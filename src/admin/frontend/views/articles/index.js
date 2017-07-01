@@ -91,7 +91,6 @@ export default class ArticleListPage extends Component {
                               </tr>
                           }>
                               {articles.map((article, i) => {
-                                const last = (i == articles.length - 1);
                                 return (
                                   <tr key={i} onClick={() => this.setArticle(article) }>
                                       <td><a href={`/admin/articles/${article._id}/edit`} dangerouslySetInnerHTML={{__html: article.title}}></a></td>
