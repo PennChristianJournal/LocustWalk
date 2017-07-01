@@ -2,6 +2,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import ArticleGroup from '~/common/frontend/components/article-group';
+import TypeaheadInput from './typeahead-input';
 import { updateArticle } from '~/common/frontend/actions/articles';
 import { invalidateArticles } from '~/common/frontend/actions/articles';
 import moment from 'moment';
@@ -27,31 +28,6 @@ class ArticleSidebar extends Component {
 
   componentDidMount() {
     this.timerID = setInterval(() => this.tick(), 1000);
-    
-    const Bloodhound = require('corejs-typeahead');
-    const documentSearch = new Bloodhound({
-      datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-      queryTokenizer: Bloodhound.tokenizers.whitespace,
-      remote: {
-        url: '/admin/articles/docs/search?name=%QUERY',
-        wildcard: '%QUERY',
-      }
-    });
-    documentSearch.initialize();
-
-    const $docSearch = $('#doc-search');
-    $docSearch.typeahead(null, {
-      hint: true,
-      highlight: true,
-      minLength: 1,
-      source: documentSearch.ttAdapter(),
-      display: 'name',
-    });
-    $docSearch.on('typeahead:selected typeahead:autocompleted', function(e, datum) {
-      $('#doc-id-input').val(datum.id)
-    });
-
-    $('.tt-input').attr('autocomplete', 'off');
   }
 
   componentWillUnmount() {
@@ -99,7 +75,7 @@ class ArticleSidebar extends Component {
                   display: block!important;
                 }
 
-                .tt-dropdown-menu { 
+                .tt-dropdown-menu {
                   width: 100%;
                   & > div {
                     padding: 5px;
@@ -132,11 +108,35 @@ class ArticleSidebar extends Component {
                   border: 1px solid gray;
                 }
               `}} />
+
               <div className="form-group">
                   <label>Pull from Google Drive</label>
                   <div className="row">
                       <div className="col-sm-6">
-                          <input className="form-control" id="doc-search" placeholder="Document Title" />
+                          <TypeaheadInput
+                            className="form-control" placeholder="Document Title"
+
+                            typeaheadConfig={{
+                              hint: true,
+                              highlight: true,
+                              minLength: 1,
+                              display: 'name',
+                            }}
+
+                            createBloodhoundConfig={function(Bloodhound) {
+                              return new Bloodhound({
+                                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+                                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                                remote: {
+                                  url: '/admin/articles/docs/search?name=%QUERY',
+                                  wildcard: '%QUERY',
+                                }
+                              });
+                            }}
+
+                            target="#doc-id-input"
+                            targetField="id"
+                          />
                       </div>
                       <div className="col-sm-6">
                           <input className="form-control" id="doc-id-input" name="doc_id" placeholder="Document ID" readOnly />
@@ -203,12 +203,37 @@ class ArticleSidebar extends Component {
                               }}>
                                   { articles => {
                                     const parent = articles[0] || {};
-                                    return <input key={parent._id} id="response-to-input" type="text" className="form-control" placeholder="Response To..." defaultValue={parent.title} />;
+                                    return (
+                                      <TypeaheadInput
+                                        key={parent._id} type="text" className="form-control" placeholder="Response To..." defaultValue={parent.title}
+
+                                        typeaheadConfig={{
+                                          hint: true,
+                                          highlight: true,
+                                          minLength: 1,
+                                          display: 'title',
+                                        }}
+
+                                        createBloodhoundConfig={function(Bloodhound) {
+                                          return new Bloodhound({
+                                            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('title'),
+                                            queryTokenizer: Bloodhound.tokenizers.whitespace,
+                                            remote: {
+                                              url: '/admin/articles/search?title=%QUERY',
+                                              wildcard: '%QUERY',
+                                            }
+                                          });
+                                        }}
+
+                                        target={this.refs['response-id-field']}
+                                        targetField="_id"
+                                      />
+                                    );
                                   }}
                               </ArticleGroup>
                           </div>
                           <div className="col-sm-6">
-                              <input name="parent" type="text" readOnly className="form-control" placeholder="Article ID"
+                              <input ref="response-id-field" name="parent" type="text" readOnly className="form-control" placeholder="Article ID"
                                   defaultValue={article.parent || ''}
                                   onChange={ e => {
                                     this.props.updateArticle('parent', e.target.value);
