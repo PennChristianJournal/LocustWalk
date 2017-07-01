@@ -6,7 +6,6 @@ import redis from 'redis';
 import connectRedis from 'connect-redis';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
-import passport from 'passport';
 
 const server = express();
 
@@ -23,14 +22,6 @@ server.use(session({
   resave: true,
   store: redisStore.domain ? redisStore : undefined,
 }));
-
-import auth from './auth';
-server.use(passport.initialize());
-server.use(passport.session());
-
-if (nconf.get('NODE_ENV') !== 'development') {
-  auth(server);
-}
 
 import RootController from './controllers';
 server.use('/', RootController);

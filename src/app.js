@@ -6,6 +6,7 @@ import express from 'express';
 import logger from 'morgan';
 import mongoose from 'mongoose';
 import http from 'http';
+import passport from 'passport';
 
 nconf.argv().env().file({file: path.join(__dirname, '../config.json')});
 
@@ -42,6 +43,11 @@ server.use(sassMiddleware({
   outputStyle: 'compressed',
 }), express.static(path.join(__dirname, '../public/css')));
 server.use(express.static(`${__dirname}/../public`));
+
+const auth = require('./auth').default;
+server.use(passport.initialize());
+server.use(passport.session());
+auth(server);
 
 server.use('/admin', require('./admin/server'));
 server.use('/', require('./common/server'));

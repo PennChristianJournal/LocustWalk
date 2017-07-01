@@ -73,7 +73,7 @@ export default class ArticleEditPage extends Component {
     return (
       <ArticleGroup name="main">
           {articles => {
-            const article = articles[0];
+            const article = articles[0] || {};
             return (
               <div className="container-fluid">
                   <div className="row">

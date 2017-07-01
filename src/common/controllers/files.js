@@ -4,8 +4,13 @@ const router = new Router();
 
 import File from '../models/file';
 import SmallFile from '../models/smallFile';
+import mongoose from 'mongoose';
 
 router.get('/:id', function(req, res, next) {
+
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    return next();
+  }
 
   SmallFile.findOne({
     _id: req.params.id,

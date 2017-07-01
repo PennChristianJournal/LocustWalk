@@ -8,7 +8,13 @@ passport.use(new GoogleStrategy({
   clientSecret: nconf.get('GOOGLE_CLIENT_SECRET'),
   callbackURL: `${nconf.get('SERVER_ROOT')}admin/login/callback`,
 }, function(accessToken, refreshToken, profile, cb) {
-  
+
+  if (nconf.get('NODE_ENV') === 'development') {
+    return cb(null, {
+      name: 'dev',
+    });
+  }
+
   var emails = profile.emails.map(el => {
     return el.value;
   });
@@ -51,7 +57,7 @@ export default function(router) {
   });
 
   router.use('/', function(req, res, next) {
-    if (nconf.get('ENV') !== 'development' && !req.isAuthenticated()) {
+    if (nconf.get('NODE_ENV') !== 'development' && !req.isAuthenticated()) {
       req.session.lastUrl = req.originalUrl;
       return res.redirect('/admin/login');
     } else {
