@@ -15,7 +15,12 @@ Object.keys(ViewEngine.TARGETS).forEach(group => {
   const GROUP = ViewEngine.TARGETS[group];
   GROUPS[group] = Object.keys(GROUP).map(target => `js/${target}`);
   Object.keys(GROUP).forEach(target => {
-    ENTRIES[`js/${target}`] = GROUP[target].file;
+    const mountTarget = GROUP[target].mountTarget;
+    if (process.env.NODE_ENV !== 'production') {
+      ENTRIES[`js/${target}`] = ['react-hot-loader/patch', 'webpack-hot-middleware/client', mountTarget];
+    } else {
+      ENTRIES[`js/${target}`] = mountTarget;
+    }
   });
 });
 
@@ -26,12 +31,15 @@ module.exports = {
     path: path.join(__dirname, '../public'),
     filename: '[name].js',
     chunkFilename: '[name]-chunk.js',
+    publicPath: nconf.get('SERVER_ROOT'),
   },
   module: {
     rules: [{
       test: /\.js$/,
       exclude: /node_modules/,
       use: [{
+        loader: 'react-hot-loader/webpack',
+      }, {
         loader: 'babel-loader',
         query: {
           presets: [
@@ -47,9 +55,6 @@ module.exports = {
         },
       }],
     }, {
-      // test: /\.svg$/,
-      // loader: "url-loader?limit=10000&mimetype=image/svg+xml"
-    }, {
       test: require.resolve('medium-editor-insert-plugin'),
       loader: 'imports-loader?define=>false',
     }],
@@ -59,6 +64,7 @@ module.exports = {
     modules: [
       __dirname,
       '../node_modules',
+      'node_modules',
     ],
     extensions: ['.js', '.json'],
     alias: {

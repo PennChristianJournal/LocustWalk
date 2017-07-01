@@ -79,6 +79,3 @@ HomePage.metadata = Object.assign({}, PageLayout.metadata, {
     },
   ],
 });
-
-import {mount} from '../helpers/page';
-mount(HomePage);

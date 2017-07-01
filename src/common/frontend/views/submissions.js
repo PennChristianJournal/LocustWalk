@@ -46,5 +46,3 @@ const SubmissionsPage = () =>
 ;
 
 export default SubmissionsPage;
-import {mount} from '../helpers/page';
-mount(SubmissionsPage);

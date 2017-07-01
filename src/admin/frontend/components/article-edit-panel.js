@@ -61,7 +61,7 @@ class ArticleSidebar extends Component {
   }
 
   handleSubmit(event) {
-    if (this.props.contentEdit && this.props.getArticleContent) {
+    if (this.props.getArticleContent) {
       const articleContent = this.props.getArticleContent();
       if (articleContent) {
         event.target.content.value = articleContent;
@@ -116,37 +116,31 @@ class ArticleSidebar extends Component {
 
                 <div className="form-group">
                     <label>Pull from Google Drive</label>
-                    <div className="row">
-                        <div className="col-sm-6">
-                            <TypeaheadInput
-                              className="form-control" placeholder="Document Title"
+                    <TypeaheadInput
+                      className="form-control" placeholder="Document Title"
 
-                              typeaheadConfig={{
-                                hint: true,
-                                highlight: true,
-                                minLength: 1,
-                                display: 'name',
-                              }}
+                      typeaheadConfig={{
+                        hint: true,
+                        highlight: true,
+                        minLength: 1,
+                        display: 'name',
+                      }}
 
-                              createBloodhoundConfig={function(Bloodhound) {
-                                return new Bloodhound({
-                                  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-                                  queryTokenizer: Bloodhound.tokenizers.whitespace,
-                                  remote: {
-                                    url: '/admin/articles/docs/search?name=%QUERY',
-                                    wildcard: '%QUERY',
-                                  },
-                                });
-                              }}
+                      createBloodhoundConfig={function(Bloodhound) {
+                        return new Bloodhound({
+                          datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+                          queryTokenizer: Bloodhound.tokenizers.whitespace,
+                          remote: {
+                            url: '/admin/articles/docs/search?name=%QUERY',
+                            wildcard: '%QUERY',
+                          },
+                        });
+                      }}
 
-                              target="#doc-id-input"
-                              targetField="id"
-                            />
-                        </div>
-                        <div className="col-sm-6">
-                            <input className="form-control" id="doc-id-input" name="doc_id" placeholder="Document ID" readOnly />
-                        </div>
-                    </div>
+                      target="#doc-id-input"
+                      targetField="id"
+                    />
+                    <input className="form-control" id="doc-id-input" name="doc_id" placeholder="Document ID" readOnly />
                 </div>
                 <div className="form-group">
                     <button className="btn btn-default" type="submit">Sync</button>
@@ -200,52 +194,49 @@ class ArticleSidebar extends Component {
               </div>
               <div className="form-group">
                   <label htmlFor="response-to-input">Response To</label>
-                      <div className="row">
-                          <div className="col-sm-6">
-                              <ArticleGroup name="parent" query={{
-                                _id: article.parent,
-                                limit: 1,
-                              }}>
-                                  { articles => {
-                                    const parent = articles[0] || {};
-                                    return (
-                                      <TypeaheadInput
-                                        key={parent._id} type="text" className="form-control" placeholder="Response To..." defaultValue={parent.title}
+                  <ArticleGroup name="parent" query={{
+                    _id: article.parent,
+                    limit: 1,
+                  }}>
+                      { articles => {
+                        const parent = articles[0] || {};
+                        return (
+                          <TypeaheadInput
+                            key={parent._id} type="text" className="form-control" placeholder="Response To..." defaultValue={parent.title}
 
-                                        typeaheadConfig={{
-                                          hint: true,
-                                          highlight: true,
-                                          minLength: 1,
-                                          display: 'title',
-                                        }}
+                            typeaheadConfig={{
+                              hint: true,
+                              highlight: true,
+                              minLength: 1,
+                              display: 'title',
+                            }}
 
-                                        createBloodhoundConfig={function(Bloodhound) {
-                                          return new Bloodhound({
-                                            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('title'),
-                                            queryTokenizer: Bloodhound.tokenizers.whitespace,
-                                            remote: {
-                                              url: '/admin/articles/search?title=%QUERY',
-                                              wildcard: '%QUERY',
-                                            },
-                                          });
-                                        }}
+                            createBloodhoundConfig={function(Bloodhound) {
+                              return new Bloodhound({
+                                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('title'),
+                                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                                remote: {
+                                  url: '/admin/articles/search?title=%QUERY',
+                                  wildcard: '%QUERY',
+                                },
+                              });
+                            }}
 
-                                        target={this.refs['response-id-field']}
-                                        targetField="_id"
-                                      />
-                                    );
-                                  }}
-                              </ArticleGroup>
-                          </div>
-                          <div className="col-sm-6">
-                              <input ref="response-id-field" name="parent" type="text" readOnly className="form-control" placeholder="Article ID"
-                                  defaultValue={article.parent || ''}
-                                  onChange={ e => {
-                                    this.props.updateArticle('parent', e.target.value);
-                                    this.props.refreshParent();
-                                  } } />
-                          </div>
-                      </div>
+                            target={this.refs['response-id-field']}
+                            targetField="_id"
+                          />
+                        );
+                      }}
+                  </ArticleGroup>
+
+                  <input ref="response-id-field" name="parent" type="text" readOnly className="form-control" placeholder="Article ID"
+                      defaultValue={article.parent || ''}
+                      onChange={ e => {
+                        this.props.updateArticle('parent', e.target.value);
+                        this.props.refreshParent();
+                      } }
+                  />
+
               </div>
               <div className="form-group">
                   <label htmlFor="date-input">Post Date</label>

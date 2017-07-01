@@ -5,7 +5,7 @@ import FeatureSlider from '~/common/frontend/components/feature-slider';
 import ArticleMain from '~/common/frontend/components/article-main';
 import ArticleThumb from '~/common/frontend/components/article-thumb';
 import ArticleLayout from '~/common/frontend/templates/article-layout';
-import ArticleSidebar from '~/admin/frontend/components/article-sidebar';
+import ArticleEditPanel from '~/admin/frontend/components/article-edit-panel';
 import MediumEditorInsertPlugin from 'medium-editor-insert-plugin';
 import $ from 'jquery';
 
@@ -81,7 +81,7 @@ export default class ArticleEditPage extends Component {
                           <div className="row">
                               <div className="container-fluid">
                                   <div className="row">
-                                      <ArticleSidebar getArticleContent={this.getArticleContent.bind(this)} article={article} gdriveSync contentEdit />
+                                      <ArticleEditPanel getArticleContent={this.getArticleContent.bind(this)} article={article} gdriveSync />
                                   </div>
                               </div>
                           </div>
@@ -157,6 +157,3 @@ ArticleEditPage.metadata = {
     },
   ],
 };
-
-import {mount} from '~/common/frontend/helpers/page';
-mount(ArticleEditPage);

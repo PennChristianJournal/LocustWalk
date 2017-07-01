@@ -91,5 +91,3 @@ const SubscribePage = () =>
 ;
 
 export default SubscribePage;
-import {mount} from '../helpers/page';
-mount(SubscribePage);

@@ -21,6 +21,9 @@ const TARGETS = {};
 function registerTargets(group, prefix, dir) {
   TARGETS[group] = TARGETS[group] || {};
   walk(dir, function(file) {
+    if (path.extname(file) !== '.js') {
+      return;
+    }
     // group = admin
     // prefix = admin
     // dir = /home/user/code/locustwalk/src/admin/frontend/views
@@ -36,13 +39,26 @@ function registerTargets(group, prefix, dir) {
 
     let basename = path.basename(relativePath, '.js');
     // basename = edit
-    
+
+    // /home/user/code/locustwalk/src/tmp/.admin-articles-edit.js
+    var mountTarget = `${__dirname}/tmp/.${target}.js`;
+    if (!fs.existsSync(`${__dirname}/tmp/`)) {
+      fs.mkdirSync(`${__dirname}/tmp/`);
+    }
+    fs.writeFileSync(mountTarget, `
+      var mount = require('${__dirname}/common/frontend/helpers/page').mount;
+      var Page = require('${file}').default;
+      mount(Page);
+    `);
+
     TARGETS[group][target] = {
+      mountTarget, // /home/user/code/locustwalk/src/tmp/.admin-articles-edit.js
       file, // /home/user/code/locustwalk/src/admin/frontend/views/articles/edit.js
       group, // admin
       target, // admin-articles-edit
       route: path.join('/', path.dirname(relativePath), basename === 'index' ? '' : basename), // /articles/edit
     };
+
   });
 }
 
