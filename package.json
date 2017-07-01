@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "nodemon --ignore jwt.json src/app.js --exec babel-node --presets es2015,react,stage-2",
+    "start": "nodemon src/app.js",
     "babel": "babel src -d dist --copy-files",
     "build": "npm run babel && cd dist && NODE_ENV=production webpack -p",
     "serve": "node dist/app.js",
