@@ -60,11 +60,8 @@ export default class ArticleMain extends Component {
           </div>
           <ArticleGroup name="responses" query={{
             parent: article._id,
-<<<<<<< HEAD:src/react/components/article-main.js
-            published: true,
-=======
+
             is_published: true,
->>>>>>> 7c692e3fae7931c0d10e34f7d6c0598187169792:src/common/frontend/components/article-main.js
           }}>
               { responses =>
                 <Optional test={responses && responses.length}>
@@ -72,7 +69,7 @@ export default class ArticleMain extends Component {
                         <div className="container">
                             <h1 className="strong">Discussion</h1>
                             <div className="tile tile-vertical">
-                                {responses.map((response, i) => 
+                                {responses.map((response, i) =>
                                     <ArticleThumb article={response} key={i} />
                                 )}
                             </div>
