@@ -68,52 +68,67 @@ class ArticleSidebar extends Component {
       }
     }
   }
+  
+  handleCancel(event) {
+    if (confirm(`Are you sure you want to cancel editing "${this.props.article.title}"? Unsaved changes will be lost!`)) {
+      if (this.props.onCancel) {
+        this.props.onCancel(event);
+      }
+    } 
+  }
+  
+  handleDelete(event) {
+    if (confirm(`Are you sure you want to delete "${this.props.article.title}?"`)) {
+      if (this.props.onDelete) {
+        this.props.onDelete(event);
+      }
+    }
+  }
 
   render() {
     const article = this.props.article || {};
     return (
       <div className="admin-sidebar">
+          <style dangerouslySetInnerHTML={{__html: `
+            .twitter-typeahead {
+              display: block!important;
+            }
+    
+            .tt-dropdown-menu {
+              width: 100%;
+              & > div {
+                padding: 5px;
+                border-radius: 5px;
+                box-shadow: 0 0 10px 0 black;
+                background-color: white;
+              }
+            }
+            .tt-suggestion {
+              padding: 2px 10px;
+              line-height: 24px;
+              color: #333;
+              p {
+                margin: 0;
+              }
+            }
+    
+            .tt-suggestion.tt-cursor,.tt-suggestion:hover {
+              color: #fff;
+              background-color: #0097cf;
+            }
+    
+            .tt-hint {
+              color: #999
+            }
+    
+            .tt-menu {
+              width: 100%;
+              background-color: white;
+              border: 1px solid gray;
+            }
+          `}} />
           <Optional test={this.props.gdriveSync}>
             <form className="form" action="sync" method="POST" onSubmit={this.props.syncArticle}>
-                <style dangerouslySetInnerHTML={{__html: `
-                  .twitter-typeahead {
-                    display: block!important;
-                  }
-
-                  .tt-dropdown-menu {
-                    width: 100%;
-                    & > div {
-                      padding: 5px;
-                      border-radius: 5px;
-                      box-shadow: 0 0 10px 0 black;
-                      background-color: white;
-                    }
-                  }
-                  .tt-suggestion {
-                    padding: 2px 10px;
-                    line-height: 24px;
-                    color: #333;
-                    p {
-                      margin: 0;
-                    }
-                  }
-
-                  .tt-suggestion.tt-cursor,.tt-suggestion:hover {
-                    color: #fff;
-                    background-color: #0097cf;
-                  }
-
-                  .tt-hint {
-                    color: #999
-                  }
-
-                  .tt-menu {
-                    width: 100%;
-                    background-color: white;
-                    border: 1px solid gray;
-                  }
-                `}} />
-
                 <div className="form-group">
                     <label>Pull from Google Drive</label>
                     <TypeaheadInput
@@ -149,16 +164,21 @@ class ArticleSidebar extends Component {
           </Optional>
           <form onSubmit={this.handleSubmit.bind(this)} className="form" key={article._id} action={`/admin/articles/${article._id}/edit`} method="post" encType="multipart/form-data">
               {this.props.contentEdit ? <input type="hidden" name="content" /> : null }
+              
               <div className="form-group">
-                  <label htmlFor="cover-photo-input">Cover Photo</label>
-                  { this.props.imagePreviews ? <img src={article.cover ? getFileURL(article.cover, article.cover_preview_img) : ''} /> : null }
-                  <input id="cover-photo-input" name="cover" type="file" accept="image/*" onChange={this.handleImageChange.bind(this, 'cover_preview_img')} />
+                  <label htmlFor="title-input">Title</label>
+                  <input id="title-type" name="title" type="text" className="form-control" placeholder="Article Title"
+                      defaultValue={article.title}
+                      onChange={ e => this.props.updateArticle('title', e.target.value) } />
               </div>
+              
               <div className="form-group">
-                  <label htmlFor="thumbnail-input">Thumbnail</label>
-                  { this.props.imagePreviews ? <img src={article.thumb ? getFileURL(article.thumb, article.thumb_preview_img) : ''} /> : null }
-                  <input id="thumbnail-input" name="thumb" type="file" accept="image/*" onChange={this.handleImageChange.bind(this, 'thumb_preview_img')} />
+                  <label htmlFor="author-input">Author</label>
+                  <input id="author-input" name="author" type="text" className="form-control" placeholder="Author"
+                      defaultValue={article.author}
+                      onChange={ e => this.props.updateArticle('author', e.target.value) } />
               </div>
+              
               <div className="form-group">
                   <div className="checkbox">
                       <label htmlFor="is_featured-input" className="checkbox-inline">
@@ -174,24 +194,26 @@ class ArticleSidebar extends Component {
                       </label>
                   </div>
               </div>
+              
               <div className="form-group">
-                  <label htmlFor="title-input">Title</label>
-                  <input id="title-type" name="title" type="text" className="form-control" placeholder="Article Title"
-                      defaultValue={article.title}
-                      onChange={ e => this.props.updateArticle('title', e.target.value) } />
+                  <label htmlFor="cover-photo-input">Cover Photo</label>
+                  { this.props.imagePreviews ? <img style={{maxWidth: '200px', display: 'block'}} src={article.cover ? getFileURL(article.cover, article.cover_preview_img) : ''} /> : null }
+                  <input id="cover-photo-input" name="cover" type="file" accept="image/*" onChange={this.handleImageChange.bind(this, 'cover_preview_img')} />
               </div>
+              
               <div className="form-group">
-                  <label htmlFor="author-input">Author</label>
-                  <input id="author-input" name="author" type="text" className="form-control" placeholder="Author"
-                      defaultValue={article.author}
-                      onChange={ e => this.props.updateArticle('author', e.target.value) } />
+                  <label htmlFor="thumbnail-input">Thumbnail</label>
+                  { this.props.imagePreviews ? <img style={{maxWidth: '200px', display: 'block'}} src={article.thumb ? getFileURL(article.thumb, article.thumb_preview_img) : ''} /> : null }
+                  <input id="thumbnail-input" name="thumb" type="file" accept="image/*" onChange={this.handleImageChange.bind(this, 'thumb_preview_img')} />
               </div>
+              
               <div className="form-group">
                   <label htmlFor="slug-input">Slug</label>
                   <input id="slug-input" name="slug" type="text" className="form-control" placeholder="Slug"
                       defaultValue={article.slug}
                       onChange={ e => this.props.updateArticle('slug', e.target.value) } />
               </div>
+              
               <div className="form-group">
                   <label htmlFor="response-to-input">Response To</label>
                   <ArticleGroup name="parent" query={{
@@ -265,7 +287,11 @@ class ArticleSidebar extends Component {
                       onChange={ e => this.props.updateArticle('heading_override', e.target.value) }
                   />
               </div>
-              <button className="btn btn-primary" type="submit">Save</button>
+              <div className="btn-toolbar">
+                <button className="btn btn-primary" type="submit">Save</button>
+                <a className="btn btn-default" onClick={this.handleCancel.bind(this)}>Cancel</a>
+                <a className="btn btn-danger pull-right" onClick={this.handleDelete.bind(this)}>Delete</a>
+              </div>
           </form>
       </div>
     );

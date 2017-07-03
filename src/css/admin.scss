@@ -45,8 +45,7 @@
               flex-flow: row nowrap;
 
               th, td {
-                display: flex;
-                flex-flow: row nowrap;
+                display: block;
                 flex-grow: 1;
                 flex-basis: 0;
                 flex-shrink: 0;

@@ -1,12 +1,16 @@
 
 import React, {Component} from 'react';
+import PageLayout from '~/common/frontend/templates/page-layout';
+import AdminLayout from '~/admin/frontend/templates/admin-layout';
 import ArticleGroup from '~/common/frontend/components/article-group';
 import FeatureSlider from '~/common/frontend/components/feature-slider';
 import ArticleMain from '~/common/frontend/components/article-main';
 import ArticleThumb from '~/common/frontend/components/article-thumb';
 import ArticleLayout from '~/common/frontend/templates/article-layout';
+import Optional from '~/common/frontend/components/optional';
 import ArticleEditPanel from '~/admin/frontend/components/article-edit-panel';
 import MediumEditorInsertPlugin from 'medium-editor-insert-plugin';
+import Modal from '~/admin/frontend/components/modal';
 import $ from 'jquery';
 
 class ArticleEdit extends Component {
@@ -71,44 +75,51 @@ export default class ArticleEditPage extends Component {
 
   render() {
     return (
-      <ArticleGroup name="main">
-          {articles => {
-            const article = articles[0] || {};
-            return (
-              <div className="container-fluid">
-                  <div className="row">
-                      <div className="col-lg-3 col-sm-4 col-xs-6">
+      <AdminLayout>
+        <ArticleGroup name="main">
+            {articles => {
+              const article = articles[0] || {};
+              return (
+                <div>
+                    <div className="container-fluid">
+                      <div className="row">
+                        <div className="col-lg-3 col-md-4 col-sm-12">
                           <div className="row">
-                              <div className="container-fluid">
-                                  <div className="row">
-                                      <ArticleEditPanel getArticleContent={this.getArticleContent.bind(this)} article={article} gdriveSync />
-                                  </div>
-                              </div>
+                            <ArticleEditPanel 
+                              article={article} 
+                              getArticleContent={this.getArticleContent.bind(this)} 
+                              gdriveSync 
+                              imagePreviews
+                              onCancel={() => window.location = '/admin/articles'}
+                              onDelete={() => window.location = '/admin/articles'}
+                            />
                           </div>
-                      </div>
-                      <div className="col-lg-9 col-sm-8 col-xs-6">
-                          <div className="row">
-                              <div className="container" style={{overflowY: 'auto'}}>
-                                  {article.is_featured ? <div className="row">
-                                      <FeatureSlider articles={[article]} />
-                                  </div> : null }
-                                  <div className="row">
-                                      <ArticleThumb article={article} />
+                        </div>
+
+                        <div className="col-lg-9 col-md-8 col-sm-12">
+                          <div className="container-fluid">
+                            <Optional test={article.is_featured}>
+                                <div className="row">
+                                  <div className="col-lg-12">
+                                    <FeatureSlider articles={[article]} />
                                   </div>
-                                  <div className="row"><br /></div>
-                                  <div className="row">
-                                      <ArticleLayout>
-                                          <ArticleEdit ref={(el) => this.articleEdit = el} article={article} />
-                                      </ArticleLayout>
-                                  </div>
+                                </div>
+                              </Optional>
+                              <div className="tile tile-vertical white-theme">
+                                  <ArticleThumb article={article} />
                               </div>
+                            </div>
+                            <ArticleLayout>
+                                <ArticleEdit ref={(el) => this.articleEdit = el} article={article} />
+                            </ArticleLayout>
                           </div>
+                        </div>
                       </div>
-                  </div>
-              </div>
-            );
-          }}
-      </ArticleGroup>
+                </div>
+              );
+            }}
+        </ArticleGroup>
+      </AdminLayout>
     );
   }
 }
@@ -146,12 +157,17 @@ ArticleEditPage.metadata = {
       type: 'text/css',
     },
     {
-      href: '/css/admin-sidebar.css',
+      href: '/css/home.css',
       rel: 'stylesheet',
       type: 'text/css',
     },
     {
-      href: '/css/home.css',
+      href: '/css/admin.css',
+      rel: 'stylesheet',
+      type: 'text/css',
+    },
+    {
+      href: '/css/admin-sidebar.css',
       rel: 'stylesheet',
       type: 'text/css',
     },

@@ -16,6 +16,9 @@ class AdminLayout extends Component {
     return (
       <div className="admin-layout" id={this.props.id}>
           <Navbar id="navbar" />
+          
+          {this.props.modal}
+          
           <div style={{
             position: 'absolute',
             top: '20px',
@@ -23,7 +26,7 @@ class AdminLayout extends Component {
             width: '100%',
             paddingTop: `${this.state.offsetTop}px`,
           }}> 
-              <div className="container" style={{height: '100%'}}>
+              <div style={{height: '100%'}}>
                   {this.props.children}
               </div>
           </div>

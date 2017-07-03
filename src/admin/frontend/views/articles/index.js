@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import AdminLayout from '~/admin/frontend/templates/admin-layout';
 import ArticleGroupInfinite from '~/common/frontend/components/article-group-infinite';
 import ArticleEditPanel from '~/admin/frontend/components/article-edit-panel';
+import Modal from '~/admin/frontend/components/modal';
 import Table from '~/admin/frontend/components/table';
 import moment from 'moment';
 import queryString from 'query-string';
@@ -66,46 +67,67 @@ export default class ArticleListPage extends Component {
 
   render() {
     return (
-      <AdminLayout id="admin-page" sidebar={<ArticleEditPanel imagePreviews article={this.state.article} />} sidebarOpen={this.state.article} >
-          <div className="admin-list-view">
-              <div className="admin-list-header">
-                  <h1>
-                      <span>Articles</span>
-                      <a className="pull-right btn btn-primary" href="/admin/articles/new">New Article</a>
-                  </h1>
-              </div>
-              <div className="admin-list-content" ref="list">
-                  <ArticleGroupInfinite initialPages={1} ref="articles" name="articles" query={{
-                    sort: this.state.sort,
-                    limit: 10,
-                  }}
-                  initialLoad={this.loadMoreArticles.bind(this)}>
-                      {articles => (
-                          <Table className="table table-striped" head={
-                              <tr>
-                                  <th>Title</th>
-                                  <th></th>
-                                  <th><i className="fa fa-star" /></th>
-                                  <th><i className="fa fa-check" /></th>
-                                  <th>Posted</th>
-                              </tr>
-                          }>
-                              {articles.map((article, i) => {
-                                return (
-                                  <tr key={i} onClick={() => this.setArticle(article) }>
-                                      <td><a href={`/admin/articles/${article._id}/edit`} dangerouslySetInnerHTML={{__html: article.title}}></a></td>
-                                      <td><a href={`/articles/${article._id}`}><i className="fa fa-link" /></a></td>
-                                      <td>{article.is_featured ? <i className="fa fa-star" /> : null}</td>
-                                      <td>{article.is_published ? <i className="fa fa-check" /> : null}</td>
-                                      <td>{moment(article.date).format('MMM DD, YYYY [at] H:mm')}</td>
-                                  </tr>
-                                );
-                              })}
-                          </Table>
-                      )}
-                  </ArticleGroupInfinite>
-              </div>
-          </div>
+      <AdminLayout id="admin-page" ref="admin-layout">
+        <Modal isOpen={this.state.article} title={this.state.article && `Editing - ${this.state.article.title}`}>
+          <ArticleEditPanel
+            article={this.state.article}
+            imagePreviews
+            onCancel={() => {
+              console.warn('TODO: Restore article state if modified (invalidate article in client DB)');
+              this.setState({
+                article: null,
+              });
+            }}
+            onDelete={() => {
+              this.setState({
+                article: null,
+              });
+            }}
+          />
+        </Modal>
+        <div className="container" style={{height: '100%'}}>
+            <div className="admin-list-view">
+                <div className="admin-list-header">
+                    <h1>
+                        <span>Articles</span>
+                        <a className="pull-right btn btn-primary" href="/admin/articles/new">New Article</a>
+                    </h1>
+                </div>
+                <div className="admin-list-content" ref="list">
+                    <ArticleGroupInfinite initialPages={1} ref="articles" name="articles" query={{
+                      sort: this.state.sort,
+                      limit: 10,
+                    }}
+                    initialLoad={this.loadMoreArticles.bind(this)}>
+                        {articles => (
+                            <Table className="table table-striped" head={
+                                <tr>
+                                    <th>Title</th>
+                                    <th></th>
+                                    <th>Permalink</th>
+                                    <th><i className="fa fa-star" /></th>
+                                    <th><i className="fa fa-check" /></th>
+                                    <th>Posted</th>
+                                </tr>
+                            }>
+                                {articles.map((article, i) => {
+                                  return (
+                                    <tr key={i} onClick={() => this.setArticle(article) }>
+                                        <td><a href={`/articles/${article.slug}`}>{article.title}</a></td>
+                                        <td><a href={`/admin/articles/${article._id}/edit`} className="btn btn-default">Edit</a></td>
+                                        <td><a href={`/articles/${article._id}`}><i className="fa fa-link" /></a></td>
+                                        <td>{article.is_featured ? <i className="fa fa-star" /> : null}</td>
+                                        <td>{article.is_published ? <i className="fa fa-check" /> : null}</td>
+                                        <td>{moment(article.date).format('MMM DD, YYYY [at] H:mm')}</td>
+                                    </tr>
+                                  );
+                                })}
+                            </Table>
+                        )}
+                    </ArticleGroupInfinite>
+                </div>
+            </div>
+        </div>
       </AdminLayout>
     );
   }

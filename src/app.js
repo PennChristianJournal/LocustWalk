@@ -56,7 +56,7 @@ function truncateObject(obj) {
   if (obj) {
     for (var prop in obj) {
       if (obj.hasOwnProperty(prop)) {
-        if (obj[prop].length && obj[prop].length > 100) {
+        if (obj[prop] && obj[prop].length && obj[prop].length > 100) {
           obj[prop].length = 100;
         }
       }
