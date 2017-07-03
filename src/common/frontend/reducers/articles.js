@@ -1,8 +1,8 @@
 
-import { 
-  REQUEST_ARTICLES, 
-  RECEIVE_ARTICLES, 
-  INVALIDATE_ARTICLES, 
+import {
+  REQUEST_ARTICLES,
+  RECEIVE_ARTICLES,
+  INVALIDATE_ARTICLES,
   UPDATE_ARTICLE,
   RECEIVE_ARTICLE_COUNT,
 } from '../actions/articles';
@@ -36,9 +36,10 @@ function articleGroup(state = [], action) {
       return Object.assign([], state, {
         [action.page]: group,
       });
+
     case RECEIVE_ARTICLE_COUNT:
       return Object.assign([], state, {
-        count: action.count, 
+        count: action.count,
       });
     default:
       return state;
@@ -77,7 +78,7 @@ export default function articles(state = { __DB__: {} }, action) {
         [action.property]: action.value,
       });
       return newState;
-    
+
     case RECEIVE_ARTICLE_COUNT:
       return Object.assign({}, newState, {
         [action.name]: articleGroup(newState[action.name], action),

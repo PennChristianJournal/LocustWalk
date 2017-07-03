@@ -12,12 +12,14 @@ import FeatureSlider from '../components/feature-slider';
 const HomePage = () => (
     <PageLayout id="home-page"
         top={[
+
           <ArticleGroup name="featured" query={HomePage.articleQueries.featured}>
               {articles => <FeatureSlider articles={articles} />}
           </ArticleGroup>,
         ]}
 
         main={
+
           <ArticleGroupInfinite name="recent" initialPages={1} query={HomePage.articleQueries.recent}>
               {(articles, group) =>
                   <div className="tile tile-vertical white-theme">

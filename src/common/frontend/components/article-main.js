@@ -60,6 +60,7 @@ export default class ArticleMain extends Component {
           </div>
           <ArticleGroup name="responses" query={{
             parent: article._id,
+
             is_published: true,
           }}>
               { responses =>
@@ -68,7 +69,7 @@ export default class ArticleMain extends Component {
                         <div className="container">
                             <h1 className="strong">Discussion</h1>
                             <div className="tile tile-vertical">
-                                {responses.map((response, i) => 
+                                {responses.map((response, i) =>
                                     <ArticleThumb article={response} key={i} />
                                 )}
                             </div>

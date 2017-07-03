@@ -3,6 +3,7 @@ import { Router } from 'express';
 const router = new Router();
 import Article from '../../models/article';
 
+
 function makeQuery(req, query) {
   var q = Object.assign({}, query, {
     is_published: query.is_published && !req.isAuthenticated(),
@@ -19,6 +20,7 @@ function makeQuery(req, query) {
 }
 
 router.get('/', (req, res) => {
+
   Article.queryPaginated(makeQuery(req, req.query), (err, articles) => {
     if (err) {
       console.log(err);
@@ -32,6 +34,7 @@ router.get('/', (req, res) => {
 router.get('/count', (req, res) => {
   delete req.query.limit;
   delete req.query.sort;
+
   Article.count(makeQuery(req, req.query), (err, count) => {
     if (err) {
       console.log(err);

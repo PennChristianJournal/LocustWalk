@@ -1,5 +1,17 @@
 import mongoose from 'mongoose';
 import slugs from 'slugs';
+// import google from 'googleapis'
+// import cheerio from 'cheerio'
+// import config from '../config'
+//
+// fs.writeFileSync(`${__root}/jwt.json`, JSON.stringify(config.jwt));
+//
+// var jwtClient = new google.auth.JWT(
+//     config.jwt.client_email,
+//     'jwt.json',
+//     config.jwt.private_key,
+//     ['https://www.googleapis.com/auth/drive']
+// );
 
 const Schema = new mongoose.Schema({
   title: {
@@ -41,7 +53,6 @@ const Schema = new mongoose.Schema({
     },
   },
   pending_attachments: [String],
-  attachments: [mongoose.Schema.Types.ObjectId],
   cover: String,
   thumb: String,
   parent: {

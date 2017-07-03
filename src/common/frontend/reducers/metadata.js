@@ -2,6 +2,7 @@
 import { RECEIVE_ARTICLES } from '../actions/articles';
 import { htmlPreview } from '../helpers/format';
 import { getFileURL } from '../helpers/file';
+
 import nconf from 'nconf';
 import urljoin from 'url-join';
 
@@ -28,6 +29,7 @@ export default function metadata(state = {
       property: 'og:site_name',
       content: 'Penn Christian Journal',
     },
+
     author: {
       properties: ['author'],
     },
@@ -81,6 +83,7 @@ export default function metadata(state = {
       if (action.name === 'main') {
         let article = action.articles[0] || {};
 
+
         let title = `${article.title} - Locust Walk`;
 
         let description = Object.assign({}, state.meta.description, {
@@ -88,6 +91,7 @@ export default function metadata(state = {
         });
 
         let image = Object.assign({}, state.meta.image, {
+
           content: urljoin(nconf.get('SERVER_ROOT'), getFileURL(article.thumb)),
         });
 
@@ -106,6 +110,7 @@ export default function metadata(state = {
         let meta = Object.assign({}, state.meta, {
           description,
           image,
+
           author,
           type,
           publishedTime,
@@ -114,6 +119,7 @@ export default function metadata(state = {
         state = Object.assign({}, state, {
           title,
           meta,
+
         });
       }
       break;

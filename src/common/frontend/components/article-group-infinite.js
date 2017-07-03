@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { fetchArticlesIfNeeded } from '../actions/articles';
 import { countArticles } from '../actions/articles';
+
 import Promise from 'bluebird';
 
 class ArticleGroupInfinite extends Component {
@@ -16,8 +17,13 @@ class ArticleGroupInfinite extends Component {
     return (this.props.articles || []).length < this.props.count || 0;
   }
 
+  hasMore() {
+    return (this.props.articles || []).length < this.props.count || 0;
+  }
+
   componentDidMount() {
     this.props.getCount();
+
     this.props.fetchPage(Math.max(this.props.pages, this.props.initialPages), this.props.initialLoad);
   }
 

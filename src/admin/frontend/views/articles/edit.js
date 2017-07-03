@@ -1,5 +1,6 @@
 
 import React, {Component} from 'react';
+
 import ArticleGroup from '~/common/frontend/components/article-group';
 import FeatureSlider from '~/common/frontend/components/feature-slider';
 import ArticleMain from '~/common/frontend/components/article-main';
@@ -20,6 +21,7 @@ class ArticleEdit extends Component {
     MediumEditorInsertPlugin($);
 
     var contentDiv = $(`div[data-article-id="${this.props.article._id}"] .article-content`);
+
 
     this.contentEditor = new MediumEditor(contentDiv, {
       placeholder: {
@@ -81,6 +83,7 @@ export default class ArticleEditPage extends Component {
                           <div className="row">
                               <div className="container-fluid">
                                   <div className="row">
+
                                       <ArticleEditPanel getArticleContent={this.getArticleContent.bind(this)} article={article} gdriveSync />
                                   </div>
                               </div>
@@ -98,6 +101,7 @@ export default class ArticleEditPage extends Component {
                                   <div className="row"><br /></div>
                                   <div className="row">
                                       <ArticleLayout>
+
                                           <ArticleEdit ref={(el) => this.articleEdit = el} article={article} />
                                       </ArticleLayout>
                                   </div>
