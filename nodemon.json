@@ -1,0 +1,14 @@
+{
+  "verbose": true,
+  "ignore": [
+    "jwt.json",
+    "**/frontend/**",
+    ".git",
+    "node_modules/**/node_modules",
+    "**/*.mount.js"
+  ],
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "exec": "babel-node --presets es2015,react,stage-2"
+}

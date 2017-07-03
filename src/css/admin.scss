@@ -13,29 +13,46 @@
     .admin-list-content {
         position: absolute;
         top: 70px;
-        bottom: 0px;
+        bottom: 100px;
         width: 100%;
     }
 
     table {
+        display: flex;
+        flex-flow: column nowrap;
         height: 100%;
         margin: 0;
+        overflow: auto;
 
         thead {
             display: block;
+            flex: 0;
             position: absolute;
             background-color: $base;
             z-index: 1;
         }
 
         tbody {
-            display: block;
-            height: 100%;
-            overflow: auto;
-            position: absolute;
-            top: 0px;
-            padding-top: 36px;
-            
+            padding-top: 38px;
+            display: flex;
+            flex-flow: column nowrap;
+            justify-content: flex-start;
+            flex-basis: auto;
+            flex-shrink: 0;
+
+            tr {
+              display: flex;
+              flex-flow: row nowrap;
+
+              th, td {
+                display: flex;
+                flex-flow: row nowrap;
+                flex-grow: 1;
+                flex-basis: 0;
+                flex-shrink: 0;
+              }
+            }
+
             tr:hover {
                 background-color: $light-gray;
                 cursor: pointer;

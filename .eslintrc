@@ -1,6 +1,7 @@
 {
     "extends": "fbjs",
     "rules": {
-        "max-len": "off"
+        "max-len": "off",
+        "consistent-return": "off",
     }
 }

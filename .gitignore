@@ -5,3 +5,5 @@ public/*
 .idea
 dist
 .vscode/
+jwt.json
+tmp/

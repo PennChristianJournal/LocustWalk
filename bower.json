@@ -20,7 +20,6 @@
     "bootstrap": "^3.3.6",
     "normalize-css": "^4.1.1",
     "font-awesome": "^4.6.3",
-    "typeahead.js": "0.10.5",
     "medium-editor": "^5.22.2",
     "medium-editor-insert-plugin": "^2.4.0"
   }
