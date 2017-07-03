@@ -50,6 +50,12 @@ block top
     .featured-wrapper#feature-slide
       - var dup = new dup_date()
 
+      .featured-block
+        .feature-month-bar
+          h2.strong.feature-month #{dup.handle("Perspectives on Time")}
+        .featured-block-aspect: .content
+          .bg-img(style='background-image: url("/img/perspectives-on-time.png"); height: 100%; width: 100%; background-size: contain; background-repeat: no-repeat; background-position: 50% 50%')
+
       each feature, index in features
         if index == 2
           .featured-block
@@ -137,7 +143,7 @@ block append footer
   script.
     (function() {
       var featureIdx = 0;
-      var maxFeatures = #{features.length + 2};
+      var maxFeatures = #{features.length + 3};
       var lBtn = document.getElementById('feature-left');
       var rBtn = document.getElementById('feature-right');
       var slide = document.getElementById('feature-slide');
