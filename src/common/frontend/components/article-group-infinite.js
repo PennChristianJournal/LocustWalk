@@ -40,7 +40,8 @@ export default connect((state, ownProps) => {
     articles: group
       .map(pagegroup => pagegroup.articles || [])
       .reduce((a, b) => a.concat(b), [])
-      .map(id => state.articles.__DB__[id]),
+      .map(id => state.articles.__DB__[id])
+      .filter(article => article),
 
     pages: group.length,
 

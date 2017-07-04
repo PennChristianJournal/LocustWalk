@@ -70,6 +70,13 @@ router.post('/:id/edit', formidable(), (req, res) => {
   });
 });
 
+router.get('/:id/delete', (req, res) => {
+  Article.findByIdAndRemove(req.params.id, err => {
+    if (err) console.warn(err);
+    res.end();
+  });
+});
+
 router.post('/:id/imageupload', formidable(), (req, res) => {
   const file = req.files && req.files['files[]'];
   if (file) {

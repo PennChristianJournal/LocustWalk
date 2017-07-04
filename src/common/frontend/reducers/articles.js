@@ -4,6 +4,7 @@ import {
   RECEIVE_ARTICLES, 
   INVALIDATE_ARTICLES, 
   UPDATE_ARTICLE,
+  DELETE_ARTICLE,
   RECEIVE_ARTICLE_COUNT,
 } from '../actions/articles';
 
@@ -76,6 +77,11 @@ export default function articles(state = { __DB__: {} }, action) {
       Object.assign(articleState, {
         [action.property]: action.value,
       });
+      return newState;
+      
+    case DELETE_ARTICLE:
+      newState = Object.assign({}, state);
+      delete newState.__DB__[action.id];
       return newState;
     
     case RECEIVE_ARTICLE_COUNT:

@@ -4,8 +4,11 @@ import {connect} from 'react-redux';
 import ArticleGroup from '~/common/frontend/components/article-group';
 import Optional from '~/common/frontend/components/optional';
 import TypeaheadInput from './typeahead-input';
-import { updateArticle } from '~/common/frontend/actions/articles';
-import { invalidateArticles } from '~/common/frontend/actions/articles';
+import { 
+  updateArticle, 
+  invalidateArticles, 
+  deleteArticle,
+} from '~/common/frontend/actions/articles';
 import moment from 'moment';
 import {getFileURL} from '~/common/frontend/helpers/file';
 import $ from 'jquery';
@@ -79,9 +82,11 @@ class ArticleSidebar extends Component {
   
   handleDelete(event) {
     if (confirm(`Are you sure you want to delete "${this.props.article.title}?"`)) {
-      if (this.props.onDelete) {
-        this.props.onDelete(event);
-      }
+      this.props.deleteArticle().then(() => {
+        if (this.props.onDelete) {
+          this.props.onDelete(event);
+        }
+      });
     }
   }
 
@@ -301,11 +306,11 @@ class ArticleSidebar extends Component {
 export default connect(null, function(dispatch, ownProps) {
   return {
     refreshParent: function() {
-      dispatch(invalidateArticles('parent', 0));
+      return dispatch(invalidateArticles('parent', 0));
     },
 
     updateArticle: function(property, value) {
-      dispatch(updateArticle(ownProps.article._id, property, value));
+      return dispatch(updateArticle(ownProps.article._id, property, value));
     },
 
     syncArticle: function(event) {
@@ -316,6 +321,10 @@ export default connect(null, function(dispatch, ownProps) {
           dispatch(updateArticle(ownProps.article._id, 'content', content));
         });
       }
+    },
+    
+    deleteArticle: function() {
+      return dispatch(deleteArticle(ownProps.article._id));
     },
   };
 })(ArticleSidebar);

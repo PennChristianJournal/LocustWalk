@@ -1,5 +1,5 @@
 
-import { Component } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { fetchArticlesIfNeeded } from '../actions/articles';
@@ -34,7 +34,7 @@ export default connect((state, ownProps) => {
   const pagegroup = group[page] || {};
   const ids = pagegroup.articles || [];
   return {
-    articles: ids.map(id => state.articles.__DB__[id]),
+    articles: ids.map(id => state.articles.__DB__[id]).filter(article => article),
   };
 }, (dispatch, ownProps) => {
   return {

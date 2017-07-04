@@ -7,6 +7,7 @@ export const REQUEST_ARTICLES = 'REQUEST_ARTICLES';
 export const RECEIVE_ARTICLES = 'RECEIVE_ARTICLES';
 export const INVALIDATE_ARTICLES = 'INVALIDATE_ARTICLES';
 export const UPDATE_ARTICLE = 'UPDATE_ARTICLE';
+export const DELETE_ARTICLE = 'DELETE_ARTICLE';
 export const GET_ARTICLE_COUNT = 'GET_ARTICLE_COUNT';
 export const RECEIVE_ARTICLE_COUNT = 'RECEIVE_ARTICLE_COUNT';
 
@@ -81,6 +82,16 @@ export function updateArticle(id, property, value) {
     id,
     property,
     value,
+  };
+}
+
+export function deleteArticle(id) {
+  var url = urljoin(nconf.get('SERVER_ROOT'), `admin/articles/${id}/delete`);
+  return (dispatch) => {
+    return fetch(url).then(() => dispatch({
+      type: DELETE_ARTICLE,
+      id,
+    }));
   };
 }
 
