@@ -20,7 +20,7 @@ function render(req, res, view, props = {}) {
   const Component = require(view.file).default;
   
   const client = new ApolloClient({
-    ssrMode: true,
+   ssrMode: true,
     networkInterface: createLocalInterface(graphql, schema, {
       context: req,
     }),
@@ -54,3 +54,4 @@ function render(req, res, view, props = {}) {
 export default {
   render,
 };
+

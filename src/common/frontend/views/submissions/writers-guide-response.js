@@ -49,5 +49,3 @@ const WritersGuideResponsePage = () => (
 
 export default WritersGuideResponsePage;
 
-import {mount} from '../../helpers/page';
-mount(WritersGuideResponsePage);

@@ -1,7 +1,7 @@
 
 import { Router } from 'express';
 const router = new Router();
-import Renderer from '~/renderer';
+import Renderer from '~/server/renderer';
 import ViewEngine from '~/viewEngine';
 
 const views = ViewEngine.getViews('common');
