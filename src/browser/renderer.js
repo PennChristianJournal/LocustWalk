@@ -39,6 +39,10 @@ export function mount(Page) {
         delete window.__STATE__;
       }
     );
+
+    return function(NewPage) {
+      render(<ApolloProvider client={client}><NewPage /></ApolloProvider>, document.getElementById('root'));
+    };
   }
 }
 
