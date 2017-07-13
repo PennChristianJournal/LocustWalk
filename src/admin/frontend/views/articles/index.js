@@ -1,13 +1,95 @@
 
 import React, {Component} from 'react';
 import AdminLayout from '~/admin/frontend/templates/admin-layout';
-import ArticleGroupInfinite from '~/common/frontend/components/article-group-infinite';
+import ArticleEdit from '~/admin/frontend/components/article-edit';
 import ArticleEditPanel from '~/admin/frontend/components/article-edit-panel';
 import Modal from '~/admin/frontend/components/modal';
 import Table from '~/admin/frontend/components/table';
+import Optional from '~/common/frontend/components/optional';
 import moment from 'moment';
 import queryString from 'query-string';
 import {debounce} from 'underscore';
+import {graphql, gql} from 'react-apollo';
+
+class ArticleList extends Component {
+  
+  render() {
+    const {articles, setArticle} = this.props;
+    
+    return (
+      <Table className="table table-striped" head={
+          <tr>
+              <th>Title</th>
+              <th></th>
+              <th>Permalink</th>
+              <th><i className="fa fa-star" /></th>
+              <th><i className="fa fa-check" /></th>
+              <th>Posted</th>
+          </tr>
+      }>
+          {articles.map((article, i) => {
+            return (
+              <tr key={i} onClick={() => setArticle(article) }>
+                  <td><a href={`/articles/${article.slug}`}>{article.title}</a></td>
+                  <td><a href={`/admin/articles/${article._id}/edit`} className="btn btn-default">Edit</a></td>
+                  <td><a href={`/articles/${article._id}`}><i className="fa fa-link" /></a></td>
+                  <td>{article.is_featured ? <i className="fa fa-star" /> : null}</td>
+                  <td>{article.is_published ? <i className="fa fa-check" /> : null}</td>
+                  <td>{moment(article.date).format('MMM DD, YYYY [at] H:mm')}</td>
+              </tr>
+            );
+          })}
+      </Table>
+    );
+  }
+}
+
+const ARTICLE_SEARCH_QUERY = gql`
+  query SearchArticles($skip: Int!) {
+    articles: recentArticles(limit: 10, skip: $skip) {
+      _id
+      title
+      slug
+      date
+      is_featured
+      is_published
+    }
+    articleCount
+  }
+`;
+
+const ArticleListWithData = graphql(ARTICLE_SEARCH_QUERY, {
+  options: {
+    variables: {
+      skip: 0,
+    },
+  },
+  props({ ownProps, data: {loading, articles, articleCount, fetchMore } }) {
+    return {
+      ...ownProps,
+      loading,
+      articles: articles || [],
+      hasMore() {
+        return (articles || []).length < articleCount;
+      },
+      loadMore() {
+        return fetchMore({
+          variables: {
+            skip: (articles || []).length,
+          },
+          updateQuery: (previousResult, { fetchMoreResult }) => {
+            if (!fetchMoreResult) {
+              return previousResult;
+            }
+            return Object.assign({}, previousResult, {
+              articles: [...previousResult.articles, ...fetchMoreResult.articles],
+            });
+          },
+        });
+      },
+    };
+  },
+})(ArticleList);
 
 export default class ArticleListPage extends Component {
   constructor(props) {
@@ -31,9 +113,11 @@ export default class ArticleListPage extends Component {
     const table = container.childNodes[0];
     table.addEventListener('mousewheel', debounce((e) => {
       if (e.deltaY > 0 && table.scrollTop + table.offsetHeight > table.scrollHeight - 50) {
-        this.loadMoreArticles(true);
+        this.loadMoreArticles();
       }
     }, 20, true));
+    
+    this.loadMoreArticles();
   }
 
   fetchArticles(cb) {
@@ -60,30 +144,43 @@ export default class ArticleListPage extends Component {
     const atBottom = table.scrollTop + table.offsetHeight > table.scrollHeight - 50;
     const bodyShort = bodyBottom < tableBottom;
 
-    if ((bodyShort || atBottom) && this.hasMoreArticles()) {
-      this.fetchArticles(this.loadMoreArticles.bind(this));
+    if ((bodyShort || atBottom) && this.refs.articleList.renderedElement.props.hasMore()) {
+      this.refs.articleList.renderedElement.props.loadMore().then(this.loadMoreArticles.bind(this));
     }
   }
 
   render() {
     return (
       <AdminLayout id="admin-page" ref="admin-layout">
-        <Modal isOpen={this.state.article} title={this.state.article && `Editing - ${this.state.article.title}`}>
-          <ArticleEditPanel
-            article={this.state.article}
-            imagePreviews
-            onCancel={() => {
-              console.warn('TODO: Restore article state if modified (invalidate article in client DB)');
-              this.setState({
-                article: null,
-              });
-            }}
-            onDelete={() => {
-              this.setState({
-                article: null,
-              });
-            }}
-          />
+        <Modal
+          isOpen={this.state.article}
+          title={this.state.article && `Editing - ${this.state.article.title}`}
+          confirmClose={() => {
+            return confirm(`Are you sure you want to cancel editing "${this.state.article.title}"? Unsaved changes will be lost!`);
+          }}
+          onClose={() => {
+            this.setState({
+              article: null,
+            });
+          }}>
+          
+          <ArticleEdit _id={this.state.article && this.state.article._id}>
+            <Optional test={this.state.article}>
+              <ArticleEditPanel
+                imagePreviews
+                onCancel={() => {
+                  this.setState({
+                    article: null,
+                  });
+                }}
+                onDelete={() => {
+                  this.setState({
+                    article: null,
+                  });
+                }}
+              />
+            </Optional>
+          </ArticleEdit>
         </Modal>
         <div className="container" style={{height: '100%'}}>
             <div className="admin-list-view">
@@ -94,37 +191,7 @@ export default class ArticleListPage extends Component {
                     </h1>
                 </div>
                 <div className="admin-list-content" ref="list">
-                    <ArticleGroupInfinite initialPages={1} ref="articles" name="articles" query={{
-                      sort: this.state.sort,
-                      limit: 10,
-                    }}
-                    initialLoad={this.loadMoreArticles.bind(this)}>
-                        {articles => (
-                            <Table className="table table-striped" head={
-                                <tr>
-                                    <th>Title</th>
-                                    <th></th>
-                                    <th>Permalink</th>
-                                    <th><i className="fa fa-star" /></th>
-                                    <th><i className="fa fa-check" /></th>
-                                    <th>Posted</th>
-                                </tr>
-                            }>
-                                {articles.map((article, i) => {
-                                  return (
-                                    <tr key={i} onClick={() => this.setArticle(article) }>
-                                        <td><a href={`/articles/${article.slug}`}>{article.title}</a></td>
-                                        <td><a href={`/admin/articles/${article._id}/edit`} className="btn btn-default">Edit</a></td>
-                                        <td><a href={`/articles/${article._id}`}><i className="fa fa-link" /></a></td>
-                                        <td>{article.is_featured ? <i className="fa fa-star" /> : null}</td>
-                                        <td>{article.is_published ? <i className="fa fa-check" /> : null}</td>
-                                        <td>{moment(article.date).format('MMM DD, YYYY [at] H:mm')}</td>
-                                    </tr>
-                                  );
-                                })}
-                            </Table>
-                        )}
-                    </ArticleGroupInfinite>
+                    <ArticleListWithData ref="articleList" setArticle={this.setArticle.bind(this)} />
                 </div>
             </div>
         </div>

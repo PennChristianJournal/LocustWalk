@@ -1,21 +1,131 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ArticleGroup from './article-group';
 import ArticleThumb from './article-thumb';
 import Optional from './optional';
 import moment from 'moment';
 import {getFileURL} from '../helpers/file';
+import {graphql, gql} from 'react-apollo';
 
-const ResponseTo = (article = {}) => (
-  <Optional test={article.title}>
+
+const PARENT_QUERY = gql`
+  query ParentQuery($_id: ObjectID!) {
+    article(_id: $_id) {
+      _id
+      title
+      slug
+    }
+  }
+`;
+
+const ResponseTo = graphql(PARENT_QUERY, {
+  skip(props) {
+    return !props._id;
+  },
+  options(props) {
+    return {
+      variables: {
+        _id: props._id,
+      },
+    };
+  },
+  props({ data: { loading, article }}) {
+    return {
+      loading,
+      article,
+    };
+  },
+})( ({loading, article}) => {
+  if (loading || !article) {
+    return null;
+  } else {
+    return (
       <div className="response-to" data-article-id={article._id}>
           <h2>In Response To:&nbsp;
               <a className="response-title" href={`/articles/${article.slug}`} dangerouslySetInnerHTML={{__html: article.title}}></a>
           </h2>
       </div>
-  </Optional>
-);
+    );
+  }
+});
+
+const RESPONSE_ARTICLES_QUERY = gql`
+query ReponseArticles($skip: Int!, $parent: ObjectID!) {
+  articleResponses(limit: 10, skip: $skip, parent: $parent) {
+    title
+    slug
+    preview(length: 300)
+    date
+    author
+    thumb 
+  }
+}
+`;
+
+const ResponseArticles = graphql(gql`
+  query ResponseArticlesWithCount($skip: Int!, $parent: ObjectID!) {
+    articleResponses(limit: 10, skip: $skip, parent: $parent) {
+      title
+      slug
+      preview(length: 300)
+      date
+      author
+      thumb 
+    }
+    articleResponsesCount
+  }
+`, {
+  options(props) {
+    return {
+      variables: {
+        skip: 0,
+        parent: props._id,
+      },
+    };
+  },
+  props({ data: {loading, articleResponses, articleResponsesCount, fetchMore } }) {
+    return {
+      loading,
+      articleResponses,
+      loadMore() {
+        return fetchMore({
+          query: RESPONSE_ARTICLES_QUERY,
+          variables: {
+            skip: articleResponses.length,
+          },
+          updateQuery: (previousResult, { fetchMoreResult }) => {
+            if (!fetchMoreResult) {
+              return previousResult;
+            }
+            return Object.assign({}, previousResult, {
+              articleResponses: [...previousResult.articleResponses, ...fetchMoreResult.articleResponses],
+            });
+          },
+        });
+      },
+      hasMore() {
+        return articleResponses && articleResponses.length < articleResponsesCount;
+      },
+    }; 
+  },
+})( ({loading, articleResponses, loadMore, hasMore}) => {
+  articleResponses = articleResponses || [];
+  return (
+    <Optional test={articleResponses.length}>
+        <div className="container-fluid white-theme discussion">
+            <div className="container">
+                <h1 className="strong">Discussion</h1>
+                <div className="tile tile-vertical">
+                    {articleResponses.map((response, i) => 
+                        <ArticleThumb article={response} key={i} />
+                    )}
+                </div>
+            </div>
+        </div>
+    </Optional>
+  );
+});
+
 
 export default class ArticleMain extends Component {
   render() {
@@ -43,40 +153,14 @@ export default class ArticleMain extends Component {
           </Optional>
 
           <div className="container">
-              <Optional test={article.parent}>
-                  <ArticleGroup name="parent" query={{
-                    _id: article.parent,
-                    is_published: true,
-                    limit: 1,
-                  }}>
-                      { articles => ResponseTo(articles[0]) }
-                  </ArticleGroup>
-              </Optional>
-
+              <ResponseTo _id={article.parent} />
               <h1 className="article-title strong">{article.title}</h1>
               <h4 className="article-author-date thin">{article.author} &#8212; {moment(article.date).format('MMM, DD YYYY')}</h4>
               <div className="article-content" dangerouslySetInnerHTML={{__html: article.content}}></div>
 
           </div>
-          <ArticleGroup name="responses" query={{
-            parent: article._id,
-            is_published: true,
-          }}>
-              { responses =>
-                <Optional test={responses && responses.length}>
-                    <div className="container-fluid white-theme discussion">
-                        <div className="container">
-                            <h1 className="strong">Discussion</h1>
-                            <div className="tile tile-vertical">
-                                {responses.map((response, i) => 
-                                    <ArticleThumb article={response} key={i} />
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                </Optional>
-              }
-          </ArticleGroup>
+          
+          <ResponseArticles _id={article._id} />
       </div>
     );
   }

@@ -1,24 +1,33 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { createStore, applyMiddleware } from 'redux';
-import thunk from 'redux-thunk';
-import createLogger from 'redux-logger';
-import { Provider } from 'react-redux';
-import reducer from '../reducers';
 import nconf from 'nconf';
+import urljoin from 'url-join';
 
-const middleware = nconf.get('NODE_ENV') !== 'production' ? applyMiddleware(thunk, createLogger()) : applyMiddleware(thunk);
+import { 
+  ApolloClient, 
+  ApolloProvider,
+  createNetworkInterface,
+} from 'react-apollo';
 
 export function mount(Page, func) {
   if (typeof document !== 'undefined') {
-
-    const state = window.__STATE__;
-    const store = createStore(reducer, state, middleware);
-
+    
+    const networkInterface = createNetworkInterface({
+      uri: urljoin(nconf.get('SERVER_ROOT'), 'graphql'),
+      opts: {
+        credentials: 'same-origin',
+      },
+    });
+    
+    const client = new ApolloClient({
+      networkInterface,
+      initialState: window.__STATE__,
+    });
+    
     render(
-      <Provider store={store}>
+      <ApolloProvider client={client}>
           <Page />
-      </Provider>,
+      </ApolloProvider>,
       document.getElementById('root'),
       function() {
         const scriptTag = document.getElementById('__STATE__');

@@ -1,37 +1,74 @@
 
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import ArticleGroup from '~/common/frontend/components/article-group';
+import PropTypes from 'prop-types';
 import Optional from '~/common/frontend/components/optional';
 import TypeaheadInput from './typeahead-input';
-import { 
-  updateArticle, 
-  invalidateArticles, 
-  deleteArticle,
-} from '~/common/frontend/actions/articles';
 import moment from 'moment';
 import {getFileURL} from '~/common/frontend/helpers/file';
 import $ from 'jquery';
+import {graphql, gql} from 'react-apollo';
 
-class ArticleSidebar extends Component {
+const PARENT_QUERY = gql`
+  query ParentQuery($_id: ObjectID!) {
+    article(_id: $_id) {
+      _id
+      title
+    }
+  }
+`;
+
+const ResponseToInput = graphql(PARENT_QUERY, {
+  skip(props) {
+    return !props.article.parent;
+  },
+  options(props) {
+    return {
+      variables: {
+        _id: props.article.parent,
+      },
+    };
+  },
+  props({ ownProps, data: { loading, article }}) {
+    return {
+      loading,
+      parent: article || {},
+      children: ownProps.children,
+    };
+  },
+})( ({children, parent}) => {
+  if (!parent) {
+    return null;
+  }
+  if (Array.isArray(children)) {
+    return children.map(child => {
+      if (React.isValidElement(child)) {
+        return React.cloneElement(child, {parent});
+      } else {
+        return child({parent});
+      }
+    });
+  } else {
+    if (React.isValidElement(children)) {
+      return React.cloneElement(children, {parent});
+    } else {
+      return children({parent});
+    }
+  }
+});
+
+export default class ArticleEditPanel extends Component {
   constructor(props) {
     super(props);
-    const article = props.article || {};
-
+  }
+  
+  componentWillMount() {
+    const article = this.context.article || {};
     this.originalDate = article.date;
 
-    this.state = {
+    this.setState({
       dateNow: !article.is_published,
       date: new Date(),
-    };
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const article = nextProps.article || {};
-    this.state = {
-      dateNow: !article.is_published,
-      date: new Date(),
-    };
+    });
   }
 
   componentDidMount() {
@@ -60,38 +97,53 @@ class ArticleSidebar extends Component {
     if (file) {
       blob = URL.createObjectURL(file);
     }
-    this.props.updateArticle(prop, blob);
+    this.context.updateArticle(prop, blob);
   }
 
   handleSubmit(event) {
+    event.preventDefault();
     if (this.props.getArticleContent) {
       const articleContent = this.props.getArticleContent();
-      if (articleContent) {
-        event.target.content.value = articleContent;
-      }
+      this.context.updateArticle('content', articleContent, () => {
+        this.context.submitArticle();
+      });
+    } else {
+      this.context.submitArticle(); 
     }
   }
   
   handleCancel(event) {
-    if (confirm(`Are you sure you want to cancel editing "${this.props.article.title}"? Unsaved changes will be lost!`)) {
+    if (confirm(`Are you sure you want to cancel editing "${this.context.article.title}"? Unsaved changes will be lost!`)) {
       if (this.props.onCancel) {
         this.props.onCancel(event);
       }
+      this.context.cancelArticle();
     } 
   }
   
   handleDelete(event) {
-    if (confirm(`Are you sure you want to delete "${this.props.article.title}?"`)) {
-      this.props.deleteArticle().then(() => {
+    if (confirm(`Are you sure you want to delete "${this.context.article.title}?"`)) {
+      this.context.deleteArticle().then(() => {
         if (this.props.onDelete) {
           this.props.onDelete(event);
         }
       });
     }
   }
+  
+  syncArticle(event) {
+    event.preventDefault();
+    const docId = event.target.elements['doc-id-input'].value;
+    if (docId && confirm('Content on this page will be replaced. Are you sure?')) {
+      $.post(`/admin/articles/docs/sync/${docId}`, (content) => {
+        this.context.updateArticle('content', content);
+      });
+    }
+  }
 
   render() {
-    const article = this.props.article || {};
+    const article = this.context.article || {};
+    
     return (
       <div className="admin-sidebar">
           <style dangerouslySetInnerHTML={{__html: `
@@ -133,7 +185,7 @@ class ArticleSidebar extends Component {
             }
           `}} />
           <Optional test={this.props.gdriveSync}>
-            <form className="form" action="sync" method="POST" onSubmit={this.props.syncArticle}>
+            <form className="form" action="sync" method="POST" onSubmit={this.syncArticle.bind(this)}>
                 <div className="form-group">
                     <label>Pull from Google Drive</label>
                     <TypeaheadInput
@@ -168,33 +220,36 @@ class ArticleSidebar extends Component {
             </form>
           </Optional>
           <form onSubmit={this.handleSubmit.bind(this)} className="form" key={article._id} action={`/admin/articles/${article._id}/edit`} method="post" encType="multipart/form-data">
-              {this.props.contentEdit ? <input type="hidden" name="content" /> : null }
+              {this.props.getArticleContent ? <input type="hidden" name="content" /> : null }
               
               <div className="form-group">
                   <label htmlFor="title-input">Title</label>
                   <input id="title-type" name="title" type="text" className="form-control" placeholder="Article Title"
-                      defaultValue={article.title}
-                      onChange={ e => this.props.updateArticle('title', e.target.value) } />
+                      value={article.title}
+                      onChange={ e => this.context.updateArticle('title', e.target.value) } />
               </div>
               
               <div className="form-group">
                   <label htmlFor="author-input">Author</label>
                   <input id="author-input" name="author" type="text" className="form-control" placeholder="Author"
-                      defaultValue={article.author}
-                      onChange={ e => this.props.updateArticle('author', e.target.value) } />
+                      value={article.author}
+                      onChange={ e => this.context.updateArticle('author', e.target.value) } />
               </div>
               
               <div className="form-group">
                   <div className="checkbox">
                       <label htmlFor="is_featured-input" className="checkbox-inline">
                           <input id="is_featured-input" name="is_featured" type="checkbox"
-                            defaultChecked={article.is_featured || false}
-                            onChange={e => this.props.updateArticle('is_featured', e.target.checked) }
+                            checked={article.is_featured || false}
+                            onChange={e => this.context.updateArticle('is_featured', e.target.checked) }
                            />
                           Featured
                       </label>
                       <label htmlFor="is_published-input" className="checkbox-inline">
-                          <input id="is_published-input" name="is_published" type="checkbox" defaultChecked={article.is_published || false} />
+                          <input id="is_published-input" name="is_published" type="checkbox" 
+                            checked={article.is_published || false}
+                            onChange={e => this.context.updateArticle('is_published', e.target.checked) }
+                          />
                           Published
                       </label>
                   </div>
@@ -215,52 +270,49 @@ class ArticleSidebar extends Component {
               <div className="form-group">
                   <label htmlFor="slug-input">Slug</label>
                   <input id="slug-input" name="slug" type="text" className="form-control" placeholder="Slug"
-                      defaultValue={article.slug}
-                      onChange={ e => this.props.updateArticle('slug', e.target.value) } />
+                      value={article.slug}
+                      onChange={ e => this.context.updateArticle('slug', e.target.value) } />
               </div>
               
               <div className="form-group">
                   <label htmlFor="response-to-input">Response To</label>
-                  <ArticleGroup name="parent" query={{
-                    _id: article.parent,
-                    limit: 1,
-                  }}>
-                      { articles => {
-                        const parent = articles[0] || {};
-                        return (
-                          <TypeaheadInput
-                            key={parent._id} type="text" className="form-control" placeholder="Response To..." defaultValue={parent.title}
-
-                            typeaheadConfig={{
-                              hint: true,
-                              highlight: true,
-                              minLength: 1,
-                              display: 'title',
-                            }}
-
-                            createBloodhoundConfig={function(Bloodhound) {
-                              return new Bloodhound({
-                                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('title'),
-                                queryTokenizer: Bloodhound.tokenizers.whitespace,
-                                remote: {
-                                  url: '/admin/articles/search?title=%QUERY',
-                                  wildcard: '%QUERY',
-                                },
-                              });
-                            }}
-
-                            target={this.refs['response-id-field']}
-                            targetField="_id"
-                          />
-                        );
-                      }}
-                  </ArticleGroup>
+                  
+                  <ResponseToInput article={article}>
+                    {({parent}) => {
+                      return (
+                        <TypeaheadInput key={parent._id} type="text" className="form-control" placeholder="Response To..." defaultValue={parent.title}
+                     
+                          typeaheadConfig={{
+                            hint: true,
+                            highlight: true,
+                            minLength: 1,
+                            display: 'title',
+                          }}
+                     
+                          createBloodhoundConfig={function(Bloodhound) {
+                            return new Bloodhound({
+                              datumTokenizer: Bloodhound.tokenizers.obj.whitespace('title'),
+                              queryTokenizer: Bloodhound.tokenizers.whitespace,
+                              remote: {
+                                url: '/admin/articles/search?title=%QUERY',
+                                wildcard: '%QUERY',
+                              },
+                            });
+                          }}
+                     
+                          target={this.refs['response-id-field']}
+                          targetField="_id"
+                        />
+                      );
+                    }}
+                  </ResponseToInput>
+                  
 
                   <input ref="response-id-field" name="parent" type="text" readOnly className="form-control" placeholder="Article ID"
-                      defaultValue={article.parent || ''}
+                      value={article.parent || ''}
                       onChange={ e => {
-                        this.props.updateArticle('parent', e.target.value);
-                        this.props.refreshParent();
+                        this.context.updateArticle('parent', e.target.value);
+                        // this.props.refreshParent();
                       } }
                   />
 
@@ -269,7 +321,8 @@ class ArticleSidebar extends Component {
                   <label htmlFor="date-input">Post Date</label>
                   <input type="text" className="form-control"
                     disabled={this.state.dateNow}
-                    onChange={ e => this.props.updateArticle('date', moment(e.target.value || this.originalDate))}
+                    onChange={ e => this.context.updateArticle('date', moment(e.target.value || this.originalDate))}
+                    placeholder={moment(this.state.dateNow ? this.state.date : article.date).format('MMM DD, YYYY [at] H:mm:ss')}
                   />
                   <div>
                     <span>{moment(this.state.dateNow ? this.state.date : article.date).format('MMM DD, YYYY [at] H:mm:ss')}</span>
@@ -287,9 +340,12 @@ class ArticleSidebar extends Component {
               </div>
               <div className="form-group">
                   <label htmlFor="heading-input">Heading Override</label>
-                  <input id="heading-input" name="heading_override" type="text" className="form-control" placeholder="Jun 2016 Special Feature"
-                      defaultValue={article.heading_override || moment(this.state.dateNow ? this.state.date : article.date).format('MMM YYYY [Feature Article]')}
-                      onChange={ e => this.props.updateArticle('heading_override', e.target.value) }
+                  <input type="text" className="form-control"
+                    onChange={ e => this.context.updateArticle('heading_override', e.target.value) }
+                    placeholder={moment(this.state.dateNow ? this.state.date : article.date).format('MMM YYYY [Feature Article]')}
+                  />
+                  <input name="heading_override" type="hidden" className="form-control"
+                    value={article.heading_override || moment(this.state.dateNow ? this.state.date : article.date).format('MMM YYYY [Feature Article]')}
                   />
               </div>
               <div className="btn-toolbar">
@@ -303,28 +359,11 @@ class ArticleSidebar extends Component {
   }
 }
 
-export default connect(null, function(dispatch, ownProps) {
-  return {
-    refreshParent: function() {
-      return dispatch(invalidateArticles('parent', 0));
-    },
+ArticleEditPanel.contextTypes = {
+  article: PropTypes.object.isRequired,
+  updateArticle: PropTypes.func.isRequired,
+  submitArticle: PropTypes.func.isRequired,
+  cancelArticle: PropTypes.func.isRequired,
+  deleteArticle: PropTypes.func.isRequired,
+};
 
-    updateArticle: function(property, value) {
-      return dispatch(updateArticle(ownProps.article._id, property, value));
-    },
-
-    syncArticle: function(event) {
-      event.preventDefault();
-      const docId = event.target.elements['doc-id-input'].value;
-      if (docId && confirm('Content on this page will be replaced. Are you sure?')) {
-        $.post(`/admin/articles/docs/sync/${docId}`, function(content) {
-          dispatch(updateArticle(ownProps.article._id, 'content', content));
-        });
-      }
-    },
-    
-    deleteArticle: function() {
-      return dispatch(deleteArticle(ownProps.article._id));
-    },
-  };
-})(ArticleSidebar);

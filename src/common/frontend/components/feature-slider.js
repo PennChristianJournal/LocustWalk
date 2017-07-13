@@ -17,12 +17,11 @@ export default class FeatureSlider extends Component {
   }
 
   setupInterval() {
-    const count = this.props.articles.length;
-    if (count > 1 && typeof this.interval === 'undefined') {
+    if (typeof this.interval === 'undefined') {
       this.interval = setInterval(() => {
         if (this.state.autoscroll) {
           var idx = this.state.idx + 1;
-          if (idx >= count) {
+          if (idx >= this.props.articles.length) {
             idx = 0;
           }
           this.setState({
@@ -37,9 +36,18 @@ export default class FeatureSlider extends Component {
       }
     }
   }
+  
+  checkLoadMore() {
+    if (this.props.loadMore) {
+      if (this.props.articles.length - this.state.idx < 2) {
+        this.props.loadMore();
+      }
+    }
+  }
 
   componentDidUpdate() {
     this.setupInterval();
+    this.checkLoadMore();
   }
 
   componentDidMount() {

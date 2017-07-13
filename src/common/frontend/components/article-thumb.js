@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { htmlPreview } from '../helpers/format';
 import {getFileURL} from '../helpers/file';
 
 export default class ArticleThumb extends Component {
@@ -25,7 +24,7 @@ export default class ArticleThumb extends Component {
                   <span className="author">{article.author}&#8212;&nbsp;</span>
                   <span className="date">{moment(article.date).format('MMM, DD YYYY')}</span>
               </p>
-              <p className="preview" dangerouslySetInnerHTML={{__html: htmlPreview(article.content, 300)}}/>
+              <p className="preview">{article.preview}</p>
           </div>
       </div>
     );

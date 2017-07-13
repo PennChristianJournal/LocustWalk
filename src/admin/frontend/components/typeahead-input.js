@@ -7,7 +7,7 @@ class TypeaheadInput extends Component {
 
   componentDidMount() {
     var {createBloodhoundConfig, typeaheadConfig, target, targetField} = this.props;
-
+    
     const search = createBloodhoundConfig(require('corejs-typeahead'));
     search.initialize();
     typeaheadConfig = Object.assign({}, typeaheadConfig, {
@@ -25,9 +25,13 @@ class TypeaheadInput extends Component {
   }
 
   render() {
-    var {createBloodhoundConfig, typeaheadConfig, target, targetField, ...otherProps} = this.props;
+    const props = Object.assign({}, this.props);
+    delete props.createBloodhoundConfig;
+    delete props.typeaheadConfig;
+    delete props.target;
+    delete props.targetField; 
 
-    return <input ref="input" {...otherProps} />;
+    return <input ref="input" {...props} />;
   }
 }
 
