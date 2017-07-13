@@ -1,35 +1,141 @@
 
 import React from 'react';
 import PageLayout from '../templates/page-layout';
-import ArticleGroup from '../components/article-group';
-import ArticleGroupInfinite from '../components/article-group-infinite';
 import ArchivePanel from '../components/panels/archive';
 import SistersPanel from '../components/panels/sisters';
 import SocialPanel from '../components/panels/social';
 import ArticleThumb from '../components/article-thumb';
 import FeatureSlider from '../components/feature-slider';
+import Optional from '../components/optional';
+import {graphql, gql} from 'react-apollo';
+
+const FEATURED_ARTICLES_QUERY = gql`
+  query FeaturedArticles($skip: Int!) {
+    featuredArticles(limit: 1, skip: $skip) {
+      _id
+      title
+      slug
+      date
+      thumb
+      author
+      preview(length: 140)
+      heading_override  
+    }
+  }
+`;
+
+const FeatureSliderWithData = graphql(FEATURED_ARTICLES_QUERY, {
+  options: {
+    variables: {
+      skip: 0,
+    },
+  },
+  props({ data: {loading, featuredArticles, fetchMore } }) {
+    return {
+      loading,
+      featuredArticles,
+      loadMore() {
+        if (featuredArticles.length >= 12) {
+          return;
+        }
+        return fetchMore({
+          variables: {
+            skip: (featuredArticles || []).length,
+          },
+          updateQuery: (previousResult, { fetchMoreResult }) => {
+            if (!fetchMoreResult) {
+              return previousResult;
+            }
+            return Object.assign({}, previousResult, {
+              featuredArticles: [...previousResult.featuredArticles, ...fetchMoreResult.featuredArticles],
+            });
+          },
+        });
+      },
+    }; 
+  },
+})( ({loading, featuredArticles, loadMore}) => {
+  return <FeatureSlider loadMore={loadMore} articles={featuredArticles || []} />;
+});
+
+const RECENT_ARTICLES_QUERY = gql`
+  query RecentArticles($skip: Int!) {
+    recentArticles(limit: 10, skip: $skip) {
+      title
+      slug
+      preview(length: 300)
+      date
+      author
+      thumb 
+    }
+  }
+`;
+
+const RecentArticlesWithData = graphql(gql`
+  query RecentArticlesWithCount($skip: Int!) {
+    recentArticles(limit: 10, skip: $skip) {
+      title
+      slug
+      preview(length: 300)
+      date
+      author
+      thumb 
+    }
+    articleCount
+  }
+`, {
+  options: {
+    variables: {
+      skip: 0,
+    },
+  },
+  props({ data: {loading, recentArticles, articleCount, fetchMore } }) {
+    return {
+      loading,
+      recentArticles,
+      loadMore() {
+        return fetchMore({
+          query: RECENT_ARTICLES_QUERY,
+          variables: {
+            skip: recentArticles.length,
+          },
+          updateQuery: (previousResult, { fetchMoreResult }) => {
+            if (!fetchMoreResult) {
+              return previousResult;
+            }
+            return Object.assign({}, previousResult, {
+              recentArticles: [...previousResult.recentArticles, ...fetchMoreResult.recentArticles],
+            });
+          },
+        });
+      },
+      hasMore() {
+        return recentArticles && recentArticles.length < articleCount;
+      },
+    }; 
+  },
+})( ({loading, recentArticles, loadMore, hasMore}) => {
+  recentArticles = recentArticles || [];
+  return (
+    <div className="tile tile-vertical white-theme">
+        <h2 className="strong">Recent Articles</h2>
+        {recentArticles.map((article, i) => {
+          return <ArticleThumb article={article} key={i} />;
+        })}
+        <Optional test={hasMore()}>
+          <button className="btn btn-default center-block" onClick={loadMore}>Load More</button>
+        </Optional>
+    </div>
+  );
+});
 
 const HomePage = () => (
-    <PageLayout id="home-page"
+     <PageLayout id="home-page"
         top={[
-          <ArticleGroup name="featured" query={HomePage.articleQueries.featured}>
-              {articles => <FeatureSlider articles={articles} />}
-          </ArticleGroup>,
+          <FeatureSliderWithData />,
         ]}
 
-        main={
-          <ArticleGroupInfinite name="recent" initialPages={1} query={HomePage.articleQueries.recent}>
-              {(articles, group) =>
-                  <div className="tile tile-vertical white-theme">
-                      <h2 className="strong">Recent Articles</h2>
-                      {articles.map((article, i) => {
-                        return <ArticleThumb article={article} key={i} />;
-                      })}
-                      {group.hasMore() ? <button className="btn btn-default center-block" onClick={group.fetchMore.bind(group)}>Load More</button> : null }
-                  </div>
-              }
-          </ArticleGroupInfinite>
-        }
+        main={<RecentArticlesWithData />}
 
         side={[
           <div className="row">
@@ -48,20 +154,6 @@ const HomePage = () => (
         ]}
     />
 );
-
-HomePage.articleQueries = {
-  featured: {
-    sort: 'date',
-    limit: 12,
-    is_published: true,
-    is_featured: true,
-  },
-  recent: {
-    sort: 'date',
-    limit: 10,
-    is_published: true,
-  },
-};
 
 export default HomePage;
 

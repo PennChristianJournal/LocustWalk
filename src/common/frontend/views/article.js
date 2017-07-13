@@ -1,25 +1,49 @@
 
 import React from 'react';
-import ArticleGroup from '../components/article-group';
-import ArticleMain from '../components/article-main';
-import ArticleLayout from '../templates/article-layout';
+import ArticleMain from '~/common/frontend/components/article-main';
+import ArticleLayout from '~/common/frontend/templates/article-layout';
+import {graphql, gql} from 'react-apollo';
 
-const ArticlePage = () =>
-  <ArticleLayout>
-    <ArticleGroup name="main" query={ArticlePage.articleQueries.main}>
-      { articles => <ArticleMain article={articles[0]} /> }
-    </ArticleGroup>
-  </ArticleLayout>
-;
+const ARTICLE_QUERY = gql`
+  query Article($idOrSlug: String, $_id: ObjectID, $slug: String) {
+    article(idOrSlug: $idOrSlug, _id: $_id, slug: $slug) {
+      _id
+      title
+      date
+      cover
+      author
+      content
+      parent
+    }
+  }
+`;
 
-ArticlePage.articleQueries = {
-  main: {
-    limit: 1,
-    is_published: true,
+const ArticlePage = graphql(ARTICLE_QUERY, {
+  options({idOrSlug, _id, slug}) {
+    idOrSlug = idOrSlug || (typeof window !== 'undefined' && (segments => segments[segments.length - 1])(window.location.pathname.split('/')));
+    return {
+      variables: {
+        idOrSlug,
+        _id,
+        slug,
+      },
+    };
   },
-};
+  props({ data: {article}} ) {
+    return {
+      article,
+    };
+  },
+})( ({article}) => {
+  return (
+    <ArticleLayout>
+      <ArticleMain article={article} />
+    </ArticleLayout>
+  );
+});
 
 export default ArticlePage;
+
 
 ArticlePage.metadata = Object.assign({}, ArticleLayout.metadata, {
   link: [

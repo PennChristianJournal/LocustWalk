@@ -31,8 +31,9 @@ router.get('/new', (req, res) => {
 });
 
 router.get('/:id/edit', (req, res) => {
-  Renderer.preloadArticles(req, 'main', 1, { _id: req.params.id }, false);
-  Renderer.render(req, res, views['admin-articles-edit']);
+  Renderer.render(req, res, views['admin-articles-edit'], {
+    _id: req.params.id,
+  });
 });
 
 router.post('/:id/edit', formidable(), (req, res) => {
@@ -72,7 +73,9 @@ router.post('/:id/edit', formidable(), (req, res) => {
 
 router.get('/:id/delete', (req, res) => {
   Article.findByIdAndRemove(req.params.id, err => {
-    if (err) console.warn(err);
+    if (err) {
+      console.warn(err);
+    }
     res.end();
   });
 });
