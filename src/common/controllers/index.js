@@ -2,7 +2,7 @@
 
 import { Router } from 'express';
 import ViewEngine from '~/viewEngine';
-import Renderer from '~/renderer';
+import Renderer from '~/server/renderer';
 
 const router = new Router();
 

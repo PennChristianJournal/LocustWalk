@@ -2,7 +2,7 @@
 
 import {Router} from 'express';
 import ViewEngine from '~/viewEngine';
-import Renderer from '~/renderer';
+import Renderer from '~/server/renderer';
 import mongoose from 'mongoose';
 import formidable from 'express-formidable';
 import Article from '~/common/models/article';

@@ -46,7 +46,7 @@ function registerTargets(group, prefix, dir) {
       fs.mkdirSync(`${__dirname}/tmp/`);
     }
     fs.writeFileSync(mountTarget, `
-      var mount = require('${__dirname}/common/frontend/helpers/page').mount;
+      var mount = require('${__dirname}/browser/renderer').mount;
       var Page = require('${file}').default;
       mount(Page);
     `);
@@ -74,3 +74,4 @@ export default {
   getViews,
   TARGETS,
 };
+

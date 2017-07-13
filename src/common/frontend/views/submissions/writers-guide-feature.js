@@ -73,6 +73,3 @@ WritersGuideFeaturePage.metadata = {
   ],
 };
 
-
-import {mount} from '../../helpers/page';
-mount(WritersGuideFeaturePage);
