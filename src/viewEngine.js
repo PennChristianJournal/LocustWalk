@@ -2,6 +2,7 @@
 
 import fs from 'fs';
 import path from 'path';
+import nconf from 'nconf';
 
 function walk(dir, action) {
   let list = fs.readdirSync(dir);
@@ -45,11 +46,25 @@ function registerTargets(group, prefix, dir) {
     if (!fs.existsSync(`${__dirname}/tmp/`)) {
       fs.mkdirSync(`${__dirname}/tmp/`);
     }
-    fs.writeFileSync(mountTarget, `
-      var mount = require('${__dirname}/browser/renderer').mount;
-      var Page = require('${file}').default;
-      mount(Page);
-    `);
+
+    var script = `
+      const mount = require('${__dirname}/browser/renderer').mount;
+      const Page = require('${file}').default;
+      const rerender = mount(Page);
+    `;
+
+    if (nconf.get('NODE_ENV') === 'development') {
+      script += `
+        if (module.hot) {
+          module.hot.accept('${file}', () => {
+            const NewApp = require('${file}').default;
+            rerender(NewApp); 
+          });
+        }
+      `;
+    }
+
+    fs.writeFileSync(mountTarget, script);
 
     TARGETS[group][target] = {
       mountTarget, // /home/user/code/locustwalk/src/tmp/.admin-articles-edit.js
