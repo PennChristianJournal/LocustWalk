@@ -125,3 +125,69 @@ th, td {
 .container {
   max-width: 100%;
 }
+
+
+
+
+
+
+
+.alert {
+    padding: 20px;
+    background-color: #f44336; /* Red */
+    color: white;
+    margin-bottom: 15px;
+}
+
+/* The close button */
+.closebtn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.textareaform {
+  width: 100%;
+  height: 500px;
+}
+#regularform label{
+padding-right: 20px
+}
+#regularform #submit {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px
+}
+#regularform button {
+  background-color: #A9A9A9; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin-right: 20px;
+  margin-left: 150px;
+  margin-top: 20px;
+}
+#left-container{
+  width: 48%;
+  float: left;
+}
+
+.tile-vertical.white-theme.container-right{
+  margin-top: 70px;
+  height:500px;
+  width: 50%;
+  float: right;
+}

@@ -10,11 +10,7 @@ const Schema = new mongoose.Schema({
   },
   contentMD: {
     type: String,
-<<<<<<< HEAD
-    required: true,
-=======
     required: false,
->>>>>>> added the form to the admin page, added the model of static content and then also had a preview option
   },
   contentHTML:{
     type: String,
