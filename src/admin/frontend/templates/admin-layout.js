@@ -1,6 +1,7 @@
 
 import React, {Component} from 'react';
 import Navbar from '~/admin/frontend/components/navbar';
+import {headData} from '~/common/frontend/head';
 
 class AdminLayout extends Component {
 
@@ -37,10 +38,8 @@ class AdminLayout extends Component {
   }
 }
 
-export default AdminLayout;
-
-AdminLayout.metadata = {
-  link: [
+export default headData(head => {
+  head.addLink([
     {
       href: '/css/admin.css',
       rel: 'stylesheet',
@@ -51,5 +50,5 @@ AdminLayout.metadata = {
       rel: 'stylesheet',
       type: 'text/css',
     },
-  ],
-};
+  ]);
+})(AdminLayout);

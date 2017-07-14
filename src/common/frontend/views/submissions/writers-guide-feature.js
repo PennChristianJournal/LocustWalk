@@ -1,6 +1,7 @@
 import React from 'react';
 import PageLayout from '../../templates/page-layout';
 import SistersPanel from '../../components/panels/sisters';
+import {headData} from '~/common/frontend/head';
 
 const WritersGuideFeaturePage = () => (
     <PageLayout
@@ -53,23 +54,8 @@ const WritersGuideFeaturePage = () => (
     ></PageLayout>
 );
 
-export default WritersGuideFeaturePage;
-
-WritersGuideFeaturePage.metadata = {
-  title: 'Feature Writers Guide - Locust Walk',
-  meta: [
-    {
-      properties: ['og:title', 'twitter:title'],
-      content: 'Feature Writers Guide - Locust Walk',
-    },
-    {
-      property: 'description',
-      content: 'Thank you for your interest in writing for Locust Walk! As a magazine, we are flexible in the topics and writing styles of submissions, however, there are',
-    },
-    {
-      property: 'og:description',
-      content: 'Thank you for your interest in writing for Locust Walk! As a magazine, we are flexible in the topics and writing styles of submissions, however, there are standards that we uphold. Please use the following guidelines to direct your writing. We look forward to hearing from you!',
-    },
-  ],
-};
-
+export default headData(head => {
+  head.setTitle('Feature Writers Guide - Locust Walk');
+  const description = 'Thank you for your interest in writing for Locust Walk! As a magazine, we are flexible in the topics and writing styles of submissions, however, there are standards that we uphold. Please use the following guidelines to direct your writing. We look forward to hearing from you!';
+  head.setMetadata('description', description.substring(0, 160));
+})(WritersGuideFeaturePage);

@@ -2,9 +2,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import {getFileURL} from '../helpers/file';
+import { getFileURL } from '../helpers/file';
+import { headData } from '~/common/frontend/head';
 
-export default class ArticleThumb extends Component {
+class ArticleThumb extends Component {
   render() {
     const article = this.props.article;
     return (
@@ -34,3 +35,11 @@ export default class ArticleThumb extends Component {
 ArticleThumb.propTypes = {
   article: PropTypes.object.isRequired,
 };
+
+export default headData(head => {
+  head.addLink({
+    href: '/css/article-thumb.css',
+    rel: 'stylesheet',
+    type: 'text/css',
+  });
+})(ArticleThumb);

@@ -8,6 +8,7 @@ import ArticleThumb from '../components/article-thumb';
 import FeatureSlider from '../components/feature-slider';
 import Optional from '../components/optional';
 import {graphql, gql} from 'react-apollo';
+import { headData } from '~/common/frontend/head';
 
 const FEATURED_ARTICLES_QUERY = gql`
   query FeaturedArticles($skip: Int!) {
@@ -155,19 +156,10 @@ const HomePage = () => (
     />
 );
 
-export default HomePage;
-
-HomePage.metadata = Object.assign({}, PageLayout.metadata, {
-  link: [
-    {
-      href: '/css/home.css',
-      rel: 'stylesheet',
-      type: 'text/css',
-    },
-    {
-      href: '/css/article-thumb.css',
-      rel: 'stylesheet',
-      type: 'text/css',
-    },
-  ],
-});
+export default headData(head => {
+  head.addLink({
+    href: '/css/home.css',
+    rel: 'stylesheet',
+    type: 'text/css',
+  });
+})(HomePage);

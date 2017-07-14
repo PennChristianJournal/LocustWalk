@@ -200,4 +200,3 @@ export default class ArticleListPage extends Component {
   }
 }
 
-ArticleListPage.metadata = Object.assign({}, AdminLayout.metadata);

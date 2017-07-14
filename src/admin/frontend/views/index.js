@@ -9,5 +9,3 @@ const AdminHome = () => (
 );
 
 export default AdminHome;
-
-AdminHome.metadata = Object.assign({}, AdminLayout.metadata);

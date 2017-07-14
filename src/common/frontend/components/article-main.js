@@ -6,7 +6,7 @@ import Optional from './optional';
 import moment from 'moment';
 import {getFileURL} from '../helpers/file';
 import {graphql, gql} from 'react-apollo';
-
+import {headData} from '~/common/frontend/head';
 
 const PARENT_QUERY = gql`
   query ParentQuery($_id: ObjectID!) {
@@ -127,7 +127,7 @@ const ResponseArticles = graphql(gql`
 });
 
 
-export default class ArticleMain extends Component {
+class ArticleMain extends Component {
   render() {
     const article = this.props.article || {};
     return (
@@ -169,3 +169,28 @@ export default class ArticleMain extends Component {
 ArticleMain.propTypes = {
   article: PropTypes.object.isRequired,
 };
+
+export default headData(head => {
+  head.addLink([
+    {
+      href: '/bower_components/medium-editor/dist/css/themes/default.css',
+      rel: 'stylesheet',
+      type: 'text/css',
+    },
+    {
+      href: '/bower_components/medium-editor-insert-plugin/dist/css/medium-editor-insert-plugin.min.css',
+      rel: 'stylesheet',
+      type: 'text/css',
+    },
+    {
+      href: '/css/article.css',
+      rel: 'stylesheet',
+      type: 'text/css',
+    },
+    {
+      href: '/css/article-discussion.css',
+      rel: 'stylesheet',
+      type: 'text/css',
+    },
+  ]);
+})(ArticleMain);

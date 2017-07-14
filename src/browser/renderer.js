@@ -10,7 +10,6 @@ import {
   ApolloProvider,
   createNetworkInterface,
 } from 'react-apollo';
-
 export function mount(Page) {
   if (typeof document !== 'undefined') {
     
@@ -28,7 +27,7 @@ export function mount(Page) {
     
     render(
       <ApolloProvider client={client}>
-          <Page />
+        <Page />
       </ApolloProvider>,
       document.getElementById('root'),
       function() {
