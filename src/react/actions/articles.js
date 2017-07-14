@@ -41,6 +41,7 @@ export function fetchArticles(name, page = 0, params = {}, getArticles = clientA
 
   return dispatch => {
     dispatch(requestArticles(name, page));
+    if (params._id === null) console.log(name, 'is null!');
     return getArticles(params).then(json => dispatch(receiveArticles(name, page, json)));
   };
 }
@@ -79,29 +80,5 @@ export function updateArticle(id, property, value) {
     id,
     property,
     value,
-  };
-}
-
-
-function clientCountAdapter(params) {
-  var query = Object.keys(params).map(function(k) {
-    return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
-  }).join('&');
-
-  var url = `${process.env.SERVER_ROOT}api/articles/count/?${query}`;
-  return fetch(url).then(response => response.json());
-}
-
-export function countArticles(name, params = {}, countFunction = clientCountAdapter) {
-  return dispatch => {
-    dispatch({
-      type: GET_ARTICLE_COUNT,
-      name,
-    });
-    return countFunction(params).then(count => dispatch({
-      type: RECEIVE_ARTICLE_COUNT,
-      name,
-      count,
-    }));
   };
 }
