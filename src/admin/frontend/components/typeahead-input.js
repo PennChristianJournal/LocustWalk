@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 import React, {Component} from 'react';
 import $ from 'jquery';
@@ -29,6 +29,6 @@ class TypeaheadInput extends Component {
 
     return <input ref="input" {...otherProps} />;
   }
-};
+}
 
 export default TypeaheadInput;

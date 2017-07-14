@@ -5,8 +5,9 @@ import thunk from 'redux-thunk';
 import createLogger from 'redux-logger';
 import { Provider } from 'react-redux';
 import reducer from '../reducers';
+import nconf from 'nconf';
 
-const middleware = process.env.NODE_ENV !== 'production' ? applyMiddleware(thunk, createLogger()) : applyMiddleware(thunk);
+const middleware = nconf.get('NODE_ENV') !== 'production' ? applyMiddleware(thunk, createLogger()) : applyMiddleware(thunk);
 
 export function mount(Page, func) {
   if (typeof document !== 'undefined') {

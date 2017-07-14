@@ -1,5 +1,7 @@
 
 import fetch from 'isomorphic-fetch';
+import nconf from 'nconf';
+import urljoin from 'url-join';
 
 export const REQUEST_ARTICLES = 'REQUEST_ARTICLES';
 export const RECEIVE_ARTICLES = 'RECEIVE_ARTICLES';
@@ -32,7 +34,7 @@ function clientAdapter(params) {
     return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
   }).join('&');
 
-  var url = `${process.env.SERVER_ROOT}api/articles/?${query}`;
+  var url = urljoin(nconf.get('SERVER_ROOT'), `api/articles/?${query}`);
   return fetch(url).then(response => response.json());
 }
 

@@ -4,28 +4,28 @@ const router = new Router();
 
 import File from '../models/file';
 import SmallFile from '../models/smallFile';
-import mkdirp from 'mkdirp';
-import fs from 'fs';
 
-const fileRoot = `${__dirname}/../../../public/files`;
 router.get('/:id', function(req, res, next) {
 
   SmallFile.findOne({
-    _id: req.params.id
+    _id: req.params.id,
   }, function(err, file) {
-    if (err) return next(err);
+    if (err) {
+      return next(err);
+    }
     if (file) {
       // If a file is stored with the old schema, remove it
       File.remove({_id: req.params.id}, (err) => {});
-      
+
       res.contentType(file.contentType);
-      res.send(file.data);
+      return res.send(file.data);
     } else {
 
-      File.findOne({_id: req.params.id}, function(err, file, stream) {
-        if (err) return next(err);
+      return File.findOne({_id: req.params.id}, function(err, file, stream) {
+        if (err) {
+          return next(err);
+        }
         if (file) {
-          
           // incrementally remove GridFS
           let data = new Buffer('');
           stream.on('data', function(chunk) {
@@ -39,17 +39,17 @@ router.get('/:id', function(req, res, next) {
               contentType: file.contentType,
             });
           });
-          
+
           res.writeHead(200, {'Content-Type': file.contentType });
-          stream.pipe(res);
+          return stream.pipe(res);
         } else {
           res.status(404);
-          res.type('txt').send('Not found');
+          return res.type('txt').send('Not found');
         }
       });
-      
+
     }
-    
+
   });
 });
 

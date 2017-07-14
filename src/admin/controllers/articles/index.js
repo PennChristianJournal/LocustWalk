@@ -14,6 +14,7 @@ import {getFileURL} from '~/common/frontend/helpers/file';
 import path from 'path';
 import {getJWTClient, getGoogleDriveClient} from '~/admin/googleAPIs';
 import cheerio from 'cheerio';
+import mime from 'mime';
 const driveClient = getJWTClient(['https://www.googleapis.com/auth/drive']);
 
 const router = new Router();
@@ -118,10 +119,10 @@ router.post('/:id/imagedelete', formidable(), (req, res) => {
       Article.findByIdAndUpdate(req.params.id, {
         $pull: {
           attachments: id,
-        }
+        },
       }, {
         new: true,
-        safe: true
+        safe: true,
       }, cb);
     },
   ], (err, results) => {
@@ -138,9 +139,11 @@ router.post('/:id/imagedelete', formidable(), (req, res) => {
 router.get('/search', (req, res) => {
   var regex = new RegExp(`^${req.query.title}`);
   Article.find({
-    title: regex
+    title: regex,
   }, (err, articles) => {
-    if (err) console.log(err);
+    if (err) {
+      console.log(err);
+    }
     res.send(articles);
   });
 });

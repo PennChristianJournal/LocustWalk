@@ -135,7 +135,7 @@ class ArticleSidebar extends Component {
                                   remote: {
                                     url: '/admin/articles/docs/search?name=%QUERY',
                                     wildcard: '%QUERY',
-                                  }
+                                  },
                                 });
                               }}
 
@@ -226,7 +226,7 @@ class ArticleSidebar extends Component {
                                             remote: {
                                               url: '/admin/articles/search?title=%QUERY',
                                               wildcard: '%QUERY',
-                                            }
+                                            },
                                           });
                                         }}
 

@@ -76,6 +76,9 @@ module.exports = {
         return acc;
       }, {}),
     }),
+    new webpack.NormalModuleReplacementPlugin(/nconf/, function(resource) {
+      resource.request = resource.request.replace(/nconf/, 'nconf-browser');
+    }),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'js/react',
       minChunks(module, count) {

@@ -34,7 +34,7 @@ export default connect((state, ownProps) => {
   if (title) {
     props.title = title;
   }
-  
+
   props.metadata = {};
   if (meta) {
     props.meta = Object.assign({}, props.meta, meta);
