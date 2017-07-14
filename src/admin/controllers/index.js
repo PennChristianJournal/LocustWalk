@@ -3,7 +3,7 @@
 import { Router } from 'express';
 import ViewEngine from '~/viewEngine';
 import Renderer from '~/renderer';
-
+import StaticContent from '~/common/models/StaticContent'
 const router = new Router();
 
 import ArticlesController from './articles';
@@ -75,8 +75,7 @@ router.get('/getStaticContent/:id', function(req,res){
 
 
 router.get('/data', function(req,res){
-
-
+  console.log("ASDAD");
 var allData = {};
   StaticContent.find({}, function(err, docs) {
     if (!err){

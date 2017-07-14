@@ -10,7 +10,7 @@ const Schema = new mongoose.Schema({
   },
   contentMD: {
     type: String,
-    required: false,
+    required: true,
   },
   contentHTML:{
     type: String,

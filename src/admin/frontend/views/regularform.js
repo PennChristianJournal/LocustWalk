@@ -46,24 +46,31 @@ class RegularForm extends React.Component {
 
       var prev = this.state.dropDownValue;
       var clickedValue =  event.target.value
-        if (this.original != this.state.markdown) {
+        if (this.original != this.state.markdown && this.original != "") {
           document.getElementById("alert-message").style.display = 'block';
           this.setState({
           dropDownValue : prev
           })
         } else {
+          document.getElementById("alert-message").style.display = 'none';
+
             var self = this;
-            var url = '/admin/getStaticContent/' + clickedValue
+            var url = '/admin/getStaticContent/' + clickedValue;
+
             fetch(url)
                 .then(function(response) {
                     return response.json();
                 })
                 .then(function(data) {
+                  var showdown = require('showdown'),
+                      converter = new showdown.Converter(),
+                      html = converter.makeHtml(data.contentMD);
 
                     self.setState({
                         name: data.name,
                         markdown: data.contentMD,
-                        dropDownValue: clickedValue
+                        dropDownValue: clickedValue,
+                        html:html
                     });
 
                 }).then(function() {
@@ -135,8 +142,10 @@ class RegularForm extends React.Component {
                 return response.json();
             })
             .then(function(data) {
+
                 self.setState({
                     allData: data
+
                 })
             });
     }
@@ -157,7 +166,6 @@ class RegularForm extends React.Component {
 
 
    <div id ="alert-message" style={{display: 'none'}} className="alert alert-danger">
-     <a href="#" className="close" data-dismiss="alert" aria-label="close">&times;</a>
      Submit your changes or discard them before switching.
    </div>
 
