@@ -11,6 +11,7 @@ import ArticleEdit from '~/admin/frontend/components/article-edit';
 import ArticleEditPanel from '~/admin/frontend/components/article-edit-panel';
 import MediumEditorInsertPlugin from 'medium-editor-insert-plugin';
 import $ from 'jquery';
+import {headData} from '~/common/frontend/head';
 
 class ArticleEditor extends Component {
   constructor(props) {
@@ -98,7 +99,7 @@ ArticlePreviews.contextTypes = {
   article: PropTypes.object.isRequired,
 };
 
-export default class ArticleEditPage extends Component {
+class ArticleEditPage extends Component {
   getArticleContent() {
     return this.articleEdit.contentEditor.serialize()['element-0'].value;
   }
@@ -138,15 +139,15 @@ export default class ArticleEditPage extends Component {
   }
 }
 
-ArticleEditPage.metadata = {
-  link: [
+export default headData(head => {
+  head.addLink([
     {
-      href: '/bower_components/medium-editor/dist/css/medium-editor.min.css',
+      href: '/css/home.css',
       rel: 'stylesheet',
       type: 'text/css',
     },
     {
-      href: '/bower_components/medium-editor/dist/css/themes/default.css',
+      href: '/bower_components/medium-editor/dist/css/medium-editor.min.css',
       rel: 'stylesheet',
       type: 'text/css',
     },
@@ -155,35 +156,5 @@ ArticleEditPage.metadata = {
       rel: 'stylesheet',
       type: 'text/css',
     },
-    {
-      href: '/css/article.css',
-      rel: 'stylesheet',
-      type: 'text/css',
-    },
-    {
-      href: '/css/article-thumb.css',
-      rel: 'stylesheet',
-      type: 'text/css',
-    },
-    {
-      href: '/css/article-discussion.css',
-      rel: 'stylesheet',
-      type: 'text/css',
-    },
-    {
-      href: '/css/home.css',
-      rel: 'stylesheet',
-      type: 'text/css',
-    },
-    {
-      href: '/css/admin.css',
-      rel: 'stylesheet',
-      type: 'text/css',
-    },
-    {
-      href: '/css/admin-sidebar.css',
-      rel: 'stylesheet',
-      type: 'text/css',
-    },
-  ],
-};
+  ]);
+})(ArticleEditPage);

@@ -1,6 +1,7 @@
 import React from 'react';
 import PageLayout from '../../templates/page-layout';
 import SistersPanel from '../../components/panels/sisters';
+import {headData} from '~/common/frontend/head';
 
 const WritersGuideResponsePage = () => (
     <PageLayout
@@ -47,5 +48,8 @@ const WritersGuideResponsePage = () => (
     ></PageLayout>
 );
 
-export default WritersGuideResponsePage;
-
+export default headData(head => {
+  head.setTitle('Response Writers Guide - Locust Walk');
+  const description = 'Thank you for your interest in writing for Locust Walk! As a magazine, we are flexible in the topics and writing styles of submissions, however, there are standards that we uphold. Please use the following guidelines to direct your writing. We look forward to hearing from you!';
+  head.setMetadata('description', description.substring(0, 160));
+})(WritersGuideResponsePage);
