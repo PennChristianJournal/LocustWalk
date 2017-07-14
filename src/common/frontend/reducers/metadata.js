@@ -2,8 +2,6 @@
 import { RECEIVE_ARTICLES } from '../actions/articles';
 import { htmlPreview } from '../helpers/format';
 import { getFileURL } from '../helpers/file';
-import nconf from 'nconf';
-import urljoin from 'url-join';
 
 import nconf from 'nconf';
 import urljoin from 'url-join';
@@ -108,7 +106,6 @@ export default function metadata(state = {
         let meta = Object.assign({}, state.meta, {
           description,
           image,
- ecf3753c68872007b788111e12551a653fe09487:src/common/frontend/reducers/metadata.js
           author,
           type,
           publishedTime,

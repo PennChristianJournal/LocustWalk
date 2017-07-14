@@ -43,10 +43,7 @@ export function fetchArticles(name, page = 0, params = {}, getArticles = clientA
 
   return dispatch => {
     dispatch(requestArticles(name, page));
-<<<<<<< HEAD
-    if (params._id === null) console.log(name, 'is null!');
-=======
->>>>>>> ecf3753c68872007b788111e12551a653fe09487
+
     return getArticles(params).then(json => dispatch(receiveArticles(name, page, json)));
   };
 }

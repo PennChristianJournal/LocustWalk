@@ -6,19 +6,16 @@ import { fetchArticlesIfNeeded } from '../actions/articles';
 import { countArticles } from '../actions/articles';
 import Promise from 'bluebird';
 
-import Promise from 'bluebird';
 
 class ArticleGroupInfinite extends Component {
 
   fetchMore(cb) {
     this.props.fetchPage(this.props.pages + 1, cb);
-<<<<<<< HEAD:src/common/frontend/components/article-group-infinite.js
-=======
+
   }
 
   hasMore() {
     return (this.props.articles || []).length < this.props.count || 0;
->>>>>>> ecf3753c68872007b788111e12551a653fe09487:src/common/frontend/components/article-group-infinite.js
   }
 
   hasMore() {
@@ -27,10 +24,9 @@ class ArticleGroupInfinite extends Component {
 
   componentDidMount() {
     this.props.getCount();
-<<<<<<< HEAD:src/common/frontend/components/article-group-infinite.js
-=======
 
->>>>>>> ecf3753c68872007b788111e12551a653fe09487:src/common/frontend/components/article-group-infinite.js
+
+
     this.props.fetchPage(Math.max(this.props.pages, this.props.initialPages), this.props.initialLoad);
   }
 
