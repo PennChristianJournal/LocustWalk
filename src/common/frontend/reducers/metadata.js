@@ -5,6 +5,9 @@ import { getFileURL } from '../helpers/file';
 import nconf from 'nconf';
 import urljoin from 'url-join';
 
+import nconf from 'nconf';
+import urljoin from 'url-join';
+
 export default function metadata(state = {
   title: 'Locust Walk - Penn Christian Journal',
   meta: {
@@ -80,15 +83,14 @@ export default function metadata(state = {
     case RECEIVE_ARTICLES:
       if (action.name === 'main') {
         let article = action.articles[0] || {};
-
-        let title = `${article.title} - Locust Walk`;
+       let title = `${article.title} - Locust Walk`;
 
         let description = Object.assign({}, state.meta.description, {
           content: htmlPreview(article.content, 160),
         });
 
         let image = Object.assign({}, state.meta.image, {
-          content: urljoin(nconf.get('SERVER_ROOT'), getFileURL(article.thumb)),
+  content: urljoin(nconf.get('SERVER_ROOT'), getFileURL(article.thumb)),
         });
 
         let author = Object.assign({}, state.meta.author, {
@@ -106,6 +108,7 @@ export default function metadata(state = {
         let meta = Object.assign({}, state.meta, {
           description,
           image,
+ ecf3753c68872007b788111e12551a653fe09487:src/common/frontend/reducers/metadata.js
           author,
           type,
           publishedTime,
@@ -114,7 +117,7 @@ export default function metadata(state = {
         state = Object.assign({}, state, {
           title,
           meta,
-        });
+});
       }
       break;
     default:

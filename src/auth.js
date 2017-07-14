@@ -57,7 +57,7 @@ export default function(router) {
   });
 
   router.use('/', function(req, res, next) {
-    if (nconf.get('NODE_ENV') !== 'development' && !req.isAuthenticated()) {
+if (nconf.get('NODE_ENV') !== 'development' && !req.isAuthenticated()) {
       req.session.lastUrl = req.originalUrl;
       return res.redirect('/admin/login');
     } else {

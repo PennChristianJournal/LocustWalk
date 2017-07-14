@@ -19,7 +19,7 @@ function makeQuery(req, query) {
 }
 
 router.get('/', (req, res) => {
-  Article.queryPaginated(makeQuery(req, req.query), (err, articles) => {
+ Article.queryPaginated(makeQuery(req, req.query), (err, articles) => {
     if (err) {
       console.log(err);
       res.json([]);
@@ -32,7 +32,7 @@ router.get('/', (req, res) => {
 router.get('/count', (req, res) => {
   delete req.query.limit;
   delete req.query.sort;
-  Article.count(makeQuery(req, req.query), (err, count) => {
+ Article.count(makeQuery(req, req.query), (err, count) => {
     if (err) {
       console.log(err);
     }

@@ -12,6 +12,8 @@ import FeatureSlider from '../components/feature-slider';
 const HomePage = () => (
     <PageLayout id="home-page"
         top={[
+
+
           <ArticleGroup name="featured" query={HomePage.articleQueries.featured}>
               {articles => <FeatureSlider articles={articles} />}
           </ArticleGroup>,

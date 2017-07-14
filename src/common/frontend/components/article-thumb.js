@@ -33,5 +33,7 @@ export default class ArticleThumb extends Component {
 }
 
 ArticleThumb.propTypes = {
+
   article: PropTypes.object.isRequired,
+
 };

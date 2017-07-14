@@ -1,11 +1,11 @@
 
 import React, {Component} from 'react';
-import ArticleGroup from '../../../components/article-group';
-import FeatureSlider from '../../../components/feature-slider';
-import ArticleMain from '../../../components/article-main';
-import ArticleThumb from '../../../components/article-thumb';
-import ArticleLayout from '../../../templates/article-layout';
-import ArticleSidebar from '../../../components/admin/article-sidebar';
+import ArticleGroup from '~/common/frontend/components/article-group';
+import FeatureSlider from '~/common/frontend/components/feature-slider';
+import ArticleMain from '~/common/frontend/components/article-main';
+import ArticleThumb from '~/common/frontend/components/article-thumb';
+import ArticleLayout from '~/common/frontend/templates/article-layout';
+import ArticleEditPanel from '~/admin/frontend/components/article-edit-panel';
 import MediumEditorInsertPlugin from 'medium-editor-insert-plugin';
 import $ from 'jquery';
 
@@ -73,7 +73,7 @@ export default class ArticleEditPage extends Component {
     return (
       <ArticleGroup name="main">
           {articles => {
-            const article = articles[0];
+            const article = articles[0] || {};
             return (
               <div className="container-fluid">
                   <div className="row">
@@ -81,7 +81,7 @@ export default class ArticleEditPage extends Component {
                           <div className="row">
                               <div className="container-fluid">
                                   <div className="row">
-                                      <ArticleSidebar getArticleContent={this.getArticleContent.bind(this)} article={article} gdriveSync contentEdit />
+                                      <ArticleEditPanel getArticleContent={this.getArticleContent.bind(this)} article={article} gdriveSync />
                                   </div>
                               </div>
                           </div>
@@ -99,8 +99,8 @@ export default class ArticleEditPage extends Component {
                                   <div className="row"><br /></div>
                                   <div className="row">
                                       <ArticleLayout>
-
-                                          <ArticleEdit ref={(el) => this.articleEdit = el} article={article} />                                      </ArticleLayout>
+                                          <ArticleEdit ref={(el) => this.articleEdit = el} article={article} />
+                                      </ArticleLayout>
                                   </div>
                               </div>
                           </div>
@@ -158,6 +158,3 @@ ArticleEditPage.metadata = {
     },
   ],
 };
-
-import {mount} from '../../../helpers/page';
-mount(ArticleEditPage);

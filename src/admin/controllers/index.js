@@ -4,7 +4,6 @@ import { Router } from 'express';
 import ViewEngine from '~/viewEngine';
 import Renderer from '~/renderer';
 
-import StaticContent from '~/common/models/StaticContent'
 const router = new Router();
 
 import ArticlesController from './articles';
@@ -15,8 +14,6 @@ const views = ViewEngine.getViews('admin');
 Object.keys(views).forEach(key => {
   const view = views[key];
   router.get(view.route, (req, res) => {
-
-
 
     Renderer.render(req, res, view);
   });
@@ -35,10 +32,6 @@ var currentPage =  new StaticContent({
 });
 var query = {name: req.fields.name};
 
-// StaticContent.findOneAndUpdate(query, currentPage, {new:true, upsert:true}, function(err, doc){
-//
-//     return res.redirect("back");
-// });
 
 
 StaticContent.find({name: req.fields.name}, function(err, docs) {
@@ -94,4 +87,5 @@ var allData = {};
 });
 
 });
+
 export default router;
