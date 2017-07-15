@@ -86,7 +86,7 @@ module.exports = function(router) {
     res.redirect('/');
   });
 
-  router.use('/', function(req, res, next) {
+  router.use('/admin', function(req, res, next) {
     if (!req.isAuthenticated()) {
       req.session.lastUrl = req.originalUrl;
       return res.redirect('/admin/login');
