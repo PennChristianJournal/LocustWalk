@@ -63,19 +63,24 @@ const ArticleListWithData = graphql(ARTICLE_SEARCH_QUERY, {
     variables: {
       skip: 0,
     },
+    notifyOnNetworkStatusChange: true,
   },
   props({ ownProps, data: {loading, articles, articleCount, fetchMore } }) {
+    articles = articles || [];
     return {
       ...ownProps,
       loading,
       articles: articles || [],
       hasMore() {
-        return (articles || []).length < articleCount;
+        return articles.length < articleCount;
       },
       loadMore() {
+        if (loading) {
+          return;
+        }
         return fetchMore({
           variables: {
-            skip: (articles || []).length,
+            skip: articles.length,
           },
           updateQuery: (previousResult, { fetchMoreResult }) => {
             if (!fetchMoreResult) {

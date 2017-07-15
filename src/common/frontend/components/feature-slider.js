@@ -9,6 +9,7 @@ export default class FeatureSlider extends Component {
     this.state = {
       idx: 0,
       autoscroll: true,
+      loadPromise: Promise.resolve(),
     };
 
     this.slideLeft = this.slideLeft.bind(this);
