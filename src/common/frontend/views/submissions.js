@@ -3,6 +3,7 @@ import PageLayout from '../templates/page-layout';
 import ArchivePanel from '../components/panels/archive';
 import SistersPanel from '../components/panels/sisters';
 import SocialPanel from '../components/panels/social';
+import DonatePanel from '../components/panels/donate';
 
 const SubmissionsPage = () =>
     <PageLayout id="submission-page"
@@ -25,6 +26,7 @@ const SubmissionsPage = () =>
             <h2 className="strong"> Artwork and photography submissions</h2>
             <p>Please attach your photos or artwork as a .jpg file and email them to us at <a href="pennchristianjournal@gmail.com">pennchristianjournal@gmail.com</a>. Include your first and last name, class year, school, and course of study.</p>
           </div>,
+          <DonatePanel />,
         ]}
 
         side={[
