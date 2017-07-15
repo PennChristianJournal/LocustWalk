@@ -3,6 +3,7 @@ import PageLayout from '../templates/page-layout';
 import ArchivePanel from '../components/panels/archive';
 import SistersPanel from '../components/panels/sisters';
 import SocialPanel from '../components/panels/social';
+import DonatePanel from '../components/panels/donate';
 
 const StaffPage = () =>
     <PageLayout id="staff-page"
@@ -273,6 +274,7 @@ const StaffPage = () =>
               </tbody>
             </table>
           </div>,
+          <DonatePanel />,
         ]}
 
         side={[

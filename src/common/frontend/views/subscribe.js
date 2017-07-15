@@ -3,6 +3,7 @@ import PageLayout from '../templates/page-layout';
 import ArchivePanel from '../components/panels/archive';
 import SistersPanel from '../components/panels/sisters';
 import SocialPanel from '../components/panels/social';
+import DonatePanel from '../components/panels/donate';
 
 const SubscribePage = () =>
     <PageLayout id="submission-page"
@@ -70,6 +71,7 @@ const SubscribePage = () =>
               </form>
             </div>
           </div>,
+          <DonatePanel />,
         ]}
 
         side={[
