@@ -13,23 +13,12 @@ import ObjectIDType from '../types/objectID';
 import Article from '~/common/models/article';
 import mongoose from 'mongoose';
 
-function removeEmpty(obj) {
-  Object.keys(obj).forEach((key) => obj[key] === undefined && delete obj[key]);
-  return obj;
-}
-
-const skipLimitArgs = {
-  skip: {
-    name: 'skip',
-    type: GraphQLInt,
-    defaultValue: 0,
-  },
-  limit: {
-    name: 'limit',
-    type: GraphQLInt,
-    defaultValue: 10,
-  },
-};
+import {
+  removeEmpty,
+  skipLimitArgs,
+  applySkipLimit, 
+  authenticatedField,
+} from '../helpers';
 
 export const article = {
   type: ArticleType,
@@ -59,7 +48,7 @@ export const article = {
     let field = (_id || mongoose.Types.ObjectId.isValid(idOrSlug)) ? '_id' : 'slug';
     
     let q = Article.findOne(removeEmpty({
-      is_published: !context.isAuthenticated() ? true : is_published,
+      is_published: authenticatedField(context, is_published, true),
       [field]: _id || slug || idOrSlug,
     }), getArticleProjection(fieldASTs));
     
@@ -85,19 +74,12 @@ export const articleResponses = {
     }
     
     let q = Article.find(removeEmpty({
-      is_published: !context.isAuthenticated() ? true : is_published,
+      is_published: authenticatedField(context, is_published, true),
       parent,
     }), getArticleProjection(fieldASTs));
     
     q.sort({ date: -1 });
-    
-    if (skip) {
-      q = q.skip(skip);
-    }
-    if (limit) {
-      q = q.limit(limit);
-    }
-    
+    q = applySkipLimit(q, skip, limit);
     return q.exec();
   },
 };
@@ -120,7 +102,7 @@ export const articleResponsesCount = {
     }
     
     let q = Article.count(removeEmpty({
-      is_published: !context.isAuthenticated() ? true : is_published,
+      is_published: authenticatedField(context, is_published, true),
       parent,
     }), getArticleProjection(fieldASTs));
     
@@ -138,19 +120,12 @@ export const featuredArticles = {
   }, skipLimitArgs),
   resolve: (root, {is_published, skip, limit}, context, fieldASTs) => {
     let q = Article.find(removeEmpty({
-      is_published: !context.isAuthenticated() ? true : is_published,
+      is_published: authenticatedField(context, is_published, true),
       is_featured: true,
     }), getArticleProjection(fieldASTs));
     
     q.sort({ date: -1 });
-    
-    if (skip) {
-      q = q.skip(skip);
-    }
-    if (limit) {
-      q = q.limit(limit);
-    }
-    
+    q = applySkipLimit(q, skip, limit);
     return q.exec();
   },
 };
@@ -165,18 +140,11 @@ export const recentArticles = {
   }, skipLimitArgs),
   resolve: (root, {is_published, skip, limit}, context, fieldASTs) => {
     let q = Article.find(removeEmpty({
-      is_published: !context.isAuthenticated() ? true : is_published,
+      is_published: authenticatedField(context, is_published, true),
     }), getArticleProjection(fieldASTs));
     
     q.sort({ date: -1 });
-    
-    if (skip) {
-      q = q.skip(skip);
-    }
-    if (limit) {
-      q = q.limit(limit);
-    }
-    
+    q = applySkipLimit(q, skip, limit);
     return q.exec();
   },
 };
@@ -191,7 +159,7 @@ export const articleCount = {
   },
   resolve(root, {is_published}, context) {
     return Article.count(removeEmpty({
-      is_published: !context.isAuthenticated() ? true : is_published,
+      is_published: authenticatedField(context, is_published, true),
     })).exec();
   },
 };

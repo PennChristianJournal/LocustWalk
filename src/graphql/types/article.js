@@ -10,7 +10,7 @@ import {
 
 import { GraphQLDateTime } from 'graphql-iso-date';
 
-import {getProjection} from '../';
+import {getProjection, htmlPreview} from '../helpers';
 
 export function getArticleProjection(fieldASTs) {
   let projection = getProjection(fieldASTs);
@@ -59,28 +59,8 @@ export default new GraphQLObjectType({
           defaultValue: true,
         },
       },
-      resolve: (root, {length, elipsis}) => {
-        if (!root.content) {
-          return root.content;
-        }
-        
-        if (elipsis) {
-          length -= 3;
-        }
-        length = Math.max(0, length);
-        
-        let result = root.content
-          .replace(/<sup><a\b[^>]*>\[\d+\]<\/a><\/sup>/ig, '')
-          .replace(/(<([^>]+)>)/ig, '')
-          .replace(/&nbsp;/ig, ' ');
-          
-        if (result.length > length) {
-          result = result.substring(0, length);
-          if (elipsis) {
-            result += '...';
-          }
-        }
-        return result;
+      resolve: ({content}, {length, elipsis}) => {
+        return htmlPreview(content, length, elipsis);
       },
     },
     heading_override: {
