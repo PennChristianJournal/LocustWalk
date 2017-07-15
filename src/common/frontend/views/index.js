@@ -30,25 +30,31 @@ const FeatureSliderWithData = graphql(FEATURED_ARTICLES_QUERY, {
     variables: {
       skip: 0,
     },
+    notifyOnNetworkStatusChange: true,
   },
   props({ data: {loading, featuredArticles, fetchMore } }) {
+    featuredArticles = featuredArticles || [];
     return {
       loading,
       featuredArticles,
       loadMore() {
-        if (featuredArticles.length >= 12) {
+        if (loading || featuredArticles.length >= 12) {
           return;
         }
+        const page = featuredArticles.length;
         return fetchMore({
           variables: {
-            skip: (featuredArticles || []).length,
+            skip: page,
           },
           updateQuery: (previousResult, { fetchMoreResult }) => {
             if (!fetchMoreResult) {
               return previousResult;
             }
+
+            let featuredArticles = [...previousResult.featuredArticles];
+            featuredArticles[page] = fetchMoreResult.featuredArticles[0];
             return Object.assign({}, previousResult, {
-              featuredArticles: [...previousResult.featuredArticles, ...fetchMoreResult.featuredArticles],
+              featuredArticles,
             });
           },
         });
@@ -56,7 +62,7 @@ const FeatureSliderWithData = graphql(FEATURED_ARTICLES_QUERY, {
     }; 
   },
 })( ({loading, featuredArticles, loadMore}) => {
-  return <FeatureSlider loadMore={loadMore} articles={featuredArticles || []} />;
+  return <FeatureSlider loadMore={loadMore} articles={featuredArticles} />;
 });
 
 const RECENT_ARTICLES_QUERY = gql`
@@ -89,21 +95,28 @@ const RecentArticlesWithData = graphql(gql`
     variables: {
       skip: 0,
     },
+    notifyOnNetworkStatusChange: true,
   },
   props({ data: {loading, recentArticles, articleCount, fetchMore } }) {
+    recentArticles = recentArticles || [];
     return {
       loading,
       recentArticles,
       loadMore() {
+        if (loading) {
+          return;
+        }
+        const page = recentArticles.length;
         return fetchMore({
           query: RECENT_ARTICLES_QUERY,
           variables: {
-            skip: recentArticles.length,
+            skip: page,
           },
           updateQuery: (previousResult, { fetchMoreResult }) => {
             if (!fetchMoreResult) {
               return previousResult;
             }
+              
             return Object.assign({}, previousResult, {
               recentArticles: [...previousResult.recentArticles, ...fetchMoreResult.recentArticles],
             });
@@ -111,12 +124,11 @@ const RecentArticlesWithData = graphql(gql`
         });
       },
       hasMore() {
-        return recentArticles && recentArticles.length < articleCount;
+        return recentArticles.length < articleCount;
       },
     }; 
   },
 })( ({loading, recentArticles, loadMore, hasMore}) => {
-  recentArticles = recentArticles || [];
   return (
     <div className="tile tile-vertical white-theme">
         <h2 className="strong">Recent Articles</h2>
