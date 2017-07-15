@@ -7,6 +7,16 @@ const SocialPanel = () => (
       <div className="logo">
           <a href="//www.facebook.com/PennChristianJournal/"><img src="/img/facebook-logo.png" style={{width: '100%'}} /></a>
       </div>
+      <div className="logo">
+          <a href="//www.twitter.com/LWJ_Penn/"><img src="/img/twitter-logo.png" style={{width: '100%'}} /></a>
+      </div>
+      <div className="logo">
+          <a href="//www.instagram.com/LWJ_Penn/"><img src="/img/instagram-logo.png" style={{
+            width: '100%',
+            WebkitFilter: 'invert(100%)',
+            filter: 'invert(100%)',
+          }} /></a>
+      </div>
   </div>
 );
 
