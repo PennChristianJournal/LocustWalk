@@ -62,34 +62,5 @@ Schema.pre('save', function(next) {
   next();
 });
 
-Schema.statics.queryPaginated = function({limit, page, sort, ...params}, cb) {
-  limit = parseInt(limit, 10);
-  page = parseInt(page, 10);
-
-  var query = this.find(params);
-  if (sort) {
-    query = query.sort({[sort]: -1});
-  }
-  if (!isNaN(page)) {
-    query = query.skip(page * limit);
-  }
-  if (!isNaN(limit)) {
-    query = query.limit(limit);
-  }
-
-  query.exec(cb);
-};
-
-Schema.statics.queryPaginatedPromise = function(params) {
-  return new Promise((resolve, reject) => {
-    this.queryPaginated(params, (err, articles) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(articles);
-      }
-    });
-  });
-};
-
 export default mongoose.model('Article', Schema);
+
