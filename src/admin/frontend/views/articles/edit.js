@@ -77,7 +77,7 @@ class ArticlePreviews extends Component {
     const article = this.context.article;
     
     return (
-      <div className="container-fluid">
+      <div className="container">
         <Optional test={article.is_featured}>
           <div className="row">
             <div className="col-lg-12">
