@@ -29,11 +29,4 @@ router.use('/', graphqlHTTP({
   graphiql: nconf.get('NODE_ENV') === 'development',
 }));
 
-export function getProjection(fieldASTs) {
-  return fieldASTs.fieldNodes[0].selectionSet.selections.reduce((projections, selection) => {
-    projections[selection.name.value] = true;
-    return projections;
-  }, {});
-}
-
 export default router;
