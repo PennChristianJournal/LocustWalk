@@ -170,21 +170,32 @@ export default class ArticleListPage extends Component {
           }}>
           
           <ArticleEdit _id={this.state.article && this.state.article._id}>
-            <Optional test={this.state.article}>
-              <ArticleEditPanel
-                imagePreviews
-                onCancel={() => {
-                  this.setState({
-                    article: null,
-                  });
-                }}
-                onDelete={() => {
-                  this.setState({
-                    article: null,
-                  });
-                }}
-              />
-            </Optional>
+            {(article, actions) => {
+              return (
+                <Optional test={this.state.article}>
+                  <ArticleEditPanel
+                    imagePreviews
+                    article={article}
+                    {...actions}
+                    onCancel={() => {
+                      this.setState({
+                        article: null,
+                      });
+                    }}
+                    onDelete={() => {
+                      this.setState({
+                        article: null,
+                      });
+                    }}
+                    onSubmit={() => {
+                      this.setState({
+                        article: null,
+                      });
+                    }}
+                  />
+                </Optional>
+              );
+            }}
           </ArticleEdit>
         </Modal>
         <div className="container" style={{height: '100%'}}>

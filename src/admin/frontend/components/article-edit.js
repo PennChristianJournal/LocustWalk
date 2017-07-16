@@ -27,15 +27,8 @@ class ArticleEdit extends Component {
   constructor(props) {
     super(props);
     this.state = Object.assign({}, props.article);
-  }
-  
-  componentWillReceiveProps(nextProps) {
-    this.setState(nextProps.article || {});
-  }
-  
-  getChildContext() {
-    return {
-      article: this.state,
+    
+    this.actions = {
       updateArticle: (field, value, cb) => {
         this.setState({
           [field]: value,
@@ -60,17 +53,16 @@ class ArticleEdit extends Component {
     };
   }
   
+  componentWillReceiveProps(nextProps) {
+    this.setState(nextProps.article || {});
+  }
   render() {
-    return this.props.loading ? null : this.props.children;
+    return this.props.loading ? null : this.props.children(this.state, this.actions);
   }
 }
 
-ArticleEdit.childContextTypes = {
-  article: PropTypes.object.isRequired,
-  updateArticle: PropTypes.func,
-  submitArticle: PropTypes.func,
-  cancelArticle: PropTypes.func,
-  deleteArticle: PropTypes.func,
+ArticleEdit.propTypes = {
+  children: PropTypes.func.isRequired,
 };
 
 export const ARTICLE_QUERY = gql`

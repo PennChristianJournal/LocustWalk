@@ -62,7 +62,7 @@ export default class ArticleEditPanel extends Component {
   }
   
   componentWillMount() {
-    const article = this.context.article || {};
+    const article = this.props.article || {};
     this.originalDate = article.date;
 
     this.setState({
@@ -97,33 +97,41 @@ export default class ArticleEditPanel extends Component {
     if (file) {
       blob = URL.createObjectURL(file);
     }
-    this.context.updateArticle(prop, blob);
+    this.props.updateArticle(prop, blob);
   }
 
   handleSubmit(event) {
     event.preventDefault();
     if (this.props.getArticleContent) {
       const articleContent = this.props.getArticleContent();
-      this.context.updateArticle('content', articleContent, () => {
-        this.context.submitArticle();
+      this.props.updateArticle('content', articleContent, () => {
+        this.props.submitArticle().then(() => {
+          if (this.props.onSubmit) {
+            this.props.onSubmit(event);
+          }
+        });
       });
     } else {
-      this.context.submitArticle(); 
+      this.props.submitArticle().then(() => {
+        if (this.props.onSubmit) {
+          this.props.onSubmit(event);
+        }
+      });
     }
   }
   
   handleCancel(event) {
-    if (confirm(`Are you sure you want to cancel editing "${this.context.article.title}"? Unsaved changes will be lost!`)) {
+    if (confirm(`Are you sure you want to cancel editing "${this.props.article.title}"? Unsaved changes will be lost!`)) {
       if (this.props.onCancel) {
         this.props.onCancel(event);
       }
-      this.context.cancelArticle();
+      this.props.cancelArticle();
     } 
   }
   
   handleDelete(event) {
-    if (confirm(`Are you sure you want to delete "${this.context.article.title}?"`)) {
-      this.context.deleteArticle().then(() => {
+    if (confirm(`Are you sure you want to delete "${this.props.article.title}?"`)) {
+      this.props.deleteArticle().then(() => {
         if (this.props.onDelete) {
           this.props.onDelete(event);
         }
@@ -136,13 +144,13 @@ export default class ArticleEditPanel extends Component {
     const docId = event.target.elements['doc-id-input'].value;
     if (docId && confirm('Content on this page will be replaced. Are you sure?')) {
       $.post(`/admin/articles/docs/sync/${docId}`, (content) => {
-        this.context.updateArticle('content', content);
+        this.props.updateArticle('content', content);
       });
     }
   }
 
   render() {
-    const article = this.context.article || {};
+    const article = this.props.article || {};
     
     return (
       <div className="admin-sidebar">
@@ -226,14 +234,14 @@ export default class ArticleEditPanel extends Component {
                   <label htmlFor="title-input">Title</label>
                   <input id="title-type" name="title" type="text" className="form-control" placeholder="Article Title"
                       value={article.title}
-                      onChange={ e => this.context.updateArticle('title', e.target.value) } />
+                      onChange={ e => this.props.updateArticle('title', e.target.value) } />
               </div>
               
               <div className="form-group">
                   <label htmlFor="author-input">Author</label>
                   <input id="author-input" name="author" type="text" className="form-control" placeholder="Author"
                       value={article.author}
-                      onChange={ e => this.context.updateArticle('author', e.target.value) } />
+                      onChange={ e => this.props.updateArticle('author', e.target.value) } />
               </div>
               
               <div className="form-group">
@@ -241,14 +249,14 @@ export default class ArticleEditPanel extends Component {
                       <label htmlFor="is_featured-input" className="checkbox-inline">
                           <input id="is_featured-input" name="is_featured" type="checkbox"
                             checked={article.is_featured || false}
-                            onChange={e => this.context.updateArticle('is_featured', e.target.checked) }
+                            onChange={e => this.props.updateArticle('is_featured', e.target.checked) }
                            />
                           Featured
                       </label>
                       <label htmlFor="is_published-input" className="checkbox-inline">
                           <input id="is_published-input" name="is_published" type="checkbox" 
                             checked={article.is_published || false}
-                            onChange={e => this.context.updateArticle('is_published', e.target.checked) }
+                            onChange={e => this.props.updateArticle('is_published', e.target.checked) }
                           />
                           Published
                       </label>
@@ -271,7 +279,7 @@ export default class ArticleEditPanel extends Component {
                   <label htmlFor="slug-input">Slug</label>
                   <input id="slug-input" name="slug" type="text" className="form-control" placeholder="Slug"
                       value={article.slug}
-                      onChange={ e => this.context.updateArticle('slug', e.target.value) } />
+                      onChange={ e => this.props.updateArticle('slug', e.target.value) } />
               </div>
               
               <div className="form-group">
@@ -311,7 +319,7 @@ export default class ArticleEditPanel extends Component {
                   <input ref="response-id-field" name="parent" type="text" readOnly className="form-control" placeholder="Article ID"
                       value={article.parent || ''}
                       onChange={ e => {
-                        this.context.updateArticle('parent', e.target.value);
+                        this.props.updateArticle('parent', e.target.value);
                         // this.props.refreshParent();
                       } }
                   />
@@ -321,7 +329,7 @@ export default class ArticleEditPanel extends Component {
                   <label htmlFor="date-input">Post Date</label>
                   <input type="text" className="form-control"
                     disabled={this.state.dateNow}
-                    onChange={ e => this.context.updateArticle('date', moment(e.target.value || this.originalDate))}
+                    onChange={ e => this.props.updateArticle('date', moment(e.target.value || this.originalDate))}
                     placeholder={moment(this.state.dateNow ? this.state.date : article.date).format('MMM DD, YYYY [at] H:mm:ss')}
                   />
                   <div>
@@ -341,7 +349,7 @@ export default class ArticleEditPanel extends Component {
               <div className="form-group">
                   <label htmlFor="heading-input">Heading Override</label>
                   <input type="text" className="form-control"
-                    onChange={ e => this.context.updateArticle('heading_override', e.target.value) }
+                    onChange={ e => this.props.updateArticle('heading_override', e.target.value) }
                     placeholder={moment(this.state.dateNow ? this.state.date : article.date).format('MMM YYYY [Feature Article]')}
                   />
                   <input name="heading_override" type="hidden" className="form-control"
@@ -359,7 +367,7 @@ export default class ArticleEditPanel extends Component {
   }
 }
 
-ArticleEditPanel.contextTypes = {
+ArticleEditPanel.propTypes = {
   article: PropTypes.object.isRequired,
   updateArticle: PropTypes.func.isRequired,
   submitArticle: PropTypes.func.isRequired,
