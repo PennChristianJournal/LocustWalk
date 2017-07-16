@@ -19,6 +19,7 @@ export default () => (
           <div className="collapse navbar-collapse" id="navbar-collapse">
               <ul className="nav navbar-nav clean">
                   <li><a href="/admin/announcements">Announcements</a></li>
+                  <li><a href="/admin/topics">Topics</a></li>
                   <li><a href="/admin/articles">Articles</a></li>
               </ul>
               <ul className="nav navbar-nav navbar-right clean">
