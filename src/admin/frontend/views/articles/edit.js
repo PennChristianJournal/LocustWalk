@@ -1,6 +1,5 @@
 
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import AdminLayout from '~/admin/frontend/templates/admin-layout';
 import FeatureSlider from '~/common/frontend/components/feature-slider';
 import ArticleMain from '~/common/frontend/components/article-main';
@@ -23,7 +22,7 @@ class ArticleEditor extends Component {
     const MediumEditor = require('medium-editor');
     MediumEditorInsertPlugin($);
 
-    var contentDiv = $(`div[data-article-id="${this.context.article._id}"] .article-content`);
+    var contentDiv = $(`div[data-article-id="${this.props.article._id}"] .article-content`);
 
     this.contentEditor = new MediumEditor(contentDiv, {
       placeholder: {
@@ -64,17 +63,13 @@ class ArticleEditor extends Component {
   }
 
   render() {
-    return <ArticleMain article={this.context.article} />;
+    return <ArticleMain article={this.props.article} />;
   }
 }
 
-ArticleEditor.contextTypes = {
-  article: PropTypes.object.isRequired,
-};
-
 class ArticlePreviews extends Component {
   render() {
-    const article = this.context.article;
+    const article = this.props.article;
     
     return (
       <div className="container">
@@ -95,10 +90,6 @@ class ArticlePreviews extends Component {
   }
 }
 
-ArticlePreviews.contextTypes = {
-  article: PropTypes.object.isRequired,
-};
-
 class ArticleEditPage extends Component {
   getArticleContent() {
     return this.articleEdit.contentEditor.serialize()['element-0'].value;
@@ -109,30 +100,36 @@ class ArticleEditPage extends Component {
     return (
       <AdminLayout>
         <ArticleEdit _id={id}>
-          <div>
-            <div className="container-fluid">
-              <div className="row">
-                <div className="col-lg-3 col-md-4 col-sm-12">
+          {(article, actions) => {
+            return (
+              <div>
+                <div className="container-fluid">
                   <div className="row">
-                    <ArticleEditPanel 
-                      getArticleContent={this.getArticleContent.bind(this)} 
-                      gdriveSync 
-                      imagePreviews
-                      onCancel={() => window.location = '/admin/articles'}
-                      onDelete={() => window.location = '/admin/articles'}
-                    />
+                    <div className="col-lg-3 col-md-4 col-sm-12">
+                      <div className="row">
+                        <ArticleEditPanel 
+                          getArticleContent={this.getArticleContent.bind(this)} 
+                          gdriveSync 
+                          imagePreviews
+                          article={article}
+                          {...actions}
+                          onCancel={() => window.location = '/admin/articles'}
+                          onDelete={() => window.location = '/admin/articles'}
+                        />
+                      </div>
+                    </div>
+    
+                    <div className="col-lg-9 col-md-8 col-sm-12">
+                      <ArticlePreviews article={article} />
+                      <ArticleLayout>
+                        <ArticleEditor article={article} ref={(el) => this.articleEdit = el} />
+                      </ArticleLayout>
+                    </div>
                   </div>
                 </div>
-
-                <div className="col-lg-9 col-md-8 col-sm-12">
-                  <ArticlePreviews />
-                  <ArticleLayout>
-                    <ArticleEditor ref={(el) => this.articleEdit = el} />
-                  </ArticleLayout>
-                </div>
               </div>
-            </div>
-          </div>
+            );
+          }}
         </ArticleEdit>
       </AdminLayout>
     );
