@@ -3,13 +3,16 @@
 import {
   GraphQLString,
   GraphQLList,
+  GraphQLNonNull,
+  GraphQLInt,
+  GraphQLBoolean,
 } from 'graphql/type';
 
 import Topic from '~/common/models/topic';
 import TopicType from '../types/topic';
 import ObjectIDType from '../types/objectID';
 import mongoose from 'mongoose';
-import {getProjection, skipLimitArgs, applySkipLimit} from '../helpers';
+import {getProjection, skipLimitArgs, applySkipLimit, removeEmpty, authenticatedField} from '../helpers';
 
 export const topic = {
   type: TopicType,
@@ -44,12 +47,34 @@ export const topic = {
 
 export const topics = {
   type: new GraphQLList(TopicType),
-  args: skipLimitArgs,
-  resolve: (root, {skip, limit}, context, fieldASTs) => {
-    let q = Topic.find({}, getProjection(fieldASTs));
+  args: Object.assign({
+    is_published: {
+      name: 'is_published',
+      type: GraphQLBoolean,
+    },
+  }, skipLimitArgs),
+  resolve: (root, {is_published, skip, limit}, context, fieldASTs) => {
+    let q = Topic.find(removeEmpty({
+      is_published: authenticatedField(context, is_published, true),
+    }), getProjection(fieldASTs));
     
     q.sort({ createdAt: -1 });
     q = applySkipLimit(q, skip, limit);
     return q.exec();
+  },
+};
+
+export const topicCount = {
+  type: new GraphQLNonNull(GraphQLInt),
+  args: {
+    is_published: {
+      name: 'is_published',
+      type: GraphQLBoolean,
+    },
+  },
+  resolve: (root, {is_published}, context) => {
+    return Topic.count(removeEmpty({
+      is_published: authenticatedField(context, is_published, true),
+    })).exec();
   },
 };
