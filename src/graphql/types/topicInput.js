@@ -12,6 +12,9 @@ export default new GraphQLInputObjectType({
     title: {
       type: GraphQLString,
     },
+    slug: {
+      type: GraphQLString,
+    },
     content: {
       type: GraphQLString,
     },
