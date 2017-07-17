@@ -45,5 +45,8 @@ export default new GraphQLInputObjectType({
     parent: {
       type: GraphQLID,
     },
+    topic: {
+      type: GraphQLID,
+    },
   },
 });

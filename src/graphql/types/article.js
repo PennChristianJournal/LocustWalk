@@ -8,8 +8,10 @@ import {
   GraphQLBoolean,
 } from 'graphql/type';
 
+import Article from '~/common/models/article';
+import Topic from '~/common/models/topic';
 import { GraphQLDateTime } from 'graphql-iso-date';
-
+import TopicType from './topic';
 import {getProjection, htmlPreview} from '../helpers';
 
 export function getArticleProjection(fieldASTs) {
@@ -23,7 +25,7 @@ export function getArticleProjection(fieldASTs) {
 
 export default new GraphQLObjectType({
   name: 'Article',
-  fields: {
+  fields: () => ({
     _id: {
       type: GraphQLID,
     },
@@ -78,5 +80,22 @@ export default new GraphQLObjectType({
     parent: {
       type: GraphQLID,
     },
-  },
+    topicID: {
+      type: GraphQLID,
+      resolve: (root, args, context, fieldASTs) => {
+        return Article.findOne({_id: root._id}, {topic: true}).then(({topic}) => {
+          return Promise.resolve(topic);
+        });
+      },
+    },
+    topic: {
+      type: TopicType,
+      resolve: (root, args, context, fieldASTs) => {
+        return Article.findOne({_id: root._id}, {topic: true}).then(({topic}) => {
+          return Topic.findOne({_id: topic}, getProjection(fieldASTs));
+        });
+      },
+    },
+  }),
 });
+

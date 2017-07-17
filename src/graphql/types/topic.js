@@ -15,7 +15,7 @@ import {skipLimitArgs, applySkipLimit, authenticatedField, removeEmpty, htmlPrev
 
 export default new GraphQLObjectType({
   name: 'Topic',
-  fields: {
+  fields: () => ({
     _id: {
       type: GraphQLID,
     },
@@ -71,6 +71,6 @@ export default new GraphQLObjectType({
         return q.exec();
       },
     },
-  },
+  }),
 });
 
