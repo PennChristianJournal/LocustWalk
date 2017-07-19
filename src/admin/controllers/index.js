@@ -58,6 +58,7 @@ StaticContent.find({name: req.fields.name}, function(err, docs) {
         res.redirect('back');
   })
 });
+
 router.get('/deleteData', function(req,res){
 StaticContent.remove({}, function(err, docs){
   if(err){
