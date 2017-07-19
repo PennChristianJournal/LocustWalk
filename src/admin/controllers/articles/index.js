@@ -15,10 +15,13 @@ import {getJWTClient, getGoogleDriveClient} from '~/admin/googleAPIs';
 import cheerio from 'cheerio';
 import mime from 'mime';
 const driveClient = getJWTClient(['https://www.googleapis.com/auth/drive']);
+import StaticContent from '~/common/models/StaticContent'
 
 const router = new Router();
 
 const views = ViewEngine.getViews('admin');
+
+
 
 router.get('/new', (req, res) => {
   var article = new Article({});
@@ -33,41 +36,6 @@ router.get('/new', (req, res) => {
 router.get('/:id/edit', (req, res) => {
   Renderer.render(req, res, views['admin-articles-edit'], {
     _id: req.params.id,
-  });
-});
-
-router.post('/:id/edit', formidable(), (req, res) => {
-  var condition = {
-    _id: req.params.id,
-  };
-
-  var update = {
-    $set: {
-      is_published: req.fields.is_published,
-      is_featured: req.fields.is_featured,
-      title: req.fields.title,
-      slug: req.fields.slug,
-      author: req.fields.author,
-      heading_override: req.fields.heading_override,
-      content: req.fields.content,
-      parent: req.fields.parent,
-    },
-  };
-
-  if (!mongoose.Types.ObjectId.isValid(req.fields.parent)) {
-    delete update.$set.parent;
-  }
-
-  if (!req.fields.content) {
-    delete update.$set.content;
-  }
-
-  Article.findOneAndUpdate(condition, update, { new: true }, (err, doc) => {
-    if (err) {
-      console.warn(err.message);
-    }
-    //refreshes the page
-    res.redirect('back');
   });
 });
 

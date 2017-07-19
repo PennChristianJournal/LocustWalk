@@ -3,7 +3,6 @@
 import { Router } from 'express';
 import ViewEngine from '~/viewEngine';
 import Renderer from '~/server/renderer';
-
 import StaticContent from '~/common/models/StaticContent'
 const router = new Router();
 
@@ -15,8 +14,6 @@ const views = ViewEngine.getViews('admin');
 Object.keys(views).forEach(key => {
   const view = views[key];
   router.get(view.route, (req, res) => {
-
-
 
     Renderer.render(req, res, view);
   });
@@ -35,10 +32,6 @@ var currentPage =  new StaticContent({
 });
 var query = {name: req.fields.name};
 
-// StaticContent.findOneAndUpdate(query, currentPage, {new:true, upsert:true}, function(err, doc){
-//
-//     return res.redirect("back");
-// });
 
 
 StaticContent.find({name: req.fields.name}, function(err, docs) {
@@ -58,7 +51,6 @@ StaticContent.find({name: req.fields.name}, function(err, docs) {
         res.redirect('back');
   })
 });
-
 router.get('/deleteData', function(req,res){
 StaticContent.remove({}, function(err, docs){
   if(err){
@@ -83,8 +75,7 @@ router.get('/getStaticContent/:id', function(req,res){
 
 
 router.get('/data', function(req,res){
-
-
+  console.log("ASDAD");
 var allData = {};
   StaticContent.find({}, function(err, docs) {
     if (!err){
@@ -95,4 +86,5 @@ var allData = {};
 });
 
 });
+
 export default router;
