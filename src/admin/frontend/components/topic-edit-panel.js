@@ -4,21 +4,18 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {getFileURL} from '~/common/frontend/helpers/file';
 import $ from 'jquery';
-import {graphql, gql, compose} from 'react-apollo';
 
-class TopicEditPanel extends Component {
-  
+class ContentEditor extends Component {
   constructor(props) {
     super(props);
-    this.contentEditor = undefined;
   }
-  
+
   componentDidMount() {
+    this.contentEditor = this.contentEditor && this.contentEditor.destroy();
+
     const MediumEditor = require('medium-editor');
-    
-    var contentDiv = $(this.refs.content);
-    
-    this.contentEditor = new MediumEditor(contentDiv, {
+
+    this.contentEditor = new MediumEditor($(this.refs.container), {
       placeholder: {
         text: 'Topic content...',
         hideOnClick: false,
@@ -40,10 +37,25 @@ class TopicEditPanel extends Component {
         ],
       },
     });
+
+    this.contentEditor.subscribe('blur', (event, editable) => {
+      this.props.onChange(this.contentEditor.serialize()['element-0'].value);
+    });
   }
-  
-  componentWillReceiveProps(nextProps) {
-    this.setState(nextProps.topic || {});
+
+  componentWillUnmount() {
+    this.contentEditor = this.contentEditor && this.contentEditor.destroy();
+  }
+
+  render() {
+    return <div ref="container" dangerouslySetInnerHTML={{__html: this.props.content}}></div>;
+  }
+}
+
+export default class TopicEditPanel extends Component {
+
+  constructor(props) {
+    super(props);
   }
 
   handleImageChange(prop, event) {
@@ -107,9 +119,9 @@ class TopicEditPanel extends Component {
                 value={topic.slug}
                 onChange={ e => { this.props.stage.update('slug', e.target.value); } } />
           </div>
-          
-          <div ref="content" />
-          
+
+          <ContentEditor content={topic.content} onChange={content => { this.props.stage.update('content', content); } } />
+
           <div className="btn-toolbar">
             <button className="btn btn-primary" type="submit">Save</button>
             <a className="btn btn-default" onClick={this.handleCancel.bind(this)}>Cancel</a>
