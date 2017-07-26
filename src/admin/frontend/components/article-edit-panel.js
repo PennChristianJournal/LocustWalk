@@ -314,7 +314,62 @@ export default class ArticleEditPanel extends Component {
                   <input type="text" readOnly className="form-control" placeholder="Article ID" value={article.parent || ''} />
               </div>
 
+              <div className="form-group">
+                <label>Topic</label>
+
+                <TypeaheadInput key={article.topic && article.topic._id} type="text" className="form-control" placeholder="Topic" defaultValue={article.topic && article.topic.title}
+                  typeaheadConfig={{
+                    hint: true,
+                    highlight: true,
+                    minLength: 1,
+                    display: 'title',
+                  }}
+
+                  createBloodhoundConfig={function(Bloodhound) {
+                    return new Bloodhound({
+                      datumTokenizer: Bloodhound.tokenizers.obj.whitespace('title'),
+                      queryTokenizer: Bloodhound.tokenizers.whitespace,
+                      remote: {
+                        url: '%QUERY',
+                        wildcard: '%QUERY',
+                        transport(options, onSuccess, onError) {
+                          let data = {
+                            operationName: 'TopicsQuery',
+                            query: `
+                              query TopicsQuery($title: String!) {
+                                searchTopics(title: $title) {
+                                  _id
+                                  title
+                                }
+                              }
+                            `,
+                            variables: {
+                              title: options.url,
+                            },
+                          };
+                          $.ajax({
+                            type: 'POST',
+                            url: '/graphql',
+                            contentType: 'application/json',
+                            data: JSON.stringify(data),
+                          })
+                          .done(({data: { searchTopics } }) => {onSuccess(searchTopics); })
+                          .fail((request, status, error) => {onError(error); });
+                        },
+                      },
+                    });
+                  }}
+
+                  target={ (value, datum) => {
+                    this.props.stage.update('topicID', value);
+                    this.props.stage.update('topic', datum);
+                  } }
+                  targetField="_id"
+                />
+
+                <input type="text" readOnly className="form-control" placeholder="Topic ID" value={article.topicID || (article.topic && article.topic._id) || ''} />
               </div>
+
               <div className="form-group">
                   <label>Post Date</label>
                   <input type="text" className="form-control"

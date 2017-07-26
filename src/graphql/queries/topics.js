@@ -34,13 +34,13 @@ export const topic = {
     if (!(idOrSlug || _id || slug)) {
       return Promise.reject('No id or slug provided');
     }
-    
+
     let field = (_id || mongoose.Types.ObjectId.isValid(idOrSlug)) ? '_id' : 'slug';
-    
+
     let q = Topic.findOne({
       [field]: _id || slug || idOrSlug,
     }, getProjection(fieldASTs));
-    
+
     return q.exec();
   },
 };
@@ -57,7 +57,7 @@ export const topics = {
     let q = Topic.find(removeEmpty({
       is_published: authenticatedField(context, is_published, true),
     }), getProjection(fieldASTs));
-    
+
     q.sort({ createdAt: -1 });
     q = applySkipLimit(q, skip, limit);
     return q.exec();
@@ -78,3 +78,26 @@ export const topicCount = {
     })).exec();
   },
 };
+
+export const searchTopics = {
+  type: new GraphQLList(TopicType),
+  args: Object.assign({
+    title: {
+      name: 'title',
+      type: new GraphQLNonNull(GraphQLString),
+    },
+  }, skipLimitArgs),
+  resolve: (root, {title, skip, limit}, context, fieldASTs) => {
+    if (!context.isAuthenticated()) {
+      return Promise.reject('Not authenticated');
+    }
+    let q = Topic.find({
+      title: {
+        $regex: new RegExp(`^${title.toLowerCase()}`, 'i'),
+      },
+    }, getProjection(fieldASTs));
+    q = applySkipLimit(q, skip, limit);
+    return q.exec();
+  },
+};
+
