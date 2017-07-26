@@ -4,7 +4,7 @@ import React, {Component} from 'react';
 import AdminLayout from '~/admin/frontend/templates/admin-layout';
 import Modal from '~/admin/frontend/components/modal';
 import Table from '~/admin/frontend/components/table';
-import Optional from '~/common/frontend/components/optional';
+import TopicEdit from '~/admin/frontend/components/topic-edit';
 import TopicEditPanel from '~/admin/frontend/components/topic-edit-panel';
 import {debounce} from 'underscore';
 import {graphql, gql} from 'react-apollo';
@@ -13,7 +13,7 @@ import {headData} from '~/common/frontend/head';
 class TopicList extends Component {
   render() {
     const {topics, setTopic} = this.props;
-    
+
     return (
       <Table className="table table-striped" head={
           <tr>
@@ -86,18 +86,18 @@ const TopicListWithData = graphql(TOPIC_SEARCH_QUERY, {
 class TopicListPage extends Component {
   constructor(props) {
     super(props);
-    
+
     this.state = {
       topic: null,
     };
   }
-  
+
   setTopic(topic) {
     this.setState({
       topic,
     });
   }
-  
+
   componentDidMount() {
     const container = this.refs.list;
     const table = container.childNodes[0];
@@ -106,10 +106,10 @@ class TopicListPage extends Component {
         this.loadMore();
       }
     }, 20, true));
-    
+
     this.loadMore();
   }
-  
+
   loadMore() {
     const container = this.refs.list;
     const table = container.childNodes[0];
@@ -121,46 +121,54 @@ class TopicListPage extends Component {
     const bodyShort = bodyBottom < tableBottom;
 
     if ((bodyShort || atBottom) && this.refs.topicList.renderedElement.props.hasMore()) {
-      this.refs.topicList.renderedElement.props.loadMore().then(this.loadMore.bind(this));
+      let loaded = this.refs.topicList.renderedElement.props.loadMore();
+      if (loaded) {
+        loaded.then(this.loadMore.bind(this));
+      }
     }
   }
-  
+
   render() {
     return (
       <AdminLayout id="admin-page" ref="admin-layout">
-        <Modal
-          isOpen={this.state.topic}
-          title={this.state.topic && `Editing - ${this.state.topic.title}`}
-          confirmClose={() => {
-            return confirm(`Are you sure you want to cancel editing "${this.state.topic.title}"? Unsaved changes will be lost!`);
+        <TopicEdit _id={this.state.topic && this.state.topic._id}>
+          {(props) => {
+            return (
+              <Modal
+                isOpen={this.state.topic}
+                title={`Editing - ${props.stage.values.title}`}
+                confirmClose={() => {
+                  return !props.stage.hasChangedFields() || confirm(`Are you sure you want to cancel editing "${props.stage.values.title}"? Unsaved changes will be lost!`);
+                }}
+                onClose={() => {
+                  this.setState({
+                    topic: null,
+                  });
+                }}>
+
+                  <TopicEditPanel
+                    {...props}
+                    onCancel={() => {
+                      this.setState({
+                        topic: null,
+                      });
+                    }}
+                    onDelete={() => {
+                      this.setState({
+                        topic: null,
+                      });
+                    }}
+                    onSubmit={() => {
+                      this.setState({
+                        topic: null,
+                      });
+                    }}
+                  />
+              </Modal>
+            );
           }}
-          onClose={() => {
-            this.setState({
-              topic: null,
-            });
-          }}>
-          
-          <Optional test={this.state.topic}>
-            <TopicEditPanel
-              _id={this.state.topic && this.state.topic._id}
-              onCancel={() => {
-                this.setState({
-                  topic: null,
-                });
-              }}
-              onDelete={() => {
-                this.setState({
-                  topic: null,
-                });
-              }}
-              onSubmit={() => {
-                this.setState({
-                  topic: null,
-                });
-              }}
-            />
-          </Optional>
-        </Modal>
+        </TopicEdit>
+
         <div className="container" style={{height: '100%'}}>
             <div className="admin-list-view">
                 <div className="admin-list-header">

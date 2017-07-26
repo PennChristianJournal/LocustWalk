@@ -5,22 +5,22 @@ import ArticleEdit from '~/admin/frontend/components/article-edit';
 import ArticleEditPanel from '~/admin/frontend/components/article-edit-panel';
 import Modal from '~/admin/frontend/components/modal';
 import Table from '~/admin/frontend/components/table';
-import Optional from '~/common/frontend/components/optional';
 import moment from 'moment';
 import queryString from 'query-string';
 import {debounce} from 'underscore';
 import {graphql, gql} from 'react-apollo';
 
 class ArticleList extends Component {
-  
+
   render() {
     const {articles, setArticle} = this.props;
-    
+
     return (
       <Table className="table table-striped" head={
           <tr>
               <th>Title</th>
               <th></th>
+              <th>Topic</th>
               <th>Permalink</th>
               <th><i className="fa fa-star" /></th>
               <th><i className="fa fa-check" /></th>
@@ -32,6 +32,7 @@ class ArticleList extends Component {
               <tr key={i} onClick={() => setArticle(article) }>
                   <td><a href={`/articles/${article.slug}`}>{article.title}</a></td>
                   <td><a href={`/admin/articles/${article._id}/edit`} className="btn btn-default">Edit</a></td>
+                  <td>{article.topic && article.topic.title}</td>
                   <td><a href={`/articles/${article._id}`}><i className="fa fa-link" /></a></td>
                   <td>{article.is_featured ? <i className="fa fa-star" /> : null}</td>
                   <td>{article.is_published ? <i className="fa fa-check" /> : null}</td>
@@ -53,6 +54,9 @@ const ARTICLE_SEARCH_QUERY = gql`
       date
       is_featured
       is_published
+      topic {
+        title
+      }
     }
     articleCount
   }
@@ -121,7 +125,7 @@ export default class ArticleListPage extends Component {
         this.loadMoreArticles();
       }
     }, 20, true));
-    
+
     this.loadMoreArticles();
   }
 
@@ -150,33 +154,34 @@ export default class ArticleListPage extends Component {
     const bodyShort = bodyBottom < tableBottom;
 
     if ((bodyShort || atBottom) && this.refs.articleList.renderedElement.props.hasMore()) {
-      this.refs.articleList.renderedElement.props.loadMore().then(this.loadMoreArticles.bind(this));
+      let loaded = this.refs.articleList.renderedElement.props.loadMore();
+      if (loaded) {
+        loaded.then(this.loadMoreArticles.bind(this));
+      }
     }
   }
 
   render() {
     return (
       <AdminLayout id="admin-page" ref="admin-layout">
-        <Modal
-          isOpen={this.state.article}
-          title={this.state.article && `Editing - ${this.state.article.title}`}
-          confirmClose={() => {
-            return confirm(`Are you sure you want to cancel editing "${this.state.article.title}"? Unsaved changes will be lost!`);
-          }}
-          onClose={() => {
-            this.setState({
-              article: null,
-            });
-          }}>
-          
-          <ArticleEdit _id={this.state.article && this.state.article._id}>
-            {(article, actions) => {
-              return (
-                <Optional test={this.state.article}>
+        <ArticleEdit _id={this.state.article && this.state.article._id}>
+          {(props) => {
+            return (
+              <Modal
+                isOpen={this.state.article}
+                title={`Editing - ${props.stage.values.title}`}
+                confirmClose={() => {
+                  return !props.stage.hasChangedFields() || confirm(`Are you sure you want to cancel editing "${props.stage.values.title}"? Unsaved changes will be lost!`);
+                }}
+                onClose={() => {
+                  this.setState({
+                    article: null,
+                  });
+                }}>
+
                   <ArticleEditPanel
                     imagePreviews
-                    article={article}
-                    {...actions}
+                    {...props}
                     onCancel={() => {
                       this.setState({
                         article: null,
@@ -193,11 +198,11 @@ export default class ArticleListPage extends Component {
                       });
                     }}
                   />
-                </Optional>
-              );
-            }}
-          </ArticleEdit>
-        </Modal>
+              </Modal>
+            );
+          }}
+        </ArticleEdit>
+
         <div className="container" style={{height: '100%'}}>
             <div className="admin-list-view">
                 <div className="admin-list-header">

@@ -70,7 +70,7 @@ class ArticleEditor extends Component {
 class ArticlePreviews extends Component {
   render() {
     const article = this.props.article;
-    
+
     return (
       <div className="container">
         <Optional test={article.is_featured}>
@@ -100,29 +100,28 @@ class ArticleEditPage extends Component {
     return (
       <AdminLayout>
         <ArticleEdit _id={id}>
-          {(article, actions) => {
+          {props => {
             return (
               <div>
                 <div className="container-fluid">
                   <div className="row">
                     <div className="col-lg-3 col-md-4 col-sm-12">
                       <div className="row">
-                        <ArticleEditPanel 
-                          getArticleContent={this.getArticleContent.bind(this)} 
-                          gdriveSync 
+                        <ArticleEditPanel
+                          getArticleContent={this.getArticleContent.bind(this)}
+                          gdriveSync
                           imagePreviews
-                          article={article}
-                          {...actions}
+                          {...props}
                           onCancel={() => window.location = '/admin/articles'}
                           onDelete={() => window.location = '/admin/articles'}
                         />
                       </div>
                     </div>
-    
+
                     <div className="col-lg-9 col-md-8 col-sm-12">
-                      <ArticlePreviews article={article} />
+                      <ArticlePreviews article={props.stage.values} />
                       <ArticleLayout>
-                        <ArticleEditor article={article} ref={(el) => this.articleEdit = el} />
+                        <ArticleEditor article={props.stage.values} ref={(el) => this.articleEdit = el} />
                       </ArticleLayout>
                     </div>
                   </div>
