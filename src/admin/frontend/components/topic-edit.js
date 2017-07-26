@@ -2,7 +2,7 @@
 
 import {Component} from 'react';
 import PropTypes from 'prop-types';
-import {compose, graphql, gql} from 'react-apollo';
+import {compose, graphql} from 'react-apollo';
 import { editingContext } from './editing-context';
 import {TOPIC_QUERY} from '../gql/queries';
 import {TOPIC_NEW, TOPIC_UPDATE, TOPIC_DELETE} from '../gql/mutations';
@@ -109,9 +109,9 @@ export default compose(
             }, {});
 
           if (isNew) {
-              return ownProps.newTopic(params)
+            return ownProps.newTopic(params);
           } else {
-              return ownProps.updateTopic(params);
+            return ownProps.updateTopic(params);
           }
         },
         cancel(cb) {
@@ -120,7 +120,7 @@ export default compose(
         delete() {
           return ownProps.deleteTopic();
         },
-      }
-    }
+      };
+    },
   }),
 )(TopicEdit);
