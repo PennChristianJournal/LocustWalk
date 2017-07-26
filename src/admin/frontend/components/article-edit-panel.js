@@ -1,3 +1,4 @@
+'use strict';
 
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
@@ -36,9 +37,6 @@ const ResponseToInput = graphql(PARENT_QUERY, {
     };
   },
 })( ({children, parent}) => {
-  if (!parent) {
-    return null;
-  }
   if (Array.isArray(children)) {
     return children.map(child => {
       if (React.isValidElement(child)) {
@@ -60,7 +58,7 @@ export default class ArticleEditPanel extends Component {
   constructor(props) {
     super(props);
   }
-  
+
   componentWillMount() {
     const article = this.props.article || {};
     this.originalDate = article.date;
@@ -97,68 +95,53 @@ export default class ArticleEditPanel extends Component {
     if (file) {
       blob = URL.createObjectURL(file);
     }
-    this.props.updateArticle(prop, blob);
+    this.props.stage.update(prop, blob);
   }
 
   handleSubmit(event) {
     event.preventDefault();
     if (this.props.getArticleContent) {
       const articleContent = this.props.getArticleContent();
-      this.props.updateArticle('content', articleContent, () => {
-        this.props.submitArticle().then(() => {
-          if (this.props.onSubmit) {
-            this.props.onSubmit(event);
-          }
-        });
+      this.props.stage.update('content', articleContent, () => {
+        this.props.submit().then(this.props.onSubmit);
       });
     } else {
-      this.props.submitArticle().then(() => {
-        if (this.props.onSubmit) {
-          this.props.onSubmit(event);
-        }
-      });
+      this.props.submit().then(this.props.onSubmit);
     }
   }
-  
+
   handleCancel(event) {
-    if (confirm(`Are you sure you want to cancel editing "${this.props.article.title}"? Unsaved changes will be lost!`)) {
-      if (this.props.onCancel) {
-        this.props.onCancel(event);
-      }
-      this.props.cancelArticle();
-    } 
-  }
-  
-  handleDelete(event) {
-    if (confirm(`Are you sure you want to delete "${this.props.article.title}?"`)) {
-      this.props.deleteArticle().then(() => {
-        if (this.props.onDelete) {
-          this.props.onDelete(event);
-        }
-      });
+    if (!this.props.stage.hasChangedFields() || confirm(`Are you sure you want to cancel editing "${this.props.stage.values.title}"? Unsaved changes will be lost!`)) {
+      this.props.cancel(this.props.onCancel);
     }
   }
-  
+
+  handleDelete(event) {
+    if (confirm(`Are you sure you want to delete "${this.props.stage.values.title}?"`)) {
+      this.props.delete().then(this.props.onDelete);
+    }
+  }
+
   syncArticle(event) {
     event.preventDefault();
     const docId = event.target.elements['doc-id-input'].value;
     if (docId && confirm('Content on this page will be replaced. Are you sure?')) {
       $.post(`/admin/articles/docs/sync/${docId}`, (content) => {
-        this.props.updateArticle('content', content);
+        this.props.stage.update('content', content);
       });
     }
   }
 
   render() {
-    const article = this.props.article || {};
-    
+    const article = this.props.stage.values;
+
     return (
       <div className="admin-sidebar">
           <style dangerouslySetInnerHTML={{__html: `
             .twitter-typeahead {
               display: block!important;
             }
-    
+
             .tt-dropdown-menu {
               width: 100%;
               & > div {
@@ -176,16 +159,16 @@ export default class ArticleEditPanel extends Component {
                 margin: 0;
               }
             }
-    
+
             .tt-suggestion.tt-cursor,.tt-suggestion:hover {
               color: #fff;
               background-color: #0097cf;
             }
-    
+
             .tt-hint {
               color: #999
             }
-    
+
             .tt-menu {
               width: 100%;
               background-color: white;
@@ -227,76 +210,90 @@ export default class ArticleEditPanel extends Component {
                 </div>
             </form>
           </Optional>
-          <form onSubmit={this.handleSubmit.bind(this)} className="form" key={article._id} action={`/admin/articles/${article._id}/edit`} method="post" encType="multipart/form-data">
+          <form onSubmit={this.handleSubmit.bind(this)} className="form" key={article._id}>
               {this.props.getArticleContent ? <input type="hidden" name="content" /> : null }
-              
+
               <div className="form-group">
-                  <label htmlFor="title-input">Title</label>
-                  <input id="title-type" name="title" type="text" className="form-control" placeholder="Article Title"
-                      value={article.title}
-                      onChange={ e => this.props.updateArticle('title', e.target.value) } />
+                  <label>Title</label>
+                  <input type="text" className="form-control"
+                    placeholder="Article Title"
+                    value={article.title}
+                    onChange={e => this.props.stage.update('title', e.target.value)}
+                  />
               </div>
-              
+
               <div className="form-group">
-                  <label htmlFor="author-input">Author</label>
-                  <input id="author-input" name="author" type="text" className="form-control" placeholder="Author"
-                      value={article.author}
-                      onChange={ e => this.props.updateArticle('author', e.target.value) } />
+                  <label>Author</label>
+                  <input type="text" className="form-control"
+                    placeholder="Author"
+                    value={article.author}
+                    onChange={e => this.props.stage.update('author', e.target.value)}
+                  />
               </div>
-              
+
               <div className="form-group">
                   <div className="checkbox">
-                      <label htmlFor="is_featured-input" className="checkbox-inline">
-                          <input id="is_featured-input" name="is_featured" type="checkbox"
+                      <label className="checkbox-inline">
+                          <input type="checkbox"
                             checked={article.is_featured || false}
-                            onChange={e => this.props.updateArticle('is_featured', e.target.checked) }
+                            onChange={e => this.props.stage.update('is_featured', e.target.checked) }
                            />
                           Featured
                       </label>
-                      <label htmlFor="is_published-input" className="checkbox-inline">
-                          <input id="is_published-input" name="is_published" type="checkbox" 
+                      <label className="checkbox-inline">
+                          <input type="checkbox"
                             checked={article.is_published || false}
-                            onChange={e => this.props.updateArticle('is_published', e.target.checked) }
+                            onChange={e => this.props.stage.update('is_published', e.target.checked) }
                           />
                           Published
                       </label>
                   </div>
               </div>
-              
+
               <div className="form-group">
-                  <label htmlFor="cover-photo-input">Cover Photo</label>
-                  { this.props.imagePreviews ? <img style={{maxWidth: '200px', display: 'block'}} src={article.cover ? getFileURL(article.cover, article.cover_preview_img) : ''} /> : null }
-                  <input id="cover-photo-input" name="cover" type="file" accept="image/*" onChange={this.handleImageChange.bind(this, 'cover_preview_img')} />
+                  <label>Cover Photo</label>
+                  <Optional test={this.props.imagePreviews}>
+                      <img
+                        style={{maxWidth: '200px', display: 'block'}}
+                        src={article.cover ? getFileURL(article.cover, article.cover_preview_img) : ''}
+                      />
+                  </Optional>
+                  <input type="file" accept="image/*" onChange={this.handleImageChange.bind(this, 'cover_preview_img')} />
               </div>
-              
+
               <div className="form-group">
-                  <label htmlFor="thumbnail-input">Thumbnail</label>
-                  { this.props.imagePreviews ? <img style={{maxWidth: '200px', display: 'block'}} src={article.thumb ? getFileURL(article.thumb, article.thumb_preview_img) : ''} /> : null }
-                  <input id="thumbnail-input" name="thumb" type="file" accept="image/*" onChange={this.handleImageChange.bind(this, 'thumb_preview_img')} />
+                  <label>Thumbnail</label>
+                  <Optional test={this.props.imagePreviews}>
+                      <img
+                        style={{maxWidth: '200px', display: 'block'}}
+                        src={article.thumb ? getFileURL(article.thumb, article.thumb_preview_img) : ''}
+                      />
+                  </Optional>
+                  <input type="file" accept="image/*" onChange={this.handleImageChange.bind(this, 'thumb_preview_img')} />
               </div>
-              
+
               <div className="form-group">
                   <label htmlFor="slug-input">Slug</label>
                   <input id="slug-input" name="slug" type="text" className="form-control" placeholder="Slug"
                       value={article.slug}
-                      onChange={ e => this.props.updateArticle('slug', e.target.value) } />
+                      onChange={ e => this.props.stage.update('slug', e.target.value) } />
               </div>
-              
+
               <div className="form-group">
-                  <label htmlFor="response-to-input">Response To</label>
-                  
+                  <label>Response To</label>
                   <ResponseToInput article={article}>
                     {({parent}) => {
+                      parent = parent || {};
                       return (
                         <TypeaheadInput key={parent._id} type="text" className="form-control" placeholder="Response To..." defaultValue={parent.title}
-                     
+
                           typeaheadConfig={{
                             hint: true,
                             highlight: true,
                             minLength: 1,
                             display: 'title',
                           }}
-                     
+
                           createBloodhoundConfig={function(Bloodhound) {
                             return new Bloodhound({
                               datumTokenizer: Bloodhound.tokenizers.obj.whitespace('title'),
@@ -307,29 +304,22 @@ export default class ArticleEditPanel extends Component {
                               },
                             });
                           }}
-                     
-                          target={this.refs['response-id-field']}
+
+                          target={ value => { this.props.stage.update('parent', value); } }
                           targetField="_id"
                         />
                       );
                     }}
                   </ResponseToInput>
-                  
-
-                  <input ref="response-id-field" name="parent" type="text" readOnly className="form-control" placeholder="Article ID"
-                      value={article.parent || ''}
-                      onChange={ e => {
-                        this.props.updateArticle('parent', e.target.value);
-                        // this.props.refreshParent();
-                      } }
-                  />
+                  <input type="text" readOnly className="form-control" placeholder="Article ID" value={article.parent || ''} />
+              </div>
 
               </div>
               <div className="form-group">
-                  <label htmlFor="date-input">Post Date</label>
+                  <label>Post Date</label>
                   <input type="text" className="form-control"
                     disabled={this.state.dateNow}
-                    onChange={ e => this.props.updateArticle('date', moment(e.target.value || this.originalDate))}
+                    onChange={ e => this.props.stage.update('date', moment(e.target.value || this.originalDate))}
                     placeholder={moment(this.state.dateNow ? this.state.date : article.date).format('MMM DD, YYYY [at] H:mm:ss')}
                   />
                   <div>
@@ -347,9 +337,9 @@ export default class ArticleEditPanel extends Component {
 
               </div>
               <div className="form-group">
-                  <label htmlFor="heading-input">Heading Override</label>
+                  <label>Heading Override</label>
                   <input type="text" className="form-control"
-                    onChange={ e => this.props.updateArticle('heading_override', e.target.value) }
+                    onChange={ e => this.props.stage.update('heading_override', e.target.value) }
                     placeholder={moment(this.state.dateNow ? this.state.date : article.date).format('MMM YYYY [Feature Article]')}
                   />
                   <input name="heading_override" type="hidden" className="form-control"
@@ -368,10 +358,9 @@ export default class ArticleEditPanel extends Component {
 }
 
 ArticleEditPanel.propTypes = {
-  article: PropTypes.object.isRequired,
-  updateArticle: PropTypes.func.isRequired,
-  submitArticle: PropTypes.func.isRequired,
-  cancelArticle: PropTypes.func.isRequired,
-  deleteArticle: PropTypes.func.isRequired,
+  stage: PropTypes.object.isRequired,
+  submit: PropTypes.func.isRequired,
+  cancel: PropTypes.func.isRequired,
+  delete: PropTypes.func.isRequired,
 };
 
