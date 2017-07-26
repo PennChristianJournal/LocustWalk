@@ -10,40 +10,46 @@ class Modal extends Component {
     this.state = {
       isOpen: props.isOpen,
       isHidden: true,
+      opening: false,
     };
   }
-  
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.isOpen != this.state.isOpen) {
       this.setState({
-        isOpen: nextProps.isOpen,
         isHidden: false,
+        opening: true,
+      }, () => {
+        this.setState({
+          isOpen: nextProps.isOpen,
+          opening: false,
+        });
       });
     }
   }
-  
+
   handleClose() {
     if (!!this.props.confirmClose && this.props.confirmClose()) {
       if (this.props.onClose) {
         this.props.onClose();
       }
-  
+
       this.setState({
         isOpen: false,
       });
     }
   }
-  
+
   render() {
-    
-    if (!this.state.isOpen && !this.state.isHidden) {
+
+    if (!this.state.isOpen && !this.state.isHidden && !this.state.opening) {
       setTimeout(() => {
         this.setState({
           isHidden: true,
         });
       }, 300);
     }
-    
+
     return (
       <div className={classnames({
         'modal-open': !this.state.isHidden,
@@ -72,7 +78,7 @@ class Modal extends Component {
       </div>
     );
   }
-  
+
 }
 
 export default Modal;
