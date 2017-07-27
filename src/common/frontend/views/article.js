@@ -15,7 +15,11 @@ const ARTICLE_QUERY = gql`
       author
       content
       metaDescription: preview(length: 160)
-      parent
+      parent {
+        _id
+        title
+        slug
+      }
     }
   }
 `;
