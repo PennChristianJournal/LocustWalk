@@ -23,7 +23,7 @@ export function getArticleProjection(fieldASTs) {
   return projection;
 }
 
-export default new GraphQLObjectType({
+const ArticleType = new GraphQLObjectType({
   name: 'Article',
   fields: () => ({
     _id: {
@@ -77,8 +77,19 @@ export default new GraphQLObjectType({
     thumb: {
       type: GraphQLID,
     },
-    parent: {
+    parentID: {
       type: GraphQLID,
+    },
+    parent: {
+      type: ArticleType,
+      resolve: (root, args, context, fieldASTs) => {
+        return Article.findOne({_id: root._id}, {parent: true}).then(({parent}) => {
+          if (!parent) {
+            return Promise.resolve(null);
+          }
+          return Article.findOne({_id: parent}, getArticleProjection(fieldASTs));
+        });
+      },
     },
     topicID: {
       type: GraphQLID,
@@ -92,6 +103,9 @@ export default new GraphQLObjectType({
       type: TopicType,
       resolve: (root, args, context, fieldASTs) => {
         return Article.findOne({_id: root._id}, {topic: true}).then(({topic}) => {
+          if (!topic) {
+            return Promise.resolve(null);
+          }
           return Topic.findOne({_id: topic}, getProjection(fieldASTs));
         });
       },
@@ -99,3 +113,4 @@ export default new GraphQLObjectType({
   }),
 });
 
+export default ArticleType;
