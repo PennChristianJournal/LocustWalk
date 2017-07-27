@@ -20,7 +20,7 @@ export const newTopic = {
     if (!context.isAuthenticated()) {
       return Promise.reject('Not Authenticated');
     }
-    
+
     return (new Topic(topic)).save(getProjection(fieldASTs));
   },
 };
@@ -41,7 +41,7 @@ export const updateTopic = {
     if (!context.isAuthenticated()) {
       return Promise.reject('Not Authenticated');
     }
-    
+
     return Topic.findOne({_id}).then(result => {
       Object.assign(result, topic);
       return result.save(getProjection(fieldASTs));
@@ -61,7 +61,7 @@ export const deleteTopic = {
     if (!context.isAuthenticated()) {
       return Promise.reject('Not Authenticated');
     }
-    
+
     return Topic.findOneAndRemove({_id}, getProjection(fieldASTs));
   },
 };

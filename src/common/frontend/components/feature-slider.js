@@ -37,7 +37,7 @@ export default class FeatureSlider extends Component {
       }
     }
   }
-  
+
   checkLoadMore() {
     if (this.props.loadMore) {
       if (this.props.articles.length - this.state.idx < 2) {
@@ -54,7 +54,7 @@ export default class FeatureSlider extends Component {
   componentDidMount() {
     this.setupInterval();
   }
-  
+
   slideLeft() {
     this.setState({
       autoscroll: false,
@@ -74,7 +74,7 @@ export default class FeatureSlider extends Component {
     return (
       <div className="featured-view">
           <div className="featured-wrapper" style={{left: this.state.idx * -100 + '%'}}>
-          {articles.map((article, i) => 
+          {articles.map((article, i) =>
             <FeatureBlock article={article} key={i} />
           )}
           </div>

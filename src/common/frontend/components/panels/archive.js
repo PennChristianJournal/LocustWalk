@@ -42,6 +42,6 @@ export default graphql(ARCHIVE_QUERY, {
   },
 })( ({featuredArticles}) => {
   featuredArticles = featuredArticles || [];
-  
+
   return <ArchivePanel articles={featuredArticles} />;
 });

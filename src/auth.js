@@ -34,30 +34,30 @@ passport.deserializeUser(function(obj, cb) {
 });
 
 module.exports = function(router) {
-  
+
   router.use(cookieParser());
-  
+
   const RediStore = connectRedis(session);
   const redisStore = new RediStore({
     client: redis.createClient(nconf.get('REDIS_URL')),
   });
-  
+
   router.use(session({
     secret: nconf.get('cookie_secret'),
     saveUninitialized: true,
     resave: true,
     store: redisStore.domain ? redisStore : undefined,
   }));
-  
+
   router.use(passport.initialize());
   router.use(passport.session());
-  
+
   const googleAuth = passport.authenticate('google', {
     scope: [
       'https://www.googleapis.com/auth/userinfo.email',
     ],
   });
-  
+
   function devAuth(req, res, next) {
     req.login({
       name: 'dev',
@@ -69,7 +69,7 @@ module.exports = function(router) {
       }
     });
   }
-  
+
   router.get('/admin/login', nconf.get('NODE_ENV') === 'development' ? devAuth : googleAuth);
 
   router.get('/admin/login/callback', passport.authenticate('google', {

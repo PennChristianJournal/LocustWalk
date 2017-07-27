@@ -11,7 +11,7 @@ class FeatureThumb extends Component {
   render() {
     const article = this.props.article;
     return (
-      <div 
+      <div
           className={this.props.response ? 'feature-response' : 'featured'}
           style={this.props.single ? {width: '100%'} : null}>
 
