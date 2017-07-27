@@ -15,7 +15,10 @@ export const ARTICLE_QUERY = gql`
       is_featured
       cover
       thumb
-      parent
+      parent {
+        _id
+        title
+      }
       topic {
         _id
         title
