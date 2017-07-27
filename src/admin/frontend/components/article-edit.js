@@ -17,7 +17,7 @@ const editableArticleFields = [
   'is_featured',
   'cover',
   'thumb',
-  'parent',
+  'parentID',
   'topicID',
 ];
 
@@ -35,6 +35,8 @@ function getInputKey(key) {
   switch (key) {
     case 'topicID':
       return 'topic';
+    case 'parentID':
+      return 'parent';
     default:
       return key;
   }

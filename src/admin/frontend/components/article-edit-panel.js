@@ -7,52 +7,6 @@ import TypeaheadInput from './typeahead-input';
 import moment from 'moment';
 import {getFileURL} from '~/common/frontend/helpers/file';
 import $ from 'jquery';
-import {graphql, gql} from 'react-apollo';
-
-const PARENT_QUERY = gql`
-  query ParentQuery($_id: ObjectID!) {
-    article(_id: $_id) {
-      _id
-      title
-    }
-  }
-`;
-
-const ResponseToInput = graphql(PARENT_QUERY, {
-  skip(props) {
-    return !props.article.parent;
-  },
-  options(props) {
-    return {
-      variables: {
-        _id: props.article.parent,
-      },
-    };
-  },
-  props({ ownProps, data: { loading, article }}) {
-    return {
-      loading,
-      parent: article || {},
-      children: ownProps.children,
-    };
-  },
-})( ({children, parent}) => {
-  if (Array.isArray(children)) {
-    return children.map(child => {
-      if (React.isValidElement(child)) {
-        return React.cloneElement(child, {parent});
-      } else {
-        return child({parent});
-      }
-    });
-  } else {
-    if (React.isValidElement(children)) {
-      return React.cloneElement(children, {parent});
-    } else {
-      return children({parent});
-    }
-  }
-});
 
 export default class ArticleEditPanel extends Component {
   constructor(props) {
@@ -280,38 +234,58 @@ export default class ArticleEditPanel extends Component {
               </div>
 
               <div className="form-group">
-                  <label>Response To</label>
-                  <ResponseToInput article={article}>
-                    {({parent}) => {
-                      parent = parent || {};
-                      return (
-                        <TypeaheadInput key={parent._id} type="text" className="form-control" placeholder="Response To..." defaultValue={parent.title}
+                <label>Response To</label>
+                <TypeaheadInput key={article.parent && article.parent._id} type="text" className="form-control" placeholder="Response To..." defaultValue={article.parent && article.parent.title}
 
-                          typeaheadConfig={{
-                            hint: true,
-                            highlight: true,
-                            minLength: 1,
-                            display: 'title',
-                          }}
+                  typeaheadConfig={{
+                    hint: true,
+                    highlight: true,
+                    minLength: 1,
+                    display: 'title',
+                  }}
 
-                          createBloodhoundConfig={function(Bloodhound) {
-                            return new Bloodhound({
-                              datumTokenizer: Bloodhound.tokenizers.obj.whitespace('title'),
-                              queryTokenizer: Bloodhound.tokenizers.whitespace,
-                              remote: {
-                                url: '/admin/articles/search?title=%QUERY',
-                                wildcard: '%QUERY',
-                              },
-                            });
-                          }}
+                  createBloodhoundConfig={function(Bloodhound) {
+                    return new Bloodhound({
+                      datumTokenizer: Bloodhound.tokenizers.obj.whitespace('title'),
+                      queryTokenizer: Bloodhound.tokenizers.whitespace,
+                      remote: {
+                        url: '%QUERY',
+                        wildcard: '%QUERY',
+                        transport(options, onSuccess, onError) {
+                          let data = {
+                            operationName: 'ArticlesQuery',
+                            query: `
+                              query ArticlesQuery($title: String!) {
+                                searchArticles(title: $title) {
+                                  _id
+                                  title
+                                }
+                              }
+                            `,
+                            variables: {
+                              title: options.url,
+                            },
+                          };
+                          $.ajax({
+                            type: 'POST',
+                            url: '/graphql',
+                            contentType: 'application/json',
+                            data: JSON.stringify(data),
+                          })
+                          .done(({data: { searchArticles } }) => {onSuccess(searchArticles); })
+                          .fail((request, status, error) => {onError(error); });
+                        },
+                      },
+                    });
+                  }}
 
-                          target={ value => { this.props.stage.update('parent', value); } }
-                          targetField="_id"
-                        />
-                      );
-                    }}
-                  </ResponseToInput>
-                  <input type="text" readOnly className="form-control" placeholder="Article ID" value={article.parent || ''} />
+                  target={ (value, datum) => {
+                    this.props.stage.update('parentID', value);
+                    this.props.stage.update('parent', datum);
+                  } }
+                  targetField="_id"
+                />
+                <input type="text" readOnly className="form-control" placeholder="Article ID" value={article.parentID || (article.parent && article.parent._id) || ''} />
               </div>
 
               <div className="form-group">
