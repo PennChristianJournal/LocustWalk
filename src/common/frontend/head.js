@@ -71,7 +71,7 @@ export function makeHeadContext() {
         property: 'article:published_time',
       },
     },
-    link: [ 
+    link: [
       {
         href: '/img/favicon.ico',
         rel: 'icon',
@@ -109,9 +109,9 @@ export function makeHeadContext() {
       },
     ],
   };
-  
+
   class HeadContext extends Component {
-    
+
     constructor(props) {
       super(props);
 
@@ -121,12 +121,12 @@ export function makeHeadContext() {
             const paramsArray = params;
             paramsArray.forEach(params => {
               if (!data.link.map(p => p.href).includes(params.href)) {
-                data.link.push(params);  
+                data.link.push(params);
               }
             });
           } else {
             if (!data.link.map(p => p.href).includes(params.href)) {
-              data.link.push(params);  
+              data.link.push(params);
             }
           }
         },
@@ -138,24 +138,24 @@ export function makeHeadContext() {
         },
       };
     }
-  
+
     getChildContext() {
       return {
         head: this.head,
       };
     }
-    
+
     render() {
       return this.props.children;
     }
   }
-  
+
   HeadContext.childContextTypes = {
     head: PropTypes.object,
   };
-  
+
   HeadContext.data = data;
-  
+
   return HeadContext;
 }
 

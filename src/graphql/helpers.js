@@ -37,7 +37,7 @@ export function applySkipLimit(query, skip, limit) {
   if (limit) {
     query = query.limit(limit);
   }
-  
+
   return query;
 }
 
@@ -49,12 +49,12 @@ export function trim(content, length, elipsis) {
   if (!content) {
     return content;
   }
-  
+
   if (elipsis) {
     length -= 3;
   }
   length = Math.max(0, length);
-  
+
   if (content.length > length) {
     content = content.substring(0, length);
     if (elipsis) {
@@ -68,11 +68,11 @@ export function htmlPreview(content, length, elipsis) {
   if (!content) {
     return content;
   }
-  
+
   content = content
     .replace(/<sup><a\b[^>]*>\[\d+\]<\/a><\/sup>/ig, '')
     .replace(/(<([^>]+)>)/ig, '')
     .replace(/&nbsp;/ig, ' ');
-    
+
   return trim(content, length, elipsis);
 }

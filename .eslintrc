@@ -3,5 +3,6 @@
     "rules": {
         "max-len": "off",
         "consistent-return": "off",
+        "no-trailing-spaces": "error",
     }
 }

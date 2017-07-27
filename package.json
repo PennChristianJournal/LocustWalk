@@ -7,7 +7,8 @@
     "postinstall": "bower install",
     "webpack": "webpack --watch",
     "lint": "eslint src",
-    "lint-watch": "esw -w --changed src"
+    "lint-watch": "esw -w --changed src",
+    "autoformat": "eslint src --fix"
   },
   "dependencies": {
     "apollo-client": "^1.7.0",
