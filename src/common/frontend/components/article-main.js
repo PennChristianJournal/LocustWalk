@@ -8,47 +8,6 @@ import {getFileURL} from '../helpers/file';
 import {graphql, gql} from 'react-apollo';
 import {headData} from '~/common/frontend/head';
 
-const PARENT_QUERY = gql`
-  query ParentQuery($_id: ObjectID!) {
-    article(_id: $_id) {
-      _id
-      title
-      slug
-    }
-  }
-`;
-
-const ResponseTo = graphql(PARENT_QUERY, {
-  skip(props) {
-    return !props._id;
-  },
-  options(props) {
-    return {
-      variables: {
-        _id: props._id,
-      },
-    };
-  },
-  props({ data: { loading, article }}) {
-    return {
-      loading,
-      article,
-    };
-  },
-})( ({loading, article}) => {
-  if (loading || !article) {
-    return null;
-  } else {
-    return (
-      <div className="response-to" data-article-id={article._id}>
-          <h2>In Response To:&nbsp;
-              <a className="response-title" href={`/articles/${article.slug}`} dangerouslySetInnerHTML={{__html: article.title}}></a>
-          </h2>
-      </div>
-    );
-  }
-});
-
 const RESPONSE_ARTICLES_QUERY = gql`
 query ReponseArticles($skip: Int!, $parent: ObjectID!) {
   articleResponses(limit: 10, skip: $skip, parent: $parent) {
@@ -57,7 +16,7 @@ query ReponseArticles($skip: Int!, $parent: ObjectID!) {
     preview(length: 300)
     date
     author
-    thumb 
+    thumb
   }
 }
 `;
@@ -70,7 +29,7 @@ const ResponseArticles = graphql(gql`
       preview(length: 300)
       date
       author
-      thumb 
+      thumb
     }
     articleResponsesCount
   }
@@ -106,7 +65,7 @@ const ResponseArticles = graphql(gql`
       hasMore() {
         return articleResponses && articleResponses.length < articleResponsesCount;
       },
-    }; 
+    };
   },
 })( ({loading, articleResponses, loadMore, hasMore}) => {
   articleResponses = articleResponses || [];
@@ -116,7 +75,7 @@ const ResponseArticles = graphql(gql`
             <div className="container">
                 <h1 className="strong">Discussion</h1>
                 <div className="tile tile-vertical">
-                    {articleResponses.map((response, i) => 
+                    {articleResponses.map((response, i) =>
                         <ArticleThumb article={response} key={i} />
                     )}
                 </div>
@@ -126,6 +85,13 @@ const ResponseArticles = graphql(gql`
   );
 });
 
+const ResponseTo = ({parent}) => (
+  <div className="response-to" data-article-id={parent._id}>
+      <h2>In Response To:&nbsp;
+          <a className="response-title" href={`/articles/${parent.slug}`} dangerouslySetInnerHTML={{__html: parent.title}}></a>
+      </h2>
+  </div>
+);
 
 class ArticleMain extends Component {
   render() {
@@ -153,13 +119,16 @@ class ArticleMain extends Component {
           </Optional>
 
           <div className="container">
-              <ResponseTo _id={article.parent} />
+              <Optional test={article.parent && article.parent._id}>
+                  <ResponseTo parent={article.parent || {}} />
+              </Optional>
+
               <h1 className="article-title strong">{article.title}</h1>
               <h4 className="article-author-date thin">{article.author} &#8212; {moment(article.date).format('MMM, DD YYYY')}</h4>
               <div className="article-content" dangerouslySetInnerHTML={{__html: article.content}}></div>
 
           </div>
-          
+
           <ResponseArticles _id={article._id} />
       </div>
     );
