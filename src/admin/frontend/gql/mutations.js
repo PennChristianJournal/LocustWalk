@@ -15,7 +15,10 @@ export const ARTICLE_UPDATE = gql`
       is_featured
       cover
       thumb
-      parent
+      parent {
+        _id
+        title
+      }
       topic {
         _id
         title
@@ -38,7 +41,10 @@ export const ARTICLE_DELETE = gql`
       is_featured
       cover
       thumb
-      parent
+      parent {
+        _id
+        title
+      }
       topic {
         _id
         title
