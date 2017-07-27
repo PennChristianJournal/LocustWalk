@@ -155,18 +155,6 @@ router.post('/:id/imagedelete', formidable(), (req, res) => {
   });
 });
 
-router.get('/search', (req, res) => {
-  var regex = new RegExp(`^${req.query.title}`);
-  Article.find({
-    title: regex,
-  }, (err, articles) => {
-    if (err) {
-      console.log(err);
-    }
-    res.send(articles);
-  });
-});
-
 router.get('/docs/search', (req, res) => {
   getGoogleDriveClient(driveClient, function(err, drive) {
     if (err) {
