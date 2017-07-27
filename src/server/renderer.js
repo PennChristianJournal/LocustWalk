@@ -1,12 +1,12 @@
 'use strict';
 
 import React from 'react';
-import { 
+import {
   renderToString,
   renderToStaticMarkup,
 } from 'react-dom/server';
-import { 
-  ApolloClient, 
+import {
+  ApolloClient,
   ApolloProvider,
   getDataFromTree,
 } from 'react-apollo';
@@ -18,14 +18,14 @@ import Head, { makeHeadContext } from '~/common/frontend/head';
 
 function render(req, res, view, props = {}) {
   const Component = require(view.file).default;
-  
+
   const client = new ApolloClient({
     ssrMode: true,
     networkInterface: createLocalInterface(graphql, schema, {
       context: req,
     }),
   });
-  
+
   const HeadContext = makeHeadContext();
   const page = (
     <ApolloProvider client={client}>
@@ -34,7 +34,7 @@ function render(req, res, view, props = {}) {
       </HeadContext>
     </ApolloProvider>
   );
-  
+
   getDataFromTree(page).then(() => {
     const initialState = {
       apollo: client.getInitialState(),

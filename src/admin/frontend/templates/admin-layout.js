@@ -23,12 +23,12 @@ class AdminLayout extends Component {
             bottom: '0px',
             width: '100%',
             paddingTop: `${this.state.offsetTop}px`,
-          }}> 
+          }}>
               <div style={{height: '100%'}}>
                   {this.props.children}
               </div>
           </div>
-      
+
           <footer>
               <script src="/bower_components/jquery/dist/jquery.min.js"></script>
               <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>

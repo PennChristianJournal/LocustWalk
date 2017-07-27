@@ -23,7 +23,7 @@ export const updateArticle = {
     if (!context.isAuthenticated()) {
       return Promise.reject('Not Authenticated');
     }
-    
+
     return Article.findOne({_id}).then(result => {
       Object.assign(result, article);
       return result.save(getArticleProjection(fieldASTs));
@@ -43,7 +43,7 @@ export const deleteArticle = {
     if (!context.isAuthenticated()) {
       return Promise.reject('Not Authenticated');
     }
-    
+
     return Article.findOneAndRemove({_id}, getArticleProjection(fieldASTs));
   },
 };

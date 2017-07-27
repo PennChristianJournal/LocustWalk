@@ -59,7 +59,7 @@ const FeatureSliderWithData = graphql(FEATURED_ARTICLES_QUERY, {
           },
         });
       },
-    }; 
+    };
   },
 })( ({loading, featuredArticles, loadMore}) => {
   return <FeatureSlider loadMore={loadMore} articles={featuredArticles} />;
@@ -116,7 +116,7 @@ const RecentArticlesWithData = graphql(gql`
             if (!fetchMoreResult) {
               return previousResult;
             }
-              
+
             return Object.assign({}, previousResult, {
               recentArticles: [...previousResult.recentArticles, ...fetchMoreResult.recentArticles],
             });
@@ -126,7 +126,7 @@ const RecentArticlesWithData = graphql(gql`
       hasMore() {
         return recentArticles.length < articleCount;
       },
-    }; 
+    };
   },
 })( ({loading, recentArticles, loadMore, hasMore}) => {
   return (

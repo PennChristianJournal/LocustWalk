@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import nconf from 'nconf';
 
-class DonatePanel extends Component { 
+class DonatePanel extends Component {
   render() {
     return (
        <div className="tile tile-vertical gray-theme">
@@ -16,7 +16,7 @@ class DonatePanel extends Component {
            <img src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1" />
            <a href="#" onClick={() => { this.refs['donate-form'].submit(); }}>
              <div className="button" style={{
-               marginTop: '10px', 
+               marginTop: '10px',
                marginRight: '10px',
                marginBottom: '10px',
              }}>Contribute</div>

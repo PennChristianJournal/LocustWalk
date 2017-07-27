@@ -19,7 +19,7 @@ export const schema = new GraphQLSchema({
       ...topicQueries,
     },
   }),
-  
+
   mutation: new GraphQLObjectType({
     name: 'RootMutation',
     fields: {
@@ -30,7 +30,7 @@ export const schema = new GraphQLSchema({
 });
 
 router.use('/', graphqlHTTP({
-  schema, 
+  schema,
   graphiql: nconf.get('NODE_ENV') === 'development',
 }));
 
