@@ -93,7 +93,7 @@ export const searchTopics = {
     }
     let q = Topic.find({
       title: {
-        $regex: new RegExp(`^${title.toLowerCase()}`, 'i'),
+        $regex: new RegExp(`^${unescape(title).toLowerCase()}`, 'i'),
       },
     }, getProjection(fieldASTs));
     q = applySkipLimit(q, skip, limit);

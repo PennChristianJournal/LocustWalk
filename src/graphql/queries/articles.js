@@ -178,7 +178,7 @@ export const searchArticles = {
     }
     let q = Article.find({
       title: {
-        $regex: new RegExp(`^${title.toLowerCase()}`, 'i'),
+        $regex: new RegExp(`^${unescape(title).toLowerCase()}`, 'i'),
       },
     }, getArticleProjection(fieldASTs));
     q = applySkipLimit(q, skip, limit);
