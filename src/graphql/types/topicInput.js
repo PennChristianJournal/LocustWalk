@@ -1,10 +1,10 @@
 'use strict';
 
 import {
-  GraphQLID,
   GraphQLInputObjectType,
   GraphQLString,
 } from 'graphql/type';
+import GraphQLBuffer from './buffer';
 
 export default new GraphQLInputObjectType({
   name: 'TopicInput',
@@ -18,11 +18,11 @@ export default new GraphQLInputObjectType({
     content: {
       type: GraphQLString,
     },
-    cover: {
-      type: GraphQLID,
+    cover_buffer: {
+      type: GraphQLBuffer,
     },
-    thumb: {
-      type: GraphQLID,
+    thumb_buffer: {
+      type: GraphQLBuffer,
     },
   },
 });

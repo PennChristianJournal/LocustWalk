@@ -6,6 +6,7 @@ import {
   GraphQLString,
   GraphQLBoolean,
 } from 'graphql/type';
+import GraphQLBuffer from './buffer';
 
 import { GraphQLDateTime } from 'graphql-iso-date';
 
@@ -36,11 +37,11 @@ export default new GraphQLInputObjectType({
     slug: {
       type: GraphQLString,
     },
-    cover: {
-      type: GraphQLID,
+    cover_buffer: {
+      type: GraphQLBuffer,
     },
-    thumb: {
-      type: GraphQLID,
+    thumb_buffer: {
+      type: GraphQLBuffer,
     },
     parent: {
       type: GraphQLID,
