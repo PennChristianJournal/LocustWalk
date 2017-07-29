@@ -89,7 +89,7 @@ export default compose(
   }),
   editingContext({
     createStage({topic = {}}, stage = {}) {
-      if (!topic._id) {
+      if (!topic || !topic._id) {
         return {};
       } else if (topic._id != stage._id) {
         return Object.assign({}, topic);

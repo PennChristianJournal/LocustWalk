@@ -1,6 +1,7 @@
 
 import React, {Component} from 'react';
 import Navbar from '~/admin/frontend/components/navbar';
+import NotificationContext from '~/admin/frontend/components/notification-context';
 import {headData} from '~/common/frontend/head';
 
 class AdminLayout extends Component {
@@ -16,6 +17,13 @@ class AdminLayout extends Component {
   render() {
     return (
       <div className="admin-layout" id={this.props.id}>
+          <NotificationContext name="notifications" style={{
+            position: 'fixed',
+            top: '0px',
+            width: '100%',
+            zIndex: 2000,
+            marginTop: '15px',
+          }} />
           <Navbar id="navbar" />
           <div style={{
             position: 'absolute',
