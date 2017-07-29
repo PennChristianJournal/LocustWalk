@@ -2,6 +2,7 @@
 
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {notificationConnect} from '~/admin/frontend/components/notification-context';
 import {getFileURL} from '~/common/frontend/helpers/file';
 import $ from 'jquery';
 
@@ -52,7 +53,7 @@ class ContentEditor extends Component {
   }
 }
 
-export default class TopicEditPanel extends Component {
+class TopicEditPanel extends Component {
 
   constructor(props) {
     super(props);
@@ -69,7 +70,14 @@ export default class TopicEditPanel extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    this.props.submit().then(this.props.onSubmit);
+    const title = this.props.stage.values.title;
+    const closeNotification = this.props.pushNotification('warning', `Saving "${title}"...`);
+
+    this.props.submit().then(() => {
+      setTimeout(this.props.pushNotification('success', `Successfully saved "${title}"`), 5000);
+    }).then(this.props.onSubmit).catch(error => {
+      this.props.pushNotification('danger', error.toString());
+    }).then(closeNotification);
   }
 
   handleCancel(event) {
@@ -79,8 +87,15 @@ export default class TopicEditPanel extends Component {
   }
 
   handleDelete(event) {
-    if (confirm(`Are you sure you want to delete "${this.props.stage.values.title}?"`)) {
-      this.props.delete().then(this.props.onDelete);
+    const title = this.props.stage.values.title;
+    if (confirm(`Are you sure you want to delete "${title}?"`)) {
+      const closeNotification = this.props.pushNotification('warning', `Deleting "${title}"...`);
+
+      this.props.delete().then(() => {
+        setTimeout(this.props.pushNotification('success', `Successfully deleted "${title}"`), 5000);
+      }).then(this.props.onDelete).catch(error => {
+        this.props.pushNotification('danger', error.toString());
+      }).then(closeNotification);
     }
   }
 
@@ -138,3 +153,5 @@ TopicEditPanel.propTypes = {
   cancel: PropTypes.func.isRequired,
   delete: PropTypes.func.isRequired,
 };
+
+export default notificationConnect('notifications')(TopicEditPanel);
