@@ -64,7 +64,12 @@ export default class TopicEditPanel extends Component {
     if (file) {
       blob = URL.createObjectURL(file);
     }
-    this.props.stage.update(prop, blob);
+    this.props.stage.update(`${prop}_preview_img`, blob);
+    var reader = new FileReader();
+    reader.onload = () => {
+      this.props.stage.update(`${prop}_buffer`, reader.result);
+    };
+    reader.readAsDataURL(file);
   }
 
   handleSubmit(event) {
@@ -100,17 +105,17 @@ export default class TopicEditPanel extends Component {
               <label>Cover Photo</label>
               <img
                 style={{maxWidth: '200px', display: 'block'}}
-                src={topic.cover ? getFileURL(topic.cover, topic.cover_preview_img) : ''}
+                src={(topic.cover || topic.cover_preview_img) ? getFileURL(topic.cover, topic.cover_preview_img) : ''}
               />
-              <input type="file" accept="image/*" onChange={this.handleImageChange.bind(this, 'cover_preview_img')} />
+              <input type="file" accept="image/*" onChange={this.handleImageChange.bind(this, 'cover')} />
           </div>
 
           <div className="form-group">
               <label>Thumbnail</label>
               <img
                 style={{maxWidth: '200px', display: 'block'}}
-                src={topic.thumb ? getFileURL(topic.thumb, topic.thumb_preview_img) : ''} />
-              <input type="file" accept="image/*" onChange={this.handleImageChange.bind(this, 'thumb_preview_img')} />
+                src={(topic.thumb || topic.thumb_preview_img) ? getFileURL(topic.thumb, topic.thumb_preview_img) : ''} />
+              <input type="file" accept="image/*" onChange={this.handleImageChange.bind(this, 'thumb')} />
           </div>
 
           <div className="form-group">
