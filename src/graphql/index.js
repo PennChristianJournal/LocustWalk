@@ -29,6 +29,10 @@ export const schema = new GraphQLSchema({
   }),
 });
 
+import bodyParser from 'body-parser';
+router.use(bodyParser.json({ limit: 1024 * 1024 * 2000, type: 'application/json' }));
+router.use(bodyParser.urlencoded({ extended: true, limit: 1024 * 1024 * 20, type: 'application/x-www-form-urlencoding' }));
+
 router.use('/', graphqlHTTP({
   schema,
   graphiql: nconf.get('NODE_ENV') === 'development',
