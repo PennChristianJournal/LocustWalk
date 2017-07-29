@@ -34,6 +34,9 @@ const ResponseArticles = graphql(gql`
     articleResponsesCount
   }
 `, {
+  skip(props) {
+    return !props._id;
+  },
   options(props) {
     return {
       variables: {

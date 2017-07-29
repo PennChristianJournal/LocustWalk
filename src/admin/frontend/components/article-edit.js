@@ -87,7 +87,7 @@ export default compose(
   }),
   editingContext({
     createStage({article = {}}, stage = {}) {
-      if (!article._id) {
+      if (!article || !article._id) {
         return {};
       } else if (article._id != stage._id) {
         return Object.assign({}, article);

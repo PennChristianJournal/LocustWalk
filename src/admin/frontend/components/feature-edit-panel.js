@@ -2,14 +2,23 @@
 
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {notificationConnect} from '~/admin/frontend/components/notification-context';
 import $ from 'jquery';
 import TypeaheadInput from './typeahead-input';
 import FeatureSlider from '~/common/frontend/components/feature-slider';
 
-export default class FeatureEditPanel extends Component {
+class FeatureEditPanel extends Component {
   handleSubmit(event) {
     event.preventDefault();
-    this.props.submit().then(this.props.onSubmit);
+    const title = this.props.stage.values.title;
+
+    const closeNotification = this.props.pushNotification('warning', `Saving "${title}"...`);
+
+    this.props.submit().then(() => {
+      setTimeout(this.props.pushNotification('success', `Successfully saved "${title}"`), 5000);
+    }).then(this.props.onSubmit).catch(error => {
+      this.props.pushNotification('danger', error.toString());
+    }).then(closeNotification);
   }
 
   handleCancel(event) {
@@ -213,3 +222,4 @@ FeatureEditPanel.propTypes = {
   delete: PropTypes.func.isRequired,
 };
 
+export default notificationConnect('notifications')(FeatureEditPanel);
