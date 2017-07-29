@@ -49,7 +49,12 @@ export default class ArticleEditPanel extends Component {
     if (file) {
       blob = URL.createObjectURL(file);
     }
-    this.props.stage.update(prop, blob);
+    this.props.stage.update(`${prop}_preview_img`, blob);
+    var reader = new FileReader();
+    reader.onload = () => {
+      this.props.stage.update(`${prop}_buffer`, reader.result);
+    };
+    reader.readAsDataURL(file);
   }
 
   handleSubmit(event) {
@@ -209,10 +214,10 @@ export default class ArticleEditPanel extends Component {
                   <Optional test={this.props.imagePreviews}>
                       <img
                         style={{maxWidth: '200px', display: 'block'}}
-                        src={article.cover ? getFileURL(article.cover, article.cover_preview_img) : ''}
+                        src={(article.cover || article.cover_preview_img) ? getFileURL(article.cover, article.cover_preview_img) : ''}
                       />
                   </Optional>
-                  <input type="file" accept="image/*" onChange={this.handleImageChange.bind(this, 'cover_preview_img')} />
+                  <input type="file" accept="image/*" onChange={this.handleImageChange.bind(this, 'cover')} />
               </div>
 
               <div className="form-group">
@@ -220,10 +225,10 @@ export default class ArticleEditPanel extends Component {
                   <Optional test={this.props.imagePreviews}>
                       <img
                         style={{maxWidth: '200px', display: 'block'}}
-                        src={article.thumb ? getFileURL(article.thumb, article.thumb_preview_img) : ''}
+                        src={(article.thumb || article.thumb_preview_img) ? getFileURL(article.thumb, article.thumb_preview_img) : ''}
                       />
                   </Optional>
-                  <input type="file" accept="image/*" onChange={this.handleImageChange.bind(this, 'thumb_preview_img')} />
+                  <input type="file" accept="image/*" onChange={this.handleImageChange.bind(this, 'thumb')} />
               </div>
 
               <div className="form-group">
