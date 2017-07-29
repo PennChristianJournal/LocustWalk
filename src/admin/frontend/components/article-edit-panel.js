@@ -2,13 +2,14 @@
 
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {notificationConnect} from '~/admin/frontend/components/notification-context';
 import Optional from '~/common/frontend/components/optional';
 import TypeaheadInput from './typeahead-input';
 import moment from 'moment';
 import {getFileURL} from '~/common/frontend/helpers/file';
 import $ from 'jquery';
 
-export default class ArticleEditPanel extends Component {
+class ArticleEditPanel extends Component {
   constructor(props) {
     super(props);
   }
@@ -59,14 +60,23 @@ export default class ArticleEditPanel extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    if (this.props.getArticleContent) {
-      const articleContent = this.props.getArticleContent();
-      this.props.stage.update('content', articleContent, () => {
-        this.props.submit().then(this.props.onSubmit);
-      });
-    } else {
-      this.props.submit().then(this.props.onSubmit);
-    }
+    const title = this.props.stage.values.title;
+
+    const closeNotification = this.props.pushNotification('warning', `Saving "${title}"...`);
+
+    const updateArticleContent = new Promise(resolve => {
+      if (this.props.getArticleContent) {
+        this.props.stage.update('content', this.props.getArticleContent(), resolve);
+      } else {
+        resolve();
+      }
+    });
+
+    updateArticleContent.then(this.props.submit).then(() => {
+      setTimeout(this.props.pushNotification('success', `Successfully saved "${title}"`), 5000);
+    }).then(this.props.onSubmit).catch(error => {
+      this.props.pushNotification('danger', error.toString());
+    }).then(closeNotification);
   }
 
   handleCancel(event) {
@@ -76,8 +86,15 @@ export default class ArticleEditPanel extends Component {
   }
 
   handleDelete(event) {
-    if (confirm(`Are you sure you want to delete "${this.props.stage.values.title}?"`)) {
-      this.props.delete().then(this.props.onDelete);
+    const title = this.props.stage.values.title;
+    if (confirm(`Are you sure you want to delete "${title}?"`)) {
+      const closeNotification = this.props.pushNotification('warning', `Deleting "${title}"...`);
+
+      this.props.delete().then(() => {
+        setTimeout(this.props.pushNotification('success', `Successfully deleted "${title}"`), 5000);
+      }).then(this.props.onDelete).catch(error => {
+        this.props.pushNotification('danger', error.toString());
+      }).then(closeNotification);
     }
   }
 
@@ -398,3 +415,4 @@ ArticleEditPanel.propTypes = {
   delete: PropTypes.func.isRequired,
 };
 
+export default notificationConnect('notifications')(ArticleEditPanel);
