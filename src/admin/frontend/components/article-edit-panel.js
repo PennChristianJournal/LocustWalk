@@ -33,9 +33,11 @@ class ArticleEditPanel extends Component {
   }
 
   tick() {
+    const date = new Date();
     this.setState({
-      date: new Date(),
+      date,
     });
+    this.props.stage.update('date', moment(this.state.dateNow ? date : this.props.stage.values.date).toDate());
   }
 
   dateNowToggled(event) {
@@ -193,7 +195,7 @@ class ArticleEditPanel extends Component {
                   <label>Title</label>
                   <input type="text" className="form-control"
                     placeholder="Article Title"
-                    value={article.title}
+                    value={article.title || undefined}
                     onChange={e => this.props.stage.update('title', e.target.value)}
                   />
               </div>
@@ -202,7 +204,7 @@ class ArticleEditPanel extends Component {
                   <label>Author</label>
                   <input type="text" className="form-control"
                     placeholder="Author"
-                    value={article.author}
+                    value={article.author || undefined}
                     onChange={e => this.props.stage.update('author', e.target.value)}
                   />
               </div>
@@ -251,7 +253,7 @@ class ArticleEditPanel extends Component {
               <div className="form-group">
                   <label htmlFor="slug-input">Slug</label>
                   <input id="slug-input" name="slug" type="text" className="form-control" placeholder="Slug"
-                      value={article.slug}
+                      value={article.slug || undefined}
                       onChange={ e => this.props.stage.update('slug', e.target.value) } />
               </div>
 
@@ -307,7 +309,7 @@ class ArticleEditPanel extends Component {
                   } }
                   targetField="_id"
                 />
-                <input type="text" readOnly className="form-control" placeholder="Article ID" value={article.parentID || (article.parent && article.parent._id) || ''} />
+                <input type="text" readOnly className="form-control" placeholder="Article ID" value={article.parentID || (article.parent && article.parent._id) || undefined} />
               </div>
 
               <div className="form-group">
@@ -363,7 +365,7 @@ class ArticleEditPanel extends Component {
                   targetField="_id"
                 />
 
-                <input type="text" readOnly className="form-control" placeholder="Topic ID" value={article.topicID || (article.topic && article.topic._id) || ''} />
+                <input type="text" readOnly className="form-control" placeholder="Topic ID" value={article.topicID || (article.topic && article.topic._id) || undefined} />
               </div>
 
               <div className="form-group">

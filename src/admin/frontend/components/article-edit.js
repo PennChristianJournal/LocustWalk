@@ -111,6 +111,9 @@ export default compose(
           stage.clear(cb);
         },
         delete() {
+          if (!ownProps.deleteArticle) {
+            return Promise.resolve();
+          }
           return ownProps.deleteArticle();
         },
       };

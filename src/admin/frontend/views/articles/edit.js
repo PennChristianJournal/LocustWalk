@@ -138,7 +138,27 @@ class ArticleEditPage extends Component {
 export default headData(head => {
   head.addLink([
     {
+      href: '/css/main.css',
+      rel: 'stylesheet',
+      type: 'text/css',
+    },
+    {
       href: '/css/home.css',
+      rel: 'stylesheet',
+      type: 'text/css',
+    },
+    {
+      href: '/css/article.css',
+      rel: 'stylesheet',
+      type: 'text/css',
+    },
+    {
+      href: '/css/article-thumb.css',
+      rel: 'stylesheet',
+      type: 'text/css',
+    },
+    {
+      href: '/css/article-discussion.css',
       rel: 'stylesheet',
       type: 'text/css',
     },

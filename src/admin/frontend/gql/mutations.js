@@ -31,24 +31,6 @@ export const ARTICLE_DELETE = gql`
   mutation deleteArticle($_id: ObjectID!) {
     deleteArticle(_id: $_id) {
       _id
-      title
-      content
-      preview
-      slug
-      author
-      date
-      is_published
-      is_featured
-      cover
-      thumb
-      parent {
-        _id
-        title
-      }
-      topic {
-        _id
-        title
-      }
     }
   }
 `;
@@ -85,12 +67,6 @@ export const TOPIC_DELETE = gql`
   mutation deleteTopic($_id: ObjectID!) {
     deleteTopic(_id: $_id) {
       _id
-      title
-      slug
-      content
-      preview
-      cover
-      thumb
     }
   }
 `;

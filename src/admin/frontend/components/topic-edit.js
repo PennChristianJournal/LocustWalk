@@ -118,6 +118,9 @@ export default compose(
           stage.clear(cb);
         },
         delete() {
+          if (!ownProps.deleteTopic) {
+            return Promise.resolve();
+          }
           return ownProps.deleteTopic();
         },
       };

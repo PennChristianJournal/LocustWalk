@@ -112,7 +112,7 @@ class TopicEditPanel extends Component {
           <div className="form-group">
               <label>Title</label>
               <input type="text" className="form-control" placeholder="Topic Title"
-                value={topic.title}
+                value={topic.title || undefined}
                 onChange={ e => { this.props.stage.update('title', e.target.value); } } />
           </div>
 
@@ -136,7 +136,7 @@ class TopicEditPanel extends Component {
           <div className="form-group">
               <label>Slug</label>
               <input type="text" className="form-control" placeholder="Slug"
-                value={topic.slug}
+                value={topic.slug || undefined}
                 onChange={ e => { this.props.stage.update('slug', e.target.value); } } />
           </div>
 
