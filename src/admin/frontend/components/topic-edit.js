@@ -4,7 +4,7 @@ import {Component} from 'react';
 import PropTypes from 'prop-types';
 import {compose, graphql} from 'react-apollo';
 import { editingContext } from './editing-context';
-import {TOPIC_QUERY} from '../gql/queries';
+import {TOPIC_QUERY, TOPIC_LIST_QUERY} from '../gql/queries';
 import {TOPIC_NEW, TOPIC_UPDATE, TOPIC_DELETE} from '../gql/mutations';
 
 const editableTopicFields = [
@@ -52,6 +52,23 @@ export default compose(
           variables: {
             topic,
           },
+          update: (store, { data: { newTopic } }) => {
+            const data = store.readQuery({
+              query: TOPIC_LIST_QUERY,
+              variables: {
+                skip: 0,
+              },
+            });
+            store.writeQuery({
+              query: TOPIC_LIST_QUERY,
+              data: Object.assign({}, data, {
+                topics: [newTopic, ...data.topics],
+              }),
+              variables: {
+                skip: 0,
+              },
+            });
+          },
         }),
       };
     },
@@ -82,6 +99,29 @@ export default compose(
         deleteTopic: () => deleteTopic({
           variables: {
             _id: ownProps._id,
+          },
+          update: (store, { data: { deleteTopic } }) => {
+            const data = store.readQuery({
+              query: TOPIC_LIST_QUERY,
+              variables: {
+                skip: 0,
+              },
+            });
+
+            let index = data.topics.findIndex(el => el._id == deleteTopic._id);
+            if (index < 0) {
+              return;
+            }
+
+            store.writeQuery({
+              query: TOPIC_LIST_QUERY,
+              data: Object.assign({}, data, {
+                topics: [...data.topics.slice(0, index), ...data.topics.slice(index + 1, data.topics.length)],
+              }),
+              variables: {
+                skip: 0,
+              },
+            });
           },
         }),
       };

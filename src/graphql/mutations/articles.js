@@ -8,6 +8,23 @@ import ObjectIDType from '../types/objectID';
 import Article from '~/common/models/article';
 import SmallFile from '~/common/models/smallFile';
 
+export const newArticle = {
+  type: ArticleType,
+  args: {
+    article: {
+      name: 'article',
+      type: ArticleInputType,
+    },
+  },
+  resolve: (root, {article}, context, fieldASTs) => {
+    if (!context.isAuthenticated()) {
+      return Promise.reject('Not Authenticated');
+    }
+
+    return (new Article(article)).save(getArticleProjection(fieldASTs));
+  },
+};
+
 export const updateArticle = {
   type: ArticleType,
   args: {

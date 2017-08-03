@@ -4,8 +4,8 @@ import {Component} from 'react';
 import PropTypes from 'prop-types';
 import {compose, graphql} from 'react-apollo';
 import { editingContext } from './editing-context';
-import {ARTICLE_QUERY} from '../gql/queries';
-import {ARTICLE_UPDATE, ARTICLE_DELETE} from '../gql/mutations';
+import {ARTICLE_LIST_QUERY, ARTICLE_QUERY} from '../gql/queries';
+import {ARTICLE_NEW, ARTICLE_UPDATE, ARTICLE_DELETE} from '../gql/mutations';
 
 const editableArticleFields = [
   'title',
@@ -61,6 +61,35 @@ export default compose(
       };
     },
   }),
+  graphql(ARTICLE_NEW, {
+    name: 'newArticle',
+    props({newArticle}) {
+      return {
+        newArticle: (article) => newArticle({
+          variables: {
+            article,
+          },
+          update: (store, { data: { newArticle } }) => {
+            const data = store.readQuery({
+              query: ARTICLE_LIST_QUERY,
+              variables: {
+                skip: 0,
+              },
+            });
+            store.writeQuery({
+              query: ARTICLE_LIST_QUERY,
+              data: Object.assign({}, data, {
+                articles: [newArticle, ...data.articles],
+              }),
+              variables: {
+                skip: 0,
+              },
+            });
+          },
+        }),
+      };
+    },
+  }),
   graphql(ARTICLE_UPDATE, {
     name: 'updateArticle',
     props({ownProps, updateArticle}) {
@@ -82,6 +111,29 @@ export default compose(
           variables: {
             _id: ownProps._id,
           },
+          update: (store, { data: { deleteArticle } }) => {
+            const data = store.readQuery({
+              query: ARTICLE_LIST_QUERY,
+              variables: {
+                skip: 0,
+              },
+            });
+
+            let index = data.articles.findIndex(el => el._id == deleteArticle._id);
+            if (index < 0) {
+              return;
+            }
+
+            store.writeQuery({
+              query: ARTICLE_LIST_QUERY,
+              data: Object.assign({}, data, {
+                articles: [...data.articles.slice(0, index), ...data.articles.slice(index + 1, data.articles.length)],
+              }),
+              variables: {
+                skip: 0,
+              },
+            });
+          },
         }),
       };
     },
@@ -99,13 +151,19 @@ export default compose(
     props(ownProps, stage) {
       return {
         submit() {
-          const params = stage.getChangedFields()
+          const isNew = !stage.values._id;
+          const params = (isNew ? Object.keys(stage.values) : stage.getChangedFields())
             .filter(key => editableArticleFields.includes(key))
             .reduce((obj, key) => {
               obj[getInputKey(key)] = stage.values[key];
               return obj;
             }, {});
-          return ownProps.updateArticle(params);
+
+          if (isNew) {
+            return ownProps.newArticle(params);
+          } else {
+            return ownProps.updateArticle(params);
+          }
         },
         cancel(cb) {
           stage.clear(cb);

@@ -7,8 +7,9 @@ import Table from '~/admin/frontend/components/table';
 import TopicEdit from '~/admin/frontend/components/topic-edit';
 import TopicEditPanel from '~/admin/frontend/components/topic-edit-panel';
 import {debounce} from 'underscore';
-import {graphql, gql} from 'react-apollo';
+import {graphql} from 'react-apollo';
 import {headData} from '~/common/frontend/head';
+import {TOPIC_LIST_QUERY} from '~/admin/frontend/gql/queries';
 
 class TopicList extends Component {
   render() {
@@ -36,18 +37,7 @@ class TopicList extends Component {
   }
 }
 
-const TOPIC_SEARCH_QUERY = gql`
-  query SearchTopics($skip: Int!) {
-    topics(limit: 10, skip: $skip) {
-      _id
-      title
-      slug
-    }
-    topicCount
-  }
-`;
-
-const TopicListWithData = graphql(TOPIC_SEARCH_QUERY, {
+const TopicListWithData = graphql(TOPIC_LIST_QUERY, {
   options: {
     variables: {
       skip: 0,

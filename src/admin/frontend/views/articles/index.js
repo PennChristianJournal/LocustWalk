@@ -8,7 +8,8 @@ import Table from '~/admin/frontend/components/table';
 import moment from 'moment';
 import queryString from 'query-string';
 import {debounce} from 'underscore';
-import {graphql, gql} from 'react-apollo';
+import {graphql} from 'react-apollo';
+import {ARTICLE_LIST_QUERY} from '~/admin/frontend/gql/queries';
 
 class ArticleList extends Component {
 
@@ -45,24 +46,7 @@ class ArticleList extends Component {
   }
 }
 
-const ARTICLE_SEARCH_QUERY = gql`
-  query SearchArticles($skip: Int!) {
-    articles: recentArticles(limit: 10, skip: $skip) {
-      _id
-      title
-      slug
-      date
-      is_featured
-      is_published
-      topic {
-        title
-      }
-    }
-    articleCount
-  }
-`;
-
-const ArticleListWithData = graphql(ARTICLE_SEARCH_QUERY, {
+const ArticleListWithData = graphql(ARTICLE_LIST_QUERY, {
   options: {
     variables: {
       skip: 0,
@@ -208,7 +192,7 @@ export default class ArticleListPage extends Component {
                 <div className="admin-list-header">
                     <h1>
                         <span>Articles</span>
-                        <a className="pull-right btn btn-primary" href="/admin/articles/new">New Article</a>
+                        <a className="pull-right btn btn-primary" href="#" onClick={() => { this.setState({ article: {} }); } }>New Article</a>
                     </h1>
                 </div>
                 <div className="admin-list-content" ref="list">

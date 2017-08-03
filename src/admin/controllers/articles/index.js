@@ -20,16 +20,6 @@ const router = new Router();
 
 const views = ViewEngine.getViews('admin');
 
-router.get('/new', (req, res) => {
-  var article = new Article({});
-  article.save({validateBeforeSave: false}, (err, article) => {
-    if (err) {
-      console.log(err);
-    }
-    res.redirect(`/admin/articles/${article._id}/edit`);
-  });
-});
-
 router.get('/:id/edit', (req, res) => {
   Renderer.render(req, res, views['admin-articles-edit'], {
     _id: req.params.id,
@@ -68,15 +58,6 @@ router.post('/:id/edit', formidable(), (req, res) => {
     }
     //refreshes the page
     res.redirect('back');
-  });
-});
-
-router.get('/:id/delete', (req, res) => {
-  Article.findByIdAndRemove(req.params.id, err => {
-    if (err) {
-      console.warn(err);
-    }
-    res.end();
   });
 });
 

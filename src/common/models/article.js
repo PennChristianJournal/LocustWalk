@@ -23,7 +23,6 @@ const Schema = new mongoose.Schema({
   author: String,
   content: {
     type: String,
-    required: true,
     $p: {
       widget: 'textarea',
       display: 'e',
