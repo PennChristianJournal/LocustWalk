@@ -1,31 +1,24 @@
 
 import React from 'react';
-import ArticleMain from '~/common/frontend/components/article-main';
+import TopicMain from '~/common/frontend/components/topic-main';
 import ArticleLayout from '~/common/frontend/templates/article-layout';
 import {compose, graphql, gql} from 'react-apollo';
 import { headData } from '~/common/frontend/head';
 
-const ARTICLE_QUERY = gql`
-  query Article($idOrSlug: String, $_id: ObjectID, $slug: String) {
-    article(idOrSlug: $idOrSlug, _id: $_id, slug: $slug) {
+const TOPIC_QUERY = gql`
+  query Topic($idOrSlug: String, $_id: ObjectID, $slug: String) {
+    topic(idOrSlug: $idOrSlug, _id: $_id, slug: $slug) {
       _id
       title
-      date
       cover
-      author
       content
       metaDescription: preview(length: 160)
-      parent {
-        _id
-        title
-        slug
-      }
     }
   }
 `;
 
-const ArticlePage = compose(
-  graphql(ARTICLE_QUERY, {
+const TopicPage = compose(
+  graphql(TOPIC_QUERY, {
     options({idOrSlug, _id, slug}) {
       idOrSlug = idOrSlug || (typeof window !== 'undefined' && (segments => segments[segments.length - 1])(window.location.pathname.split('/')));
       return {
@@ -36,24 +29,24 @@ const ArticlePage = compose(
         },
       };
     },
-    props({ data: {article}} ) {
+    props({ data: {topic}} ) {
       return {
-        article,
+        topic,
       };
     },
   }),
-  headData((head, {article}) => {
-    if (article) {
-      head.setTitle(article.title);
-      head.setMetadata('description', article.metaDescription);
+  headData((head, {topic}) => {
+    if (topic) {
+      head.setTitle(topic.title);
+      head.setMetadata('description', topic.metaDescription);
     }
   })
-)( ({article}) => {
+)( ({topic}) => {
   return (
     <ArticleLayout>
-      <ArticleMain article={article} />
+      <TopicMain topic={topic} />
     </ArticleLayout>
   );
 });
 
-export default ArticlePage;
+export default TopicPage;

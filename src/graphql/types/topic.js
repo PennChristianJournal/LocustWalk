@@ -13,6 +13,9 @@ import ArticleType, {getArticleProjection} from './article';
 import Article from '~/common/models/article';
 import {skipLimitArgs, applySkipLimit, authenticatedField, removeEmpty, htmlPreview} from '../helpers';
 
+// This adds content to the article if preview is requested. Topics mimic that behavior as well
+export const getTopicProjection = getArticleProjection;
+
 export default new GraphQLObjectType({
   name: 'Topic',
   fields: () => ({
@@ -40,7 +43,7 @@ export default new GraphQLObjectType({
         },
       },
       resolve: ({content}, {length, elipsis}) => {
-        htmlPreview(content, length, elipsis);
+        return htmlPreview(content, length, elipsis);
       },
     },
     slug: {
@@ -73,4 +76,3 @@ export default new GraphQLObjectType({
     },
   }),
 });
-
