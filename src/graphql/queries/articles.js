@@ -9,6 +9,7 @@ import {
 } from 'graphql/type';
 
 import ArticleType, { getArticleProjection } from '../types/article';
+import { getTopicProjection } from '../types/topic';
 import ObjectIDType from '../types/objectID';
 import Article from '~/common/models/article';
 import mongoose from 'mongoose';
@@ -105,6 +106,60 @@ export const articleResponsesCount = {
       is_published: authenticatedField(context, is_published, true),
       parent,
     }), getArticleProjection(fieldASTs));
+
+    return q.exec();
+  },
+};
+
+export const topicArticles = {
+  type: new GraphQLList(ArticleType),
+  args: Object.assign({
+    topic: {
+      name: 'topic',
+      type: ObjectIDType,
+    },
+    is_published: {
+      name: 'is_published',
+      type: GraphQLBoolean,
+    },
+  }, skipLimitArgs),
+  resolve: (root, {topic, is_published, skip, limit}, context, fieldASTs) => {
+    if (!topic) {
+      return Promise.resolve([]);
+    }
+
+    let q = Article.find(removeEmpty({
+      is_published: authenticatedField(context, is_published, true),
+      topic,
+    }), getTopicProjection(fieldASTs));
+
+    q.sort({ date: -1 });
+    q = applySkipLimit(q, skip, limit);
+    return q.exec();
+  },
+};
+
+export const topicArticlesCount = {
+  type: GraphQLInt,
+  args: Object.assign({
+    topic: {
+      name: 'topic',
+      type: ObjectIDType,
+    },
+    is_published: {
+      name: 'is_published',
+      type: GraphQLBoolean,
+    },
+  }),
+  resolve: (root, {topic, is_published}, context, fieldASTs) => {
+    if (!topic) {
+      return Promise.resolve(0);
+    }
+
+    let q = Article.count(removeEmpty({
+      is_published: authenticatedField(context, is_published, true),
+      topic,
+    }), getTopicProjection(fieldASTs));
 
     return q.exec();
   },
