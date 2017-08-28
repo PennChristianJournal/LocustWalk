@@ -38,13 +38,9 @@ export default class FeatureSlider extends Component {
     }
   }
 
-  // checkLoadMore() {
-  //   if (this.props.loadMore) {
-  //     if (this.props.articles.length - this.state.idx < 2) {
-  //       this.props.loadMore();
-  //     }
-  //   }
-  // }
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
 
   componentDidUpdate() {
     this.setupInterval();
