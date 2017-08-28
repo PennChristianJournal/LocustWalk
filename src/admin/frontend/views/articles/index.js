@@ -22,7 +22,6 @@ class ArticleList extends Component {
               <th></th>
               <th>Topic</th>
               <th>Permalink</th>
-              <th><i className="fa fa-star" /></th>
               <th><i className="fa fa-check" /></th>
               <th>Posted</th>
           </tr>
@@ -34,7 +33,6 @@ class ArticleList extends Component {
                   <td><a href={`/admin/articles/${article._id}/edit`} className="btn btn-default">Edit</a></td>
                   <td>{article.topic && article.topic.title}</td>
                   <td><a href={`/articles/${article._id}`}><i className="fa fa-link" /></a></td>
-                  <td>{article.is_featured ? <i className="fa fa-star" /> : null}</td>
                   <td>{article.is_published ? <i className="fa fa-check" /> : null}</td>
                   <td>{moment(article.date).format('MMM DD, YYYY [at] H:mm')}</td>
               </tr>
@@ -52,7 +50,6 @@ const ARTICLE_SEARCH_QUERY = gql`
       title
       slug
       date
-      is_featured
       is_published
       topic {
         title

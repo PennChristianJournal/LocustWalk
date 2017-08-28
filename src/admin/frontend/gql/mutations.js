@@ -12,7 +12,6 @@ export const ARTICLE_UPDATE = gql`
       author
       date
       is_published
-      is_featured
       cover
       thumb
       parent {
@@ -37,7 +36,6 @@ export const ARTICLE_DELETE = gql`
       author
       date
       is_published
-      is_featured
       cover
       thumb
       parent {
