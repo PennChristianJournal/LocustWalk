@@ -2,6 +2,7 @@
 
 import React, {Component} from 'react';
 import {graphql, gql} from 'react-apollo';
+import {headData} from '~/common/frontend/head';
 import AdminLayout from '~/admin/frontend/templates/admin-layout';
 import Table from '~/admin/frontend/components/table';
 import Modal from '~/admin/frontend/components/modal';
@@ -73,6 +74,7 @@ class FeatureListPage extends Component {
           {(props) => {
             return (
               <Modal
+                width="90%"
                 isOpen={this.state.feature}
                 title={`Editing - ${props.stage.values.title}`}
                 confirmClose={() => {
@@ -128,5 +130,12 @@ class FeatureListPage extends Component {
   }
 }
 
-export default FeatureListPage;
-
+export default headData(head => {
+  head.addLink([
+    {
+      href: '/css/home.css',
+      rel: 'stylesheet',
+      type: 'text/css',
+    },
+  ]);
+})(FeatureListPage);

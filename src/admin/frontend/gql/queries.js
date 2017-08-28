@@ -50,11 +50,23 @@ export const FEATURE_QUERY = gql`
       mainItem {
         _id
         title
+        thumb
+        url
+        ...on Article {
+          author
+          date
+        }
         __typename
       }
       secondaryItems {
         _id
         title
+        thumb
+        url
+        ...on Article {
+          author
+          date
+        }
         __typename
       }
     }

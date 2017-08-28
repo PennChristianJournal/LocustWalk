@@ -50,6 +50,8 @@ FeatureThumb.propTypes = {
 
 class FeatureBlock extends Component {
   render() {
+    const secondaryItems = this.props.feature.secondaryItems || [];
+    const mainItem = this.props.feature.mainItem || {};
     return (
       <div className="featured-block">
           <div className="feature-month-bar">
@@ -57,16 +59,16 @@ class FeatureBlock extends Component {
           </div>
           <div className="feature-block-aspect">
               <div className="content">
-                  <Optional test={this.props.feature.secondaryItems.length === 2}>
+                  <Optional test={secondaryItems.length === 2}>
                       <div>
-                          <FeatureThumb feature={this.props.feature.mainItem} />
-                          <FeatureThumb feature={this.props.feature.secondaryItems[0] || {}} response />
-                          <FeatureThumb feature={this.props.feature.secondaryItems[1] || {}} response />
+                          <FeatureThumb feature={mainItem} />
+                          <FeatureThumb feature={secondaryItems[0] || {}} response />
+                          <FeatureThumb feature={secondaryItems[1] || {}} response />
                       </div>
                   </Optional>
-                  <Optional test={this.props.feature.secondaryItems.length !== 2}>
+                  <Optional test={secondaryItems.length !== 2}>
                       <div>
-                          <FeatureThumb feature={this.props.feature.mainItem} single />
+                          <FeatureThumb feature={mainItem} single />
                       </div>
                   </Optional>
               </div>
