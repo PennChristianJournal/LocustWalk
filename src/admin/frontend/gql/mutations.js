@@ -15,7 +15,9 @@ export const ARTICLE_UPDATE = gql`
       is_featured
       cover
       thumb
-      parent
+      parent {
+        _id
+      }
       topic {
         _id
         title
@@ -38,7 +40,9 @@ export const ARTICLE_DELETE = gql`
       is_featured
       cover
       thumb
-      parent
+      parent {
+        _id
+      }
       topic {
         _id
         title
@@ -88,3 +92,64 @@ export const TOPIC_DELETE = gql`
     }
   }
 `;
+
+export const FEATURE_NEW = gql`
+  mutation newFeature($feature: FeatureInput!) {
+    newFeature(feature: $feature) {
+      _id
+      title
+      index
+      mainItem {
+        _id
+        title
+        __typename
+      }
+      secondaryItems {
+        _id
+        title
+        __typename
+      }
+    }
+  }
+`;
+
+export const FEATURE_UPDATE = gql`
+  mutation updateFeature($_id: ObjectID!, $feature: FeatureInput) {
+    updateFeature(_id: $_id, feature: $feature) {
+      _id
+      title
+      index
+      mainItem {
+        _id
+        title
+        __typename
+      }
+      secondaryItems {
+        _id
+        title
+        __typename
+      }
+    }
+  }
+`;
+
+export const FEATURE_DELETE = gql`
+  mutation deleteFeature($_id: ObjectID!) {
+    deleteFeature(_id: $_id) {
+      _id
+      title
+      index
+      mainItem {
+        _id
+        title
+        __typename
+      }
+      secondaryItems {
+        _id
+        title
+        __typename
+      }
+    }
+  }
+`;
+

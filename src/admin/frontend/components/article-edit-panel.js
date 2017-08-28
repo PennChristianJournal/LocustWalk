@@ -91,44 +91,6 @@ export default class ArticleEditPanel extends Component {
 
     return (
       <div className="admin-sidebar">
-          <style dangerouslySetInnerHTML={{__html: `
-            .twitter-typeahead {
-              display: block!important;
-            }
-
-            .tt-dropdown-menu {
-              width: 100%;
-              & > div {
-                padding: 5px;
-                border-radius: 5px;
-                box-shadow: 0 0 10px 0 black;
-                background-color: white;
-              }
-            }
-            .tt-suggestion {
-              padding: 2px 10px;
-              line-height: 24px;
-              color: #333;
-              p {
-                margin: 0;
-              }
-            }
-
-            .tt-suggestion.tt-cursor,.tt-suggestion:hover {
-              color: #fff;
-              background-color: #0097cf;
-            }
-
-            .tt-hint {
-              color: #999
-            }
-
-            .tt-menu {
-              width: 100%;
-              background-color: white;
-              border: 1px solid gray;
-            }
-          `}} />
           <Optional test={this.props.gdriveSync}>
             <form className="form" action="sync" method="POST" onSubmit={this.syncArticle.bind(this)}>
                 <div className="form-group">

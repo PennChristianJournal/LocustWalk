@@ -10,14 +10,22 @@ import {
 } from 'graphql/type';
 
 import ArticleType, {getArticleProjection} from './article';
+import FeatureItemType from '../types/featureItem';
 import Article from '~/common/models/article';
 import {skipLimitArgs, applySkipLimit, authenticatedField, removeEmpty, htmlPreview} from '../helpers';
 
 export default new GraphQLObjectType({
   name: 'Topic',
+  interfaces: [FeatureItemType],
   fields: () => ({
     _id: {
       type: GraphQLID,
+    },
+    _typename: {
+      type: GraphQLString,
+      resolve(root) {
+        return root.__typename;
+      },
     },
     title: {
       type: GraphQLString,
@@ -45,6 +53,12 @@ export default new GraphQLObjectType({
     },
     slug: {
       type: GraphQLString,
+    },
+    url: {
+      type: GraphQLString,
+      resolve: ({slug}) => {
+        return `/topics/${slug}`;
+      },
     },
     cover: {
       type: GraphQLID,
