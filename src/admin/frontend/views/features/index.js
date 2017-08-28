@@ -15,12 +15,14 @@ class FeatureList extends Component {
       <Table className="table table-striped" head={
         <tr>
           <th>Title</th>
+          <th><i className="fa fa-check" /></th>
         </tr>
       }>
         {features.map((feature, i) => {
           return (
             <tr key={i} onClick={() => setFeature(feature) }>
               <td>{feature.title}</td>
+              <td>{feature.is_published ? <i className="fa fa-check" /> : null}</td>
             </tr>
           );
         })}
@@ -35,6 +37,7 @@ const FEATURES_QUERY = gql`
       _id
       title
       index
+      is_published
     }
   }
 `;

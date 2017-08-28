@@ -46,6 +46,7 @@ export const FEATURE_QUERY = gql`
       _id
       title
       index
+      is_published
       mainItem {
         _id
         title

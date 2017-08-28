@@ -10,6 +10,7 @@ import {FEATURE_NEW, FEATURE_UPDATE, FEATURE_DELETE} from '../gql/mutations';
 const editableFeatureFields = {
   title: true,
   index: true,
+  is_published: true,
   mainItem: {
     _id: true,
     _typename: true,

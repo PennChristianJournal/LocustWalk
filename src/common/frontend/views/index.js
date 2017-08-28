@@ -12,7 +12,7 @@ import { headData } from '~/common/frontend/head';
 
 const FEATURED_ARTICLES_QUERY = gql`
   query FeaturedArticles {
-    features {
+    features(is_published: true) {
       title
       mainItem {
         _id

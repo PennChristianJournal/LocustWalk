@@ -21,20 +21,6 @@ export const newFeature = {
       return Promise.reject('Not Authenticated');
     }
 
-    /*var obj = Object.assign(new Feature(), {
-      title: feature.title,
-      index: feature.index,
-      mainItem: {
-        type: feature.mainItemType,
-        contentID: feature.mainItem,
-      },
-      secondaryItems: feature.secondaryItems.map((item, index) => {
-        return {
-          type: feature.secondaryItemTypes[index],
-          contentID: item,
-        };
-      }),
-    });*/
     var obj = Object.assign(new Feature(), feature);
 
     return obj.save(getProjection(fieldASTs));
