@@ -1,11 +1,9 @@
 
 import React, {Component} from 'react';
 import AdminLayout from '~/admin/frontend/templates/admin-layout';
-import FeatureSlider from '~/common/frontend/components/feature-slider';
 import ArticleMain from '~/common/frontend/components/article-main';
 import ArticleThumb from '~/common/frontend/components/article-thumb';
 import ArticleLayout from '~/common/frontend/templates/article-layout';
-import Optional from '~/common/frontend/components/optional';
 import ArticleEdit from '~/admin/frontend/components/article-edit';
 import ArticleEditPanel from '~/admin/frontend/components/article-edit-panel';
 import MediumEditorInsertPlugin from 'medium-editor-insert-plugin';
@@ -73,13 +71,6 @@ class ArticlePreviews extends Component {
 
     return (
       <div className="container">
-        <Optional test={article.is_featured}>
-          <div className="row">
-            <div className="col-lg-12">
-              <FeatureSlider articles={[article]} />
-            </div>
-          </div>
-        </Optional>
         <div className="row">
           <div className="tile tile-vertical white-theme">
             <ArticleThumb article={article} />

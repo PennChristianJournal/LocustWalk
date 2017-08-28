@@ -16,9 +16,6 @@ export default new GraphQLInputObjectType({
     title: {
       type: GraphQLString,
     },
-    is_featured: {
-      type: GraphQLBoolean,
-    },
     is_published: {
       type: GraphQLBoolean,
     },
@@ -29,9 +26,6 @@ export default new GraphQLInputObjectType({
       type: GraphQLString,
     },
     content: {
-      type: GraphQLString,
-    },
-    heading_override: {
       type: GraphQLString,
     },
     slug: {

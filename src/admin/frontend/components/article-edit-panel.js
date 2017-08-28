@@ -156,13 +156,6 @@ export default class ArticleEditPanel extends Component {
                   <div className="checkbox">
                       <label className="checkbox-inline">
                           <input type="checkbox"
-                            checked={article.is_featured || false}
-                            onChange={e => this.props.stage.update('is_featured', e.target.checked) }
-                           />
-                          Featured
-                      </label>
-                      <label className="checkbox-inline">
-                          <input type="checkbox"
                             checked={article.is_published || false}
                             onChange={e => this.props.stage.update('is_published', e.target.checked) }
                           />
@@ -331,16 +324,6 @@ export default class ArticleEditPanel extends Component {
                   <input id="date-input" name="date" type="hidden" className="form-control"
                       value={moment(this.state.dateNow ? this.state.date : article.date).format('MMM DD, YYYY [at] H:mm:ss')} />
 
-              </div>
-              <div className="form-group">
-                  <label>Heading Override</label>
-                  <input type="text" className="form-control"
-                    onChange={ e => this.props.stage.update('heading_override', e.target.value) }
-                    placeholder={moment(this.state.dateNow ? this.state.date : article.date).format('MMM YYYY [Feature Article]')}
-                  />
-                  <input name="heading_override" type="hidden" className="form-control"
-                    value={article.heading_override || moment(this.state.dateNow ? this.state.date : article.date).format('MMM YYYY [Feature Article]')}
-                  />
               </div>
               <div className="btn-toolbar">
                 <button className="btn btn-primary" type="submit">Save</button>

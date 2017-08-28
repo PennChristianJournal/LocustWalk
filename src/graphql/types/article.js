@@ -46,9 +46,6 @@ const ArticleType = new GraphQLObjectType({
     title: {
       type: GraphQLString,
     },
-    is_featured: {
-      type: GraphQLBoolean,
-    },
     is_published: {
       type: GraphQLBoolean,
     },
@@ -56,9 +53,6 @@ const ArticleType = new GraphQLObjectType({
       type: GraphQLDateTime,
     },
     author: {
-      type: GraphQLString,
-    },
-    heading_override: {
       type: GraphQLString,
     },
     content: {

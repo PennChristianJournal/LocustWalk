@@ -1,7 +1,6 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { articleHeading } from '../../helpers/article';
 import {graphql, gql} from 'react-apollo';
 
 class ArchivePanel extends Component {
@@ -11,7 +10,7 @@ class ArchivePanel extends Component {
           <h2 className="strong"><a href="/archive">Archive</a></h2>
           <ul className="clean">
               {this.props.articles.map((article, i) => {
-                return <li key={i}><a href={`/articles/${article.slug}`}>{articleHeading(article)}</a></li>;
+                return <li key={i}><a href={article.url}>{article.title}</a></li>;
               })}
           </ul>
       </div>
@@ -25,23 +24,21 @@ ArchivePanel.propTypes = {
 
 const ARCHIVE_QUERY = gql`
   query ArchiveQuery {
-    featuredArticles(limit: 12) {
+    recentArticles(limit: 24) {
       title
-      slug
-      date
-      heading_override
+      url
     }
   }
 `;
 
 export default graphql(ARCHIVE_QUERY, {
-  props({ data: { loading, featuredArticles } } ) {
+  props({ data: { loading, recentArticles } } ) {
     return {
-      featuredArticles,
+      recentArticles,
     };
   },
-})( ({featuredArticles}) => {
-  featuredArticles = featuredArticles || [];
+})( ({recentArticles}) => {
+  recentArticles = recentArticles || [];
 
-  return <ArchivePanel articles={featuredArticles} />;
+  return <ArchivePanel articles={recentArticles} />;
 });
