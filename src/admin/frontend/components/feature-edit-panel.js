@@ -36,6 +36,18 @@ export default class FeatureEditPanel extends Component {
         </div>
 
         <div className="form-group">
+            <div className="checkbox">
+                <label className="checkbox-inline">
+                    <input type="checkbox"
+                      checked={feature.is_published || false}
+                      onChange={e => this.props.stage.update('is_published', e.target.checked) }
+                    />
+                    Published
+                </label>
+            </div>
+        </div>
+
+        <div className="form-group">
           <label>Main Item</label>
           <TypeaheadInput key={feature.mainItem && feature.mainItem._id} type="text" className="form-control" placeholder="Main Item" defaultValue={feature.mainItem && feature.mainItem.title}
 

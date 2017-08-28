@@ -14,6 +14,11 @@ const Schema = new mongoose.Schema({
     type: Number,
     index: true,
   },
+  is_published: {
+    type: Boolean,
+    default: false,
+    index: true,
+  },
   mainItem: {
     type: FeaturedItem,
     required: true,
