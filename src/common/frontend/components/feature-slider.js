@@ -22,7 +22,7 @@ export default class FeatureSlider extends Component {
       this.interval = setInterval(() => {
         if (this.state.autoscroll) {
           var idx = this.state.idx + 1;
-          if (idx >= this.props.articles.length) {
+          if (idx >= this.props.features.length) {
             idx = 0;
           }
           this.setState({
@@ -38,17 +38,16 @@ export default class FeatureSlider extends Component {
     }
   }
 
-  checkLoadMore() {
-    if (this.props.loadMore) {
-      if (this.props.articles.length - this.state.idx < 2) {
-        this.props.loadMore();
-      }
-    }
-  }
+  // checkLoadMore() {
+  //   if (this.props.loadMore) {
+  //     if (this.props.articles.length - this.state.idx < 2) {
+  //       this.props.loadMore();
+  //     }
+  //   }
+  // }
 
   componentDidUpdate() {
     this.setupInterval();
-    this.checkLoadMore();
   }
 
   componentDidMount() {
@@ -65,17 +64,17 @@ export default class FeatureSlider extends Component {
   slideRight() {
     this.setState({
       autoscroll: false,
-      idx: Math.min(this.props.articles.length - 1, this.state.idx + 1),
+      idx: Math.min(this.props.features.length - 1, this.state.idx + 1),
     });
   }
 
   render() {
-    const articles = this.props.articles;
+    const features = this.props.features;
     return (
       <div className="featured-view">
           <div className="featured-wrapper" style={{left: this.state.idx * -100 + '%'}}>
-          {articles.map((article, i) =>
-            <FeatureBlock article={article} key={i} />
+          {features.map((feature, i) =>
+            <FeatureBlock feature={feature} key={i} />
           )}
           </div>
           <div className="feature-nav">
