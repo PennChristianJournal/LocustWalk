@@ -12,7 +12,6 @@ export const ARTICLE_QUERY = gql`
       author
       date
       is_published
-      is_featured
       cover
       thumb
       parent {

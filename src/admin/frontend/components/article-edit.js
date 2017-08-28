@@ -14,7 +14,6 @@ const editableArticleFields = [
   'author',
   'date',
   'is_published',
-  'is_featured',
   'cover_buffer',
   'thumb_buffer',
   'parentID',

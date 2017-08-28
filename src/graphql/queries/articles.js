@@ -165,26 +165,6 @@ export const topicArticlesCount = {
   },
 };
 
-export const featuredArticles = {
-  type: new GraphQLList(ArticleType),
-  args: Object.assign({
-    is_published: {
-      name: 'is_published',
-      type: GraphQLBoolean,
-    },
-  }, skipLimitArgs),
-  resolve: (root, {is_published, skip, limit}, context, fieldASTs) => {
-    let q = Article.find(removeEmpty({
-      is_published: authenticatedField(context, is_published, true),
-      is_featured: true,
-    }), getArticleProjection(fieldASTs));
-
-    q.sort({ date: -1 });
-    q = applySkipLimit(q, skip, limit);
-    return q.exec();
-  },
-};
-
 export const recentArticles = {
   type: new GraphQLList(ArticleType),
   args: Object.assign({
