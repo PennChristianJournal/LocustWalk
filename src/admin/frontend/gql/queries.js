@@ -40,3 +40,24 @@ export const TOPIC_QUERY = gql`
     }
   }
 `;
+
+export const FEATURE_QUERY = gql`
+  query FeatureQuery($_id: ObjectID!) {
+    feature(_id: $_id) {
+      _id
+      title
+      index
+      mainItem {
+        _id
+        title
+        __typename
+      }
+      secondaryItems {
+        _id
+        title
+        __typename
+      }
+    }
+  }
+`;
+

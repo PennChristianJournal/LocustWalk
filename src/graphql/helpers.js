@@ -4,17 +4,39 @@ import {
   GraphQLInt,
 } from 'graphql/type';
 
+import { Kind } from 'graphql/language';
 
 export function removeEmpty(obj) {
   Object.keys(obj).forEach((key) => obj[key] === undefined && delete obj[key]);
   return obj;
 }
 
-export function getProjection(fieldASTs) {
-  return fieldASTs.fieldNodes[0].selectionSet.selections.reduce((projections, selection) => {
-    projections[selection.name.value] = true;
-    return projections;
-  }, {});
+export function getProjection(fieldASTs, type) {
+  function reduceFields(node) {
+    return node.selectionSet.selections.reduce((projections, selection) => {
+      switch (selection.kind) {
+        case Kind.INLINE_FRAGMENT:
+          if (selection.typeCondition.name.value === type) {
+            Object.assign(projections, reduceFields(selection));
+          }
+          break;
+        case Kind.FRAGMENT_SPREAD:
+          var node = fieldASTs.fragments[selection.name.value];
+          if (node.typeCondition.name.value === type) {
+            Object.assign(projections, reduceFields(node));
+          }
+          break;
+        case Kind.FIELD:
+          projections[selection.name.value] = true;
+          break;
+        default:
+          throw new Error(`Unsupported Kind ${selection.kind} in projection`);
+      }
+      return projections;
+    }, {});
+  }
+
+  return reduceFields(fieldASTs.fieldNodes[0]);
 }
 
 export const skipLimitArgs = {
