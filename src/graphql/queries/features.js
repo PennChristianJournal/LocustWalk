@@ -49,7 +49,7 @@ export const features = {
     let q = Feature.find(removeEmpty({
       is_published: authenticatedField(context, is_published, true),
     }));
-    q.sort({ index: 1 });
+    q.sort({ index: -1 });
     q = applySkipLimit(q, skip, limit);
     return q.exec();
   },

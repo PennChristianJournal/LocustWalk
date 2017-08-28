@@ -107,12 +107,7 @@ export default compose(
       return {
         submit() {
           const isNew = !stage.values._id;
-          /*const params = (isNew ? Object.keys(stage.values) : stage.getChangedFields())
-            .filter(key => editableFeatureFields.includes(key))
-            .reduce((obj, key) => {
-              obj[key] = stage.values[key];
-              return obj;
-            }, {});*/
+
           function project(tgt, src, fields) {
             return fields.filter(key => tgt.hasOwnProperty(key))
             .reduce((obj, key) => {
@@ -129,12 +124,6 @@ export default compose(
             }, {});
           }
 
-          /*const params = (isNew ? Object.keys(stage.values) : stage.getChangedFields())
-            .filter(key => editableFeatureFields.hasOwnProperty(key))
-            .reduce((obj, key) => {
-              obj[key] = stage.values[key];
-              return obj;
-            }, {});*/
           const params = project(editableFeatureFields, stage.values,
             (isNew ? Object.keys(stage.values) : stage.getChangedFields()));
 

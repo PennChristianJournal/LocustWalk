@@ -16,9 +16,6 @@ export default new GraphQLInputObjectType({
     title: {
       type: GraphQLString,
     },
-    index: {
-      type: GraphQLInt,
-    },
     is_published: {
       type: GraphQLBoolean,
     },

@@ -12,7 +12,10 @@ const Schema = new mongoose.Schema({
   },
   index: {
     type: Number,
-    index: true,
+    index: {
+      unique: true,
+    },
+    required: true,
   },
   is_published: {
     type: Boolean,
@@ -28,4 +31,24 @@ const Schema = new mongoose.Schema({
   },
 });
 
-export default mongoose.model('Feature', Schema);
+Schema.pre('validate', function(next) {
+  var self = this;
+  if (!self.index) {
+    FeatureModel.find({}, {
+      index: true,
+    }, {
+      sort: {
+        index: -1,
+      },
+      limit: 1,
+    }, (err, latest) => {
+      self.index = (latest[0].index || 0) + 1;
+      next(err);
+    });
+  } else {
+    next();
+  }
+});
+
+const FeatureModel = mongoose.model('Feature', Schema);
+export default FeatureModel;
