@@ -11,58 +11,50 @@ import {graphql, gql} from 'react-apollo';
 import { headData } from '~/common/frontend/head';
 
 const FEATURED_ARTICLES_QUERY = gql`
-  query FeaturedArticles($skip: Int!) {
-    featuredArticles(limit: 1, skip: $skip) {
-      _id
+  query FeaturedArticles {
+    features {
       title
-      slug
-      date
-      thumb
-      author
-      preview(length: 140)
-      heading_override  
+      mainItem {
+        _id
+        title
+        url
+        thumb
+        preview(length: 140)
+        ...on Article {
+          author
+          date
+        }
+        __typename
+      }
+      secondaryItems {
+        _id
+        title
+        url
+        thumb
+        preview(length: 140)
+        ...on Article {
+          author
+          date
+        }
+        __typename
+      }
     }
   }
 `;
 
 const FeatureSliderWithData = graphql(FEATURED_ARTICLES_QUERY, {
   options: {
-    variables: {
-      skip: 0,
-    },
     notifyOnNetworkStatusChange: true,
   },
-  props({ data: {loading, featuredArticles, fetchMore } }) {
-    featuredArticles = featuredArticles || [];
+  props({ data: {loading, features, fetchMore } }) {
+    features = features || [];
     return {
       loading,
-      featuredArticles,
-      loadMore() {
-        if (loading || featuredArticles.length >= 12) {
-          return;
-        }
-        const page = featuredArticles.length;
-        return fetchMore({
-          variables: {
-            skip: page,
-          },
-          updateQuery: (previousResult, { fetchMoreResult }) => {
-            if (!fetchMoreResult) {
-              return previousResult;
-            }
-
-            let featuredArticles = [...previousResult.featuredArticles];
-            featuredArticles[page] = fetchMoreResult.featuredArticles[0];
-            return Object.assign({}, previousResult, {
-              featuredArticles,
-            });
-          },
-        });
-      },
+      features,
     };
   },
-})( ({loading, featuredArticles, loadMore}) => {
-  return <FeatureSlider loadMore={loadMore} articles={featuredArticles} />;
+})( ({loading, features}) => {
+  return <FeatureSlider features={features} />;
 });
 
 const RECENT_ARTICLES_QUERY = gql`
