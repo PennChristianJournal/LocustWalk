@@ -15,6 +15,7 @@ class FeatureList extends Component {
     return (
       <Table className="table table-striped" head={
         <tr>
+          <th>Index</th>
           <th>Title</th>
           <th><i className="fa fa-check" /></th>
         </tr>
@@ -22,6 +23,7 @@ class FeatureList extends Component {
         {features.map((feature, i) => {
           return (
             <tr key={i} onClick={() => setFeature(feature) }>
+              <td>{feature.index}</td>
               <td>{feature.title}</td>
               <td>{feature.is_published ? <i className="fa fa-check" /> : null}</td>
             </tr>
@@ -33,21 +35,48 @@ class FeatureList extends Component {
 }
 
 const FEATURES_QUERY = gql`
-  query ListFeatures {
-    features {
+  query ListFeatures($skip: Int!) {
+    features(limit: 10, skip: $skip) {
       _id
       title
       index
       is_published
     }
+    featureCount
   }
 `;
 
 const FeatureListWithData = graphql(FEATURES_QUERY, {
-  props({ data: {features}}) {
+  options: {
+    variables: {
+      skip: 0,
+    },
+  },
+  props({ data: {loading, features, featureCount, fetchMore}}) {
     features = features || [];
     return {
       features,
+      hasMore() {
+        return features.length < featureCount;
+      },
+      loadMore() {
+        if (loading) {
+          return;
+        }
+        return fetchMore({
+          variables: {
+            skip: features.length,
+          },
+          updateQuery: (previousResult, { fetchMoreResult }) => {
+            if (!fetchMoreResult) {
+              return previousResult;
+            }
+            return Object.assign({}, previousResult, {
+              features: [...previousResult.features, ...fetchMoreResult.features],
+            });
+          },
+        });
+      },
     };
   },
 })(FeatureList);
