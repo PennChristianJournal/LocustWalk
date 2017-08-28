@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 
 const FeaturedItem = new mongoose.Schema({
-  type: String,
-  contentID: mongoose.Schema.Types.ObjectId,
+  _typename: String,
+  _id: mongoose.Schema.Types.ObjectId,
 });
 
 const Schema = new mongoose.Schema({
@@ -24,4 +24,3 @@ const Schema = new mongoose.Schema({
 });
 
 export default mongoose.model('Feature', Schema);
-
