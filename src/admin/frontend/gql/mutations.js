@@ -99,6 +99,7 @@ export const FEATURE_NEW = gql`
       _id
       title
       index
+      is_published
       mainItem {
         _id
         title
@@ -119,6 +120,7 @@ export const FEATURE_UPDATE = gql`
       _id
       title
       index
+      is_published
       mainItem {
         _id
         title
@@ -139,6 +141,7 @@ export const FEATURE_DELETE = gql`
       _id
       title
       index
+      is_published
       mainItem {
         _id
         title

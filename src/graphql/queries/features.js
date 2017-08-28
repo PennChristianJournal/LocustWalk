@@ -2,6 +2,7 @@
 
 import {
   GraphQLNonNull,
+  GraphQLBoolean,
   GraphQLList,
   GraphQLInt,
   GraphQLString,
@@ -11,6 +12,8 @@ import {
   skipLimitArgs,
   applySkipLimit,
   getProjection,
+  removeEmpty,
+  authenticatedField,
 } from '../helpers';
 
 import ObjectIDType from '../types/objectID';
@@ -36,9 +39,16 @@ export const feature = {
 
 export const features = {
   type: new GraphQLList(FeatureType),
-  args: skipLimitArgs,
-  resolve: (root, {skip, limit}, context, fieldASTs) => {
-    let q = Feature.find({});
+  args: Object.assign({
+    is_published: {
+      name: 'is_published',
+      type: GraphQLBoolean,
+    },
+  }, skipLimitArgs),
+  resolve: (root, {skip, limit, is_published}, context, fieldASTs) => {
+    let q = Feature.find(removeEmpty({
+      is_published: authenticatedField(context, is_published, true),
+    }));
     q.sort({ index: 1 });
     q = applySkipLimit(q, skip, limit);
     return q.exec();
@@ -47,8 +57,16 @@ export const features = {
 
 export const featureCount = {
   type: new GraphQLNonNull(GraphQLInt),
-  resolve: () => {
-    return Feature.count({}).exec();
+  args: {
+    is_published: {
+      name: 'is_published',
+      type: GraphQLBoolean,
+    },
+  },
+  resolve: (root, {is_published}, context) => {
+    return Feature.count(removeEmpty({
+      is_published: authenticatedField(context, is_published, true),
+    })).exec();
   },
 };
 

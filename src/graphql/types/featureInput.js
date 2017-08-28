@@ -1,6 +1,7 @@
 'use strict';
 
 import {
+  GraphQLBoolean,
   GraphQLInputObjectType,
   GraphQLString,
   GraphQLList,
@@ -17,6 +18,9 @@ export default new GraphQLInputObjectType({
     },
     index: {
       type: GraphQLInt,
+    },
+    is_published: {
+      type: GraphQLBoolean,
     },
     mainItem: {
       type: FeatureItemInputType,

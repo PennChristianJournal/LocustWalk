@@ -1,6 +1,7 @@
 'use strict';
 
 import {
+  GraphQLBoolean,
   GraphQLID,
   GraphQLInt,
   GraphQLNonNull,
@@ -36,6 +37,9 @@ export default new GraphQLObjectType({
     },
     index: {
       type: GraphQLInt,
+    },
+    is_published: {
+      type: GraphQLBoolean,
     },
     mainItem: {
       type: new GraphQLNonNull(FeatureItemType),
