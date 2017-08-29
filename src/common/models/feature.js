@@ -42,7 +42,7 @@ Schema.pre('validate', function(next) {
       },
       limit: 1,
     }, (err, latest) => {
-      self.index = (latest[0].index || 0) + 1;
+      self.index = ((latest[0] && latest[0].index) || 0) + 1;
       next(err);
     });
   } else {

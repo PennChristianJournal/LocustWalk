@@ -200,7 +200,7 @@ class FeatureEditPanel extends Component {
               );
             })}
             <div className="form-group">
-              <a className="btn btn-success" onClick={() => {this.props.stage.update('secondaryItems', feature.secondaryItems.concat([{}])); } }>Add</a>
+              <a className="btn btn-success" onClick={() => {this.props.stage.update('secondaryItems', (feature.secondaryItems || []).concat([{}])); } }>Add</a>
             </div>
 
             <div className="btn-toolbar">
