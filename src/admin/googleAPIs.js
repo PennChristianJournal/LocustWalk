@@ -4,7 +4,7 @@ import google from 'googleapis';
 import nconf from 'nconf';
 import fs from 'fs';
 
-const JWT = nconf.get('JWT');
+const JWT = nconf.get().JWT;
 fs.writeFileSync(`${__dirname}/../../jwt.json`, JSON.stringify(JWT));
 
 export function getJWTClient(scopes) {

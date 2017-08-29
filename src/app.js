@@ -7,7 +7,7 @@ import logger from 'morgan';
 import mongoose from 'mongoose';
 import http from 'http';
 
-nconf.argv().env().file({file: path.join(__dirname, '../config.json')});
+nconf.argv().env('__').file({file: path.join(__dirname, '../config.json')});
 
 nconf.defaults({
   PORT: 3000,

@@ -1,10 +1,9 @@
 import ViewEngine from './viewEngine';
-import {BundleAnalyzerPlugin} from 'webpack-bundle-analyzer';
 import path from 'path';
 import webpack from 'webpack';
 import nconf from 'nconf';
 
-nconf.argv().env().file({file: path.join(__dirname, '../config.json')}).overrides({
+nconf.argv().env('__').file({file: path.join(__dirname, '../config.json')}).overrides({
   APP_ENV: 'browser',
 });
 
@@ -73,7 +72,7 @@ module.exports = {
   },
 
   plugins: [
-    process.env.NODE_ENV !== 'production' ? new BundleAnalyzerPlugin({openAnalyzer: false}) : null,
+    process.env.NODE_ENV !== 'production' ? new (require('webpack-bundle-analyzer').BundleAnalyzerPlugin)({openAnalyzer: false}) : null,
     process.env.NODE_ENV !== 'production' ? new webpack.HotModuleReplacementPlugin() : null,
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.DefinePlugin({
