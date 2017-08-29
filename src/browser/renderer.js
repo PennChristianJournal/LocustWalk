@@ -9,6 +9,7 @@ import {
   ApolloClient,
   ApolloProvider,
   createNetworkInterface,
+  IntrospectionFragmentMatcher,
 } from 'react-apollo';
 export function mount(Page) {
   if (typeof document !== 'undefined') {
@@ -23,6 +24,22 @@ export function mount(Page) {
     const client = new ApolloClient({
       networkInterface,
       initialState: window.__STATE__,
+      fragmentMatcher: new IntrospectionFragmentMatcher({
+        introspectionQueryResultData: {
+          __schema: {
+            types: [
+              {
+                kind: 'UNION',
+                name: 'FeatureItem',
+                possibleTypes: [
+                  { name: 'Topic' },
+                  { name: 'Article' },
+                ],
+              },
+            ],
+          },
+        },
+      }),
     });
 
     render(

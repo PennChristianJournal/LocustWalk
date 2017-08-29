@@ -2,9 +2,9 @@
 
 import {
   GraphQLID,
+  GraphQLInt,
   GraphQLObjectType,
   GraphQLString,
-  GraphQLInt,
   GraphQLBoolean,
 } from 'graphql/type';
 
@@ -12,28 +12,39 @@ import Article from '~/common/models/article';
 import Topic from '~/common/models/topic';
 import { GraphQLDateTime } from 'graphql-iso-date';
 import TopicType from './topic';
+import FeatureItemType from '../types/featureItem';
 import {getProjection, htmlPreview} from '../helpers';
 
-export function getArticleProjection(fieldASTs) {
-  let projection = getProjection(fieldASTs);
+export function projectionForArticle(projection) {
   // preview is a computed field so we still need to query the content if only the preview is requested
   if (projection.preview) {
     projection.content = true;
   }
+  if (projection.url) {
+    projection.slug = true;
+  }
   return projection;
+}
+
+export function getArticleProjection(fieldASTs) {
+  return projectionForArticle(getProjection(fieldASTs));
 }
 
 const ArticleType = new GraphQLObjectType({
   name: 'Article',
+  interfaces: [FeatureItemType],
   fields: () => ({
     _id: {
       type: GraphQLID,
     },
+    _typename: {
+      type: GraphQLString,
+      resolve(root) {
+        return root.__typename;
+      },
+    },
     title: {
       type: GraphQLString,
-    },
-    is_featured: {
-      type: GraphQLBoolean,
     },
     is_published: {
       type: GraphQLBoolean,
@@ -65,11 +76,14 @@ const ArticleType = new GraphQLObjectType({
         return htmlPreview(content, length, elipsis);
       },
     },
-    heading_override: {
-      type: GraphQLString,
-    },
     slug: {
       type: GraphQLString,
+    },
+    url: {
+      type: GraphQLString,
+      resolve: ({slug}) => {
+        return `/articles/${slug}`;
+      },
     },
     cover: {
       type: GraphQLID,

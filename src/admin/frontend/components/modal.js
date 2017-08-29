@@ -59,7 +59,9 @@ class Modal extends Component {
         })} style={{
           display: !this.state.isHidden ? 'block' : 'none',
         }}>
-          <div className="modal-dialog">
+          <div className="modal-dialog" style={{
+            width: this.props.width ? this.props.width : undefined,
+          }}>
             <div className="modal-content">
               <div className="modal-header">
                 <button type="button" className="close" onClick={this.handleClose.bind(this)}><span>&times;</span></button>

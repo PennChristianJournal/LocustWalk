@@ -11,11 +11,6 @@ const Schema = new mongoose.Schema({
     default: false,
     index: true,
   },
-  is_featured: {
-    type: Boolean,
-    index: true,
-    default: false,
-  },
   date: {
     type: Date,
     index: true,
@@ -28,10 +23,6 @@ const Schema = new mongoose.Schema({
       widget: 'textarea',
       display: 'e',
     },
-  },
-  heading_override: {
-    type: String,
-    default: '',
   },
   slug: {
     type: String,

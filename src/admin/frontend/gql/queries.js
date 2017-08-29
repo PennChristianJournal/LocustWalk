@@ -12,7 +12,6 @@ export const ARTICLE_QUERY = gql`
       author
       date
       is_published
-      is_featured
       cover
       thumb
       parent {
@@ -40,3 +39,37 @@ export const TOPIC_QUERY = gql`
     }
   }
 `;
+
+export const FEATURE_QUERY = gql`
+  query FeatureQuery($_id: ObjectID!) {
+    feature(_id: $_id) {
+      _id
+      title
+      index
+      is_published
+      mainItem {
+        _id
+        title
+        thumb
+        url
+        ...on Article {
+          author
+          date
+        }
+        __typename
+      }
+      secondaryItems {
+        _id
+        title
+        thumb
+        url
+        ...on Article {
+          author
+          date
+        }
+        __typename
+      }
+    }
+  }
+`;
+

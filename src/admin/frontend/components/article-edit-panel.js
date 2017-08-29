@@ -91,44 +91,6 @@ export default class ArticleEditPanel extends Component {
 
     return (
       <div className="admin-sidebar">
-          <style dangerouslySetInnerHTML={{__html: `
-            .twitter-typeahead {
-              display: block!important;
-            }
-
-            .tt-dropdown-menu {
-              width: 100%;
-              & > div {
-                padding: 5px;
-                border-radius: 5px;
-                box-shadow: 0 0 10px 0 black;
-                background-color: white;
-              }
-            }
-            .tt-suggestion {
-              padding: 2px 10px;
-              line-height: 24px;
-              color: #333;
-              p {
-                margin: 0;
-              }
-            }
-
-            .tt-suggestion.tt-cursor,.tt-suggestion:hover {
-              color: #fff;
-              background-color: #0097cf;
-            }
-
-            .tt-hint {
-              color: #999
-            }
-
-            .tt-menu {
-              width: 100%;
-              background-color: white;
-              border: 1px solid gray;
-            }
-          `}} />
           <Optional test={this.props.gdriveSync}>
             <form className="form" action="sync" method="POST" onSubmit={this.syncArticle.bind(this)}>
                 <div className="form-group">
@@ -187,13 +149,6 @@ export default class ArticleEditPanel extends Component {
 
               <div className="form-group">
                   <div className="checkbox">
-                      <label className="checkbox-inline">
-                          <input type="checkbox"
-                            checked={article.is_featured || false}
-                            onChange={e => this.props.stage.update('is_featured', e.target.checked) }
-                           />
-                          Featured
-                      </label>
                       <label className="checkbox-inline">
                           <input type="checkbox"
                             checked={article.is_published || false}
@@ -364,16 +319,6 @@ export default class ArticleEditPanel extends Component {
                   <input id="date-input" name="date" type="hidden" className="form-control"
                       value={moment(this.state.dateNow ? this.state.date : article.date).format('MMM DD, YYYY [at] H:mm:ss')} />
 
-              </div>
-              <div className="form-group">
-                  <label>Heading Override</label>
-                  <input type="text" className="form-control"
-                    onChange={ e => this.props.stage.update('heading_override', e.target.value) }
-                    placeholder={moment(this.state.dateNow ? this.state.date : article.date).format('MMM YYYY [Feature Article]')}
-                  />
-                  <input name="heading_override" type="hidden" className="form-control"
-                    value={article.heading_override || moment(this.state.dateNow ? this.state.date : article.date).format('MMM YYYY [Feature Article]')}
-                  />
               </div>
               <div className="btn-toolbar">
                 <button className="btn btn-primary" type="submit">Save</button>

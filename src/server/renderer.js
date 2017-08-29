@@ -9,6 +9,7 @@ import {
   ApolloClient,
   ApolloProvider,
   getDataFromTree,
+  IntrospectionFragmentMatcher,
 } from 'react-apollo';
 import { createLocalInterface } from 'apollo-local-query';
 import { schema } from '~/graphql';
@@ -23,6 +24,22 @@ function render(req, res, view, props = {}) {
     ssrMode: true,
     networkInterface: createLocalInterface(graphql, schema, {
       context: req,
+    }),
+    fragmentMatcher: new IntrospectionFragmentMatcher({
+      introspectionQueryResultData: {
+        __schema: {
+          types: [
+            {
+              kind: 'UNION',
+              name: 'FeatureItem',
+              possibleTypes: [
+                { name: 'Topic' },
+                { name: 'Article' },
+              ],
+            },
+          ],
+        },
+      },
     }),
   });
 
