@@ -52,6 +52,7 @@ export const FEATURE_QUERY = gql`
         title
         thumb
         url
+        preview(length: 100)
         ...on Article {
           author
           date
@@ -63,6 +64,7 @@ export const FEATURE_QUERY = gql`
         title
         thumb
         url
+        preview(length: 100)
         ...on Article {
           author
           date

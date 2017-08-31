@@ -72,6 +72,12 @@ class FeatureEditPanel extends Component {
                       _id
                       title
                       __typename
+                      thumb
+                      preview(length: 100)
+                      ...on Article {
+                        date
+                        author
+                      }
                     }
                   }
                 `}
@@ -83,11 +89,9 @@ class FeatureEditPanel extends Component {
                 onChange={selectedItems => {
                   const selected = selectedItems[0];
                   if (selected) {
-                    this.props.stage.update('mainItem', {
-                      _id: selected._id,
-                      title: selected.title,
+                    this.props.stage.update('mainItem', Object.assign({
                       _typename: selected.__typename,
-                    });
+                    }, selected));
                   }
                 }}
                 minLength={1}
@@ -114,6 +118,12 @@ class FeatureEditPanel extends Component {
                           _id
                           title
                           __typename
+                          thumb
+                          preview(length: 100)
+                          ...on Article {
+                            date
+                            author
+                          }
                         }
                       }
                     `}
@@ -126,11 +136,9 @@ class FeatureEditPanel extends Component {
                       const selected = selectedItems[0];
                       if (selected) {
                         var arr = feature.secondaryItems.slice();
-                        arr[index] = {
-                          _id: selected._id,
-                          title: selected.title,
+                        arr[index] = Object.assign({
                           _typename: selected.__typename,
-                        };
+                        }, selected);
                         this.props.stage.update('secondaryItems', arr);
                       }
                     }}
