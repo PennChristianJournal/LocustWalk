@@ -11,6 +11,7 @@ import {
 import ArticleType, { getArticleProjection } from '../types/article';
 import { getTopicProjection } from '../types/topic';
 import ObjectIDType from '../types/objectID';
+import GoogleDriveDocumentType from '../types/googleDriveDocument';
 import Article from '~/common/models/article';
 import mongoose from 'mongoose';
 
@@ -218,5 +219,59 @@ export const searchArticles = {
     }, getArticleProjection(fieldASTs));
     q = applySkipLimit(q, skip, limit);
     return q.exec();
+  },
+};
+
+import {getJWTClient, getGoogleDriveClient} from '~/admin/googleAPIs';
+const driveClient = getJWTClient(['https://www.googleapis.com/auth/drive']);
+
+export const searchDocuments = {
+  type: new GraphQLList(GoogleDriveDocumentType),
+  args: {
+    title: {
+      name: 'title',
+      type: new GraphQLNonNull(GraphQLString),
+    },
+  },
+  resolve: (root, {title}, context, fieldASTs) => {
+    if (!context.isAuthenticated()) {
+      return Promise.reject('Not authenticated');
+    }
+
+    return new Promise((resolve, reject) => {
+      getGoogleDriveClient(driveClient, function(err, drive) {
+        if (err) {
+          console.error(err);
+        }
+    
+        var files = [];
+    
+        function fetchPage(pageToken, cb) {
+          drive.files.list({
+            q: `name contains '${title}'`,
+            fields: 'nextPageToken, files(id, name)',
+            spaces: 'drive',
+            pageToken: pageToken,
+          }, function(err, res) {
+            if (err) {
+              return cb(err);
+            }
+    
+            res.files.forEach(file => files.push(file));
+            if (res.nextPageToken) {
+              // more results...
+            }
+            return cb(null);
+          });
+        }
+    
+        fetchPage(null, function(err) {
+          if (err) {
+            return reject(err);
+          }
+          return resolve(files);
+        });
+      });
+    });
   },
 };

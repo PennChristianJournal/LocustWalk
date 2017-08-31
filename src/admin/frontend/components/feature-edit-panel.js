@@ -36,7 +36,7 @@ class FeatureEditPanel extends Component {
   render() {
     const feature = this.props.stage.values;
 
-    var mainType = (feature.mainItem && feature.mainItem.__typename) || '';
+    var mainType = (feature.mainItem && (feature.mainItem._typename || feature.mainItem.__typename)) || '';
     var mainID = (feature.mainItem && feature.mainItem._id) || '';
     return (
       <div className="row">
@@ -64,59 +64,34 @@ class FeatureEditPanel extends Component {
 
             <div className="form-group">
               <label>Main Item</label>
-              <TypeaheadInput key={feature.mainItem && feature.mainItem._id} type="text" className="form-control" placeholder="Main Item" defaultValue={feature.mainItem && feature.mainItem.title}
-
-                typeaheadConfig={{
-                  hint: true,
-                  highlight: true,
-                  minLength: 1,
-                  display: 'title',
+              <TypeaheadInput
+                labelKey="title"
+                query={`
+                  query FeaturesSearch($title: String!) {
+                    searchFeatureItems(title: $title) {
+                      _id
+                      title
+                      __typename
+                    }
+                  }
+                `}
+                getVariables={query => {
+                  return {
+                    title: query,
+                  };
                 }}
-
-                createBloodhoundConfig={function(Bloodhound) {
-                  return new Bloodhound({
-                    datumTokenizer: Bloodhound.tokenizers.whitespace('title'),
-                    queryTokenizer: Bloodhound.tokenizers.whitespace,
-                    remote: {
-                      url: '%QUERY',
-                      wildcard: '%QUERY',
-                      transport(options, onSuccess, onError) {
-                        let data = {
-                          operationName: 'FeaturesSearch',
-                          query: `
-                            query FeaturesSearch($title: String!) {
-                              searchFeatureItems(title: $title) {
-                                _id
-                                title
-                                __typename
-                              }
-                            }
-                          `,
-                          variables: {
-                            title: options.url,
-                          },
-                        };
-                        $.ajax({
-                          type: 'POST',
-                          url: '/graphql',
-                          contentType: 'application/json',
-                          data: JSON.stringify(data),
-                        })
-                        .done(({data: { searchFeatureItems } }) => {onSuccess(searchFeatureItems); })
-                        .fail((request, status, error) => {onError(error); });
-                      },
-                    },
-                  });
+                onChange={selectedItems => {
+                  const selected = selectedItems[0];
+                  if (selected) {
+                    this.props.stage.update('mainItem', {
+                      _id: selected._id,
+                      title: selected.title,
+                      _typename: selected.__typename,
+                    });
+                  }
                 }}
-
-                target={ (value, datum) => {
-                  this.props.stage.update('mainItem', Object.assign({}, {
-                    _id: datum._id,
-                    title: datum.title,
-                    _typename: datum.__typename,
-                  }));
-                }}
-                targetField="_id"
+                minLength={1}
+                defaultSelected={feature._id ? [feature] : undefined}
               />
               <span>{`${mainType} ${mainID}`}</span>
               <input type="hidden" readOnly className="form-control" placeholder="Main Item Type" value={mainType} />
@@ -127,65 +102,40 @@ class FeatureEditPanel extends Component {
               <label>Secondary Items</label>
             </div>
             {(feature.secondaryItems || []).map((item, index) => {
-              var type = item.__typename || '';
+              var type = item._typename || item.__typename || '';
               var id = item._id || '';
               return (
                 <div className="form-group" key={index + id}>
-                  <TypeaheadInput type="text" className="form-control" placeholder="Secondary Item" defaultValue={item && item.title}
-
-                    typeaheadConfig={{
-                      hint: true,
-                      highlight: true,
-                      minLength: 1,
-                      display: 'title',
+                  <TypeaheadInput
+                    labelKey="title"
+                    query={`
+                      query FeaturesSearch($title: String!) {
+                        searchFeatureItems(title: $title) {
+                          _id
+                          title
+                          __typename
+                        }
+                      }
+                    `}
+                    getVariables={query => {
+                      return {
+                        title: query,
+                      };
                     }}
-
-                    createBloodhoundConfig={function(Bloodhound) {
-                      return new Bloodhound({
-                        datumTokenizer: Bloodhound.tokenizers.whitespace('title'),
-                        queryTokenizer: Bloodhound.tokenizers.whitespace,
-                        remote: {
-                          url: '%QUERY',
-                          wildcard: '%QUERY',
-                          transport(options, onSuccess, onError) {
-                            let data = {
-                              operationName: 'FeaturesSearch',
-                              query: `
-                                query FeaturesSearch($title: String!) {
-                                  searchFeatureItems(title: $title) {
-                                    _id
-                                    title
-                                    __typename
-                                  }
-                                }
-                              `,
-                              variables: {
-                                title: options.url,
-                              },
-                            };
-                            $.ajax({
-                              type: 'POST',
-                              url: '/graphql',
-                              contentType: 'application/json',
-                              data: JSON.stringify(data),
-                            })
-                            .done(({data: { searchFeatureItems } }) => {onSuccess(searchFeatureItems); })
-                            .fail((request, status, error) => {onError(error); });
-                          },
-                        },
-                      });
+                    onChange={selectedItems => {
+                      const selected = selectedItems[0];
+                      if (selected) {
+                        var arr = feature.secondaryItems.slice();
+                        arr[index] = {
+                          _id: selected._id,
+                          title: selected.title,
+                          _typename: selected.__typename,
+                        };
+                        this.props.stage.update('secondaryItems', arr);
+                      }
                     }}
-
-                    target={ (value, datum) => {
-                      var arr = feature.secondaryItems.slice();
-                      arr[index] = Object.assign({}, {
-                        _id: datum._id,
-                        title: datum.title,
-                        _typename: datum.__typename,
-                      });
-                      this.props.stage.update('secondaryItems', arr);
-                    }}
-                    targetField="_id"
+                    minLength={1}
+                    defaultSelected={item._id ? [item] : undefined}
                   />
                   <span>{`${type} ${id}`}</span>
                   <input type="hidden" readOnly className="form-control" placeholder="Secondary Item Type" value={type} />

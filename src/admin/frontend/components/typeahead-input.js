@@ -1,53 +1,42 @@
 'use strict';
 
 import React, {Component} from 'react';
+import {AsyncTypeahead} from 'react-bootstrap-typeahead'
 import $ from 'jquery';
 
-class TypeaheadInput extends Component {
-
-  registerTarget(target) {
-    const $input = $(this.refs.input);
-    $input.on('typeahead:selected typeahead:autocompleted', (e, datum) => {
-      if (typeof target === 'function') {
-        target(datum[this.props.targetField], datum);
-      } else {
-        $(target).val(datum[this.props.targetField]);
-      }
-    });
-  }
-
-  componentDidMount() {
-    var {createBloodhoundConfig, typeaheadConfig, target} = this.props;
-
-    const search = createBloodhoundConfig(require('corejs-typeahead'));
-    search.initialize();
-    typeaheadConfig = Object.assign({}, typeaheadConfig, {
-      source: search.ttAdapter(),
-    });
-
-    const $input = $(this.refs.input);
-    $input.typeahead(null, typeaheadConfig);
-
-    this.registerTarget(target);
-
-    $('.tt-input').attr('autocomplete', 'off');
-  }
-
-  componentWillReceiveProps({target}) {
-    if (target && target != this.props.target) {
-      this.registerTarget(target);
-    }
+export default class TypeaheadInput extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      options: [],
+    };
   }
 
   render() {
-    const props = Object.assign({}, this.props);
-    delete props.createBloodhoundConfig;
-    delete props.typeaheadConfig;
-    delete props.target;
-    delete props.targetField;
-
-    return <input ref="input" {...props} />;
+    let matches = this.props.query.match(/query ([a-zA-Z]+)[\s\S]*?{[\s\S]*?([a-zA-Z]+)/);
+    const {getVariables, query, ...otherProps} = this.props;
+    return (
+      <AsyncTypeahead
+        {...otherProps}
+        onSearch={query => {
+          let data = {
+            operationName: matches[1],
+            query: this.props.query,
+            variables: this.props.getVariables(query),
+          }
+          $.ajax({
+            type: 'POST',
+            url: '/graphql',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+          }).then(({data}) => {
+            this.setState({
+              options: data[matches[2]],
+            });
+          });
+        }}
+        options={this.state.options}
+      />
+    );
   }
 }
-
-export default TypeaheadInput;

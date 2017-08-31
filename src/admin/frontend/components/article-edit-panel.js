@@ -118,28 +118,28 @@ class ArticleEditPanel extends Component {
                 <div className="form-group">
                     <label>Pull from Google Drive</label>
                     <TypeaheadInput
-                      className="form-control" placeholder="Document Title"
-
-                      typeaheadConfig={{
-                        hint: true,
-                        highlight: true,
-                        minLength: 1,
-                        display: 'name',
+                      labelKey="name"
+                      query={`
+                        query ArticlesQuery($title: String!) {
+                          searchDocuments(title: $title) {
+                            id
+                            name
+                          }
+                        }
+                      `}
+                      getVariables={query => {
+                        return {
+                          title: query,
+                        };
                       }}
-
-                      createBloodhoundConfig={function(Bloodhound) {
-                        return new Bloodhound({
-                          datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-                          queryTokenizer: Bloodhound.tokenizers.whitespace,
-                          remote: {
-                            url: '/admin/articles/docs/search?name=%QUERY',
-                            wildcard: '%QUERY',
-                          },
-                        });
+                      onChange={selectedItems => {
+                        const selected = selectedItems[0];
+                        if (selected) {
+                          var el = document.getElementById('doc-id-input');
+                          el.value = selected.id;
+                        }
                       }}
-
-                      target="#doc-id-input"
-                      targetField="id"
+                      minLength={1}
                     />
                     <input className="form-control" id="doc-id-input" name="doc_id" placeholder="Document ID" readOnly />
                 </div>
@@ -212,112 +212,61 @@ class ArticleEditPanel extends Component {
 
               <div className="form-group">
                 <label>Response To</label>
-                <TypeaheadInput key={article.parent && article.parent._id} type="text" className="form-control" placeholder="Response To..." defaultValue={article.parent && article.parent.title}
-
-                  typeaheadConfig={{
-                    hint: true,
-                    highlight: true,
-                    minLength: 1,
-                    display: 'title',
+                <TypeaheadInput
+                  labelKey="title"
+                  query={`
+                    query ArticlesQuery($title: String!) {
+                      searchArticles(title: $title) {
+                        _id
+                        title
+                      }
+                    }
+                  `}
+                  getVariables={query => {
+                    return {
+                      title: query,
+                    };
                   }}
-
-                  createBloodhoundConfig={function(Bloodhound) {
-                    return new Bloodhound({
-                      datumTokenizer: Bloodhound.tokenizers.obj.whitespace('title'),
-                      queryTokenizer: Bloodhound.tokenizers.whitespace,
-                      remote: {
-                        url: '%QUERY',
-                        wildcard: '%QUERY',
-                        transport(options, onSuccess, onError) {
-                          let data = {
-                            operationName: 'ArticlesQuery',
-                            query: `
-                              query ArticlesQuery($title: String!) {
-                                searchArticles(title: $title) {
-                                  _id
-                                  title
-                                }
-                              }
-                            `,
-                            variables: {
-                              title: options.url,
-                            },
-                          };
-                          $.ajax({
-                            type: 'POST',
-                            url: '/graphql',
-                            contentType: 'application/json',
-                            data: JSON.stringify(data),
-                          })
-                          .done(({data: { searchArticles } }) => {onSuccess(searchArticles); })
-                          .fail((request, status, error) => {onError(error); });
-                        },
-                      },
-                    });
+                  onChange={selectedItems => {
+                    const selected = selectedItems[0];
+                    if (selected) {
+                      this.props.stage.update('parentID', selected._id);
+                      this.props.stage.update('parent', selected);
+                    }
                   }}
-
-                  target={ (value, datum) => {
-                    this.props.stage.update('parentID', value);
-                    this.props.stage.update('parent', datum);
-                  } }
-                  targetField="_id"
+                  minLength={1}
+                  defaultSelected={(article.parent && article.parent._id) ? [article.parent] : undefined}
                 />
                 <input type="text" readOnly className="form-control" placeholder="Article ID" value={article.parentID || (article.parent && article.parent._id) || ''} />
               </div>
 
               <div className="form-group">
                 <label>Topic</label>
-
-                <TypeaheadInput key={article.topic && article.topic._id} type="text" className="form-control" placeholder="Topic" defaultValue={article.topic && article.topic.title}
-                  typeaheadConfig={{
-                    hint: true,
-                    highlight: true,
-                    minLength: 1,
-                    display: 'title',
+                <TypeaheadInput
+                  labelKey="title"
+                  query={`
+                    query TopicsQuery($title: String!) {
+                      searchTopics(title: $title) {
+                        _id
+                        title
+                      }
+                    }
+                  `}
+                  getVariables={query => {
+                    return {
+                      title: query,
+                    };
                   }}
-
-                  createBloodhoundConfig={function(Bloodhound) {
-                    return new Bloodhound({
-                      datumTokenizer: Bloodhound.tokenizers.obj.whitespace('title'),
-                      queryTokenizer: Bloodhound.tokenizers.whitespace,
-                      remote: {
-                        url: '%QUERY',
-                        wildcard: '%QUERY',
-                        transport(options, onSuccess, onError) {
-                          let data = {
-                            operationName: 'TopicsQuery',
-                            query: `
-                              query TopicsQuery($title: String!) {
-                                searchTopics(title: $title) {
-                                  _id
-                                  title
-                                }
-                              }
-                            `,
-                            variables: {
-                              title: options.url,
-                            },
-                          };
-                          $.ajax({
-                            type: 'POST',
-                            url: '/graphql',
-                            contentType: 'application/json',
-                            data: JSON.stringify(data),
-                          })
-                          .done(({data: { searchTopics } }) => {onSuccess(searchTopics); })
-                          .fail((request, status, error) => {onError(error); });
-                        },
-                      },
-                    });
+                  onChange={selectedItems => {
+                    const selected = selectedItems[0];
+                    if (selected) {
+                      this.props.stage.update('topicID', selected._id);
+                      this.props.stage.update('topic', selected);
+                    }
                   }}
-
-                  target={ (value, datum) => {
-                    this.props.stage.update('topicID', value);
-                    this.props.stage.update('topic', datum);
-                  } }
-                  targetField="_id"
+                  minLength={1}
+                  defaultSelected={(article.topic && article.topic._id) ? [article.topic] : undefined}
                 />
-
                 <input type="text" readOnly className="form-control" placeholder="Topic ID" value={article.topicID || (article.topic && article.topic._id) || ''} />
               </div>
 
