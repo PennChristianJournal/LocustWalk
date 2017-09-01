@@ -2,37 +2,11 @@
 
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {notificationConnect} from '~/admin/frontend/components/notification-context';
-import $ from 'jquery';
 import TypeaheadInput from './typeahead-input';
 import FeatureSlider from '~/common/frontend/components/feature-slider';
+import EditForm from './edit-form';
 
 class FeatureEditPanel extends Component {
-  handleSubmit(event) {
-    event.preventDefault();
-    const title = this.props.stage.values.title;
-
-    const closeNotification = this.props.pushNotification('warning', `Saving "${title}"...`);
-
-    this.props.submit().then(() => {
-      setTimeout(this.props.pushNotification('success', `Successfully saved "${title}"`), 5000);
-    }).then(this.props.onSubmit).catch(error => {
-      this.props.pushNotification('danger', error.toString());
-    }).then(closeNotification);
-  }
-
-  handleCancel(event) {
-    if (!this.props.stage.hasChangedFields() || confirm(`Are you sure you want to cancel editing "${this.props.stage.values.title}"? Unsaved changes will be lost!`)) {
-      this.props.cancel(this.props.onCancel);
-    }
-  }
-
-  handleDelete(event) {
-    if (confirm(`Are you sure you want to delete "${this.props.stage.values.title}?"`)) {
-      this.props.delete().then(this.props.onDelete);
-    }
-  }
-
   render() {
     const feature = this.props.stage.values;
 
@@ -44,7 +18,7 @@ class FeatureEditPanel extends Component {
           <FeatureSlider features={[feature]} />
         </div>
         <div className="col-lg-12">
-          <form onSubmit={this.handleSubmit.bind(this)} className="form" key={feature._id}>
+          <EditForm {...this.props} getName={values => values.title} key={feature._id}>
             <div className="form-group">
               <label>Title</label>
               <input type="text" className="form-control" placeholder="Feature Title" value={feature.title} onChange={ e => { this.props.stage.update('title', e.target.value); } } />
@@ -160,13 +134,7 @@ class FeatureEditPanel extends Component {
             <div className="form-group">
               <a className="btn btn-success" onClick={() => {this.props.stage.update('secondaryItems', (feature.secondaryItems || []).concat([{}])); } }>Add</a>
             </div>
-
-            <div className="btn-toolbar">
-              <button className="btn btn-primary" type="submit">Save</button>
-              <a className="btn btn-default" onClick={this.handleCancel.bind(this)}>Cancel</a>
-              <a className="btn btn-danger pull-right" onClick={this.handleDelete.bind(this)}>Delete</a>
-            </div>
-          </form>
+          </EditForm>
         </div>
       </div>
     );
@@ -180,4 +148,4 @@ FeatureEditPanel.propTypes = {
   delete: PropTypes.func.isRequired,
 };
 
-export default notificationConnect('notifications')(FeatureEditPanel);
+export default FeatureEditPanel;

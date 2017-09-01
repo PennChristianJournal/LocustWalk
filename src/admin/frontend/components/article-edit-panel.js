@@ -8,6 +8,7 @@ import TypeaheadInput from './typeahead-input';
 import moment from 'moment';
 import {getFileURL} from '~/common/frontend/helpers/file';
 import $ from 'jquery';
+import EditForm from './edit-form';
 
 class ArticleEditPanel extends Component {
   constructor(props) {
@@ -56,46 +57,6 @@ class ArticleEditPanel extends Component {
       this.props.stage.update(`${prop}_buffer`, reader.result);
     };
     reader.readAsDataURL(file);
-  }
-
-  handleSubmit(event) {
-    event.preventDefault();
-    const title = this.props.stage.values.title;
-
-    const closeNotification = this.props.pushNotification('warning', `Saving "${title}"...`);
-
-    const updateArticleContent = new Promise(resolve => {
-      if (this.props.getArticleContent) {
-        this.props.stage.update('content', this.props.getArticleContent(), resolve);
-      } else {
-        resolve();
-      }
-    });
-
-    updateArticleContent.then(this.props.submit).then(() => {
-      setTimeout(this.props.pushNotification('success', `Successfully saved "${title}"`), 5000);
-    }).then(this.props.onSubmit).catch(error => {
-      this.props.pushNotification('danger', error.toString());
-    }).then(closeNotification);
-  }
-
-  handleCancel(event) {
-    if (!this.props.stage.hasChangedFields() || confirm(`Are you sure you want to cancel editing "${this.props.stage.values.title}"? Unsaved changes will be lost!`)) {
-      this.props.cancel(this.props.onCancel);
-    }
-  }
-
-  handleDelete(event) {
-    const title = this.props.stage.values.title;
-    if (confirm(`Are you sure you want to delete "${title}?"`)) {
-      const closeNotification = this.props.pushNotification('warning', `Deleting "${title}"...`);
-
-      this.props.delete().then(() => {
-        setTimeout(this.props.pushNotification('success', `Successfully deleted "${title}"`), 5000);
-      }).then(this.props.onDelete).catch(error => {
-        this.props.pushNotification('danger', error.toString());
-      }).then(closeNotification);
-    }
   }
 
   syncArticle(event) {
@@ -148,7 +109,15 @@ class ArticleEditPanel extends Component {
                 </div>
             </form>
           </Optional>
-          <form onSubmit={this.handleSubmit.bind(this)} className="form" key={article._id}>
+          <EditForm {...this.props} key={article._id} getName={values => values.title} preSubmit={() => {
+            return new Promise(resolve => {
+              if (this.props.getArticleContent) {
+                this.props.stage.update('content', this.props.getArticleContent(), resolve);
+              } else {
+                resolve();
+              }
+            });
+          }} >
               {this.props.getArticleContent ? <input type="hidden" name="content" /> : null }
 
               <div className="form-group">
@@ -291,12 +260,7 @@ class ArticleEditPanel extends Component {
                       value={moment(this.state.dateNow ? this.state.date : article.date).format('MMM DD, YYYY [at] H:mm:ss')} />
 
               </div>
-              <div className="btn-toolbar">
-                <button className="btn btn-primary" type="submit">Save</button>
-                <a className="btn btn-default" onClick={this.handleCancel.bind(this)}>Cancel</a>
-                <a className="btn btn-danger pull-right" onClick={this.handleDelete.bind(this)}>Delete</a>
-              </div>
-          </form>
+          </EditForm>
       </div>
     );
   }
@@ -309,4 +273,4 @@ ArticleEditPanel.propTypes = {
   delete: PropTypes.func.isRequired,
 };
 
-export default notificationConnect('notifications')(ArticleEditPanel);
+export default ArticleEditPanel;
