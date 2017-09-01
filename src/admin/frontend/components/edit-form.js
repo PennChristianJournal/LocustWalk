@@ -9,10 +9,10 @@ class EditForm extends Component {
     super(props);
     this.errorNotifications = [];
   }
-  
+
   handleSubmit(event) {
     event.preventDefault();
-    
+
     const name = this.props.getName(this.props.stage.values);
 
     const closeSavingNotification = this.props.pushNotification('warning', `Saving "${name}"...`);
@@ -63,7 +63,7 @@ class EditForm extends Component {
           <a className="btn btn-danger pull-right" onClick={this.handleDelete.bind(this)}>Delete</a>
         </div>
       </form>
-    )
+    );
   }
 }
 

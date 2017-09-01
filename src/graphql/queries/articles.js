@@ -243,9 +243,9 @@ export const searchDocuments = {
         if (err) {
           console.error(err);
         }
-    
+
         var files = [];
-    
+
         function fetchPage(pageToken, cb) {
           drive.files.list({
             q: `name contains '${title}'`,
@@ -256,7 +256,7 @@ export const searchDocuments = {
             if (err) {
               return cb(err);
             }
-    
+
             res.files.forEach(file => files.push(file));
             if (res.nextPageToken) {
               // more results...
@@ -264,7 +264,7 @@ export const searchDocuments = {
             return cb(null);
           });
         }
-    
+
         fetchPage(null, function(err) {
           if (err) {
             return reject(err);

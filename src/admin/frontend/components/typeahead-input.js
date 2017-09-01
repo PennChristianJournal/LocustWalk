@@ -2,7 +2,6 @@
 
 import React, {Component} from 'react';
 import {AsyncTypeahead} from 'react-bootstrap-typeahead'
-import $ from 'jquery';
 
 export default class TypeaheadInput extends Component {
   constructor(props) {
@@ -21,8 +20,8 @@ export default class TypeaheadInput extends Component {
         onSearch={query => {
           let data = {
             operationName: matches[1],
-            query: this.props.query,
-            variables: this.props.getVariables(query),
+            query,
+            variables: getVariables(query),
           }
           $.ajax({
             type: 'POST',

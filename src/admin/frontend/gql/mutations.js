@@ -1,6 +1,31 @@
 'use strict';
 import {gql} from 'react-apollo';
 
+export const ARTICLE_NEW = gql`
+  mutation newArticle($article: ArticleInput) {
+    newArticle(article: $article) {
+      _id
+      title
+      content
+      preview
+      slug
+      author
+      date
+      is_published
+      cover
+      thumb
+      parent {
+        _id
+        title
+      }
+      topic {
+        _id
+        title
+      }
+    }
+  }
+`;
+
 export const ARTICLE_UPDATE = gql`
   mutation updateArticle($_id: ObjectID!, $article: ArticleInput) {
     updateArticle(_id: $_id, article: $article) {
@@ -30,23 +55,6 @@ export const ARTICLE_DELETE = gql`
   mutation deleteArticle($_id: ObjectID!) {
     deleteArticle(_id: $_id) {
       _id
-      title
-      content
-      preview
-      slug
-      author
-      date
-      is_published
-      cover
-      thumb
-      parent {
-        _id
-        title
-      }
-      topic {
-        _id
-        title
-      }
     }
   }
 `;

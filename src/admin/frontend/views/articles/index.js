@@ -43,7 +43,7 @@ class ArticleList extends Component {
   }
 }
 
-const ARTICLE_SEARCH_QUERY = gql`
+export const ARTICLE_SEARCH_QUERY = gql`
   query SearchArticles($skip: Int!) {
     articles: recentArticles(limit: 10, skip: $skip) {
       _id
@@ -205,7 +205,11 @@ export default class ArticleListPage extends Component {
                 <div className="admin-list-header">
                     <h1>
                         <span>Articles</span>
-                        <a className="pull-right btn btn-primary" href="/admin/articles/new">New Article</a>
+                        <a className="pull-right btn btn-primary" href="#" onClick={() => {
+                          this.setState({
+                            article: {},
+                          });
+                        }}>New Article</a>
                     </h1>
                 </div>
                 <div className="admin-list-content" ref="list">

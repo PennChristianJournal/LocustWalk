@@ -20,61 +20,9 @@ const router = new Router();
 
 const views = ViewEngine.getViews('admin');
 
-router.get('/new', (req, res) => {
-  var article = new Article({});
-  article.save({validateBeforeSave: false}, (err, article) => {
-    if (err) {
-      console.log(err);
-    }
-    res.redirect(`/admin/articles/${article._id}/edit`);
-  });
-});
-
 router.get('/:id/edit', (req, res) => {
   Renderer.render(req, res, views['admin-articles-edit'], {
     _id: req.params.id,
-  });
-});
-
-router.post('/:id/edit', formidable(), (req, res) => {
-  var condition = {
-    _id: req.params.id,
-  };
-
-  var update = {
-    $set: {
-      is_published: req.fields.is_published,
-      title: req.fields.title,
-      slug: req.fields.slug,
-      author: req.fields.author,
-      content: req.fields.content,
-      parent: req.fields.parent,
-    },
-  };
-
-  if (!mongoose.Types.ObjectId.isValid(req.fields.parent)) {
-    delete update.$set.parent;
-  }
-
-  if (!req.fields.content) {
-    delete update.$set.content;
-  }
-
-  Article.findOneAndUpdate(condition, update, { new: true }, (err, doc) => {
-    if (err) {
-      console.warn(err.message);
-    }
-    //refreshes the page
-    res.redirect('back');
-  });
-});
-
-router.get('/:id/delete', (req, res) => {
-  Article.findByIdAndRemove(req.params.id, err => {
-    if (err) {
-      console.warn(err);
-    }
-    res.end();
   });
 });
 

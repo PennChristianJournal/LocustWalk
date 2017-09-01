@@ -18,7 +18,7 @@ const Schema = new mongoose.Schema({
   author: String,
   content: {
     type: String,
-    required: true,
+    default: '',
     $p: {
       widget: 'textarea',
       display: 'e',

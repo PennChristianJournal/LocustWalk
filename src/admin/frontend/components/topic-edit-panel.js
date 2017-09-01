@@ -2,9 +2,7 @@
 
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {notificationConnect} from '~/admin/frontend/components/notification-context';
 import {getFileURL} from '~/common/frontend/helpers/file';
-import $ from 'jquery';
 import EditForm from './edit-form';
 import ContentEditor from './content-editor';
 
@@ -64,7 +62,7 @@ class TopicEditPanel extends Component {
                 onChange={ e => { this.props.stage.update('slug', e.target.value); } } />
           </div>
 
-          <ContentEditor placeholder='Topic content...' content={topic.content} onChange={content => { this.props.stage.update('content', content); } } />
+          <ContentEditor placeholder="Topic content..." content={topic.content} onChange={content => { this.props.stage.update('content', content); } } />
       </EditForm>
     );
   }

@@ -45,6 +45,10 @@ class ArticleEditor extends Component {
       },
     });
 
+    this.contentEditor.subscribe('blur', () => {
+      this.props.stage.update('content', this.contentEditor.serialize()['element-0'].value);
+    });
+
     contentDiv.mediumInsert({
       editor: this.contentEditor,
       addons: {
@@ -112,7 +116,7 @@ class ArticleEditPage extends Component {
                     <div className="col-lg-9 col-md-8 col-sm-12">
                       <ArticlePreviews article={props.stage.values} />
                       <ArticleLayout>
-                        <ArticleEditor article={props.stage.values} ref={(el) => this.articleEdit = el} />
+                        <ArticleEditor stage={props.stage} article={props.stage.values} ref={(el) => this.articleEdit = el} />
                       </ArticleLayout>
                     </div>
                   </div>

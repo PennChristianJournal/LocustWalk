@@ -2,7 +2,6 @@
 
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {notificationConnect} from '~/admin/frontend/components/notification-context';
 import Optional from '~/common/frontend/components/optional';
 import TypeaheadInput from './typeahead-input';
 import moment from 'moment';
@@ -110,21 +109,17 @@ class ArticleEditPanel extends Component {
             </form>
           </Optional>
           <EditForm {...this.props} key={article._id} getName={values => values.title} preSubmit={() => {
-            return new Promise(resolve => {
-              if (this.props.getArticleContent) {
-                this.props.stage.update('content', this.props.getArticleContent(), resolve);
-              } else {
-                resolve();
-              }
-            });
+            if (this.props.getArticleContent) {
+              return this.props.stage.update('content', this.props.getArticleContent());
+            } else {
+              return Promise.resolve();
+            }
           }} >
-              {this.props.getArticleContent ? <input type="hidden" name="content" /> : null }
-
               <div className="form-group">
                   <label>Title</label>
                   <input type="text" className="form-control"
                     placeholder="Article Title"
-                    value={article.title}
+                    value={article.title || ''}
                     onChange={e => this.props.stage.update('title', e.target.value)}
                   />
               </div>
@@ -133,7 +128,7 @@ class ArticleEditPanel extends Component {
                   <label>Author</label>
                   <input type="text" className="form-control"
                     placeholder="Author"
-                    value={article.author}
+                    value={article.author || ''}
                     onChange={e => this.props.stage.update('author', e.target.value)}
                   />
               </div>
@@ -175,7 +170,7 @@ class ArticleEditPanel extends Component {
               <div className="form-group">
                   <label htmlFor="slug-input">Slug</label>
                   <input id="slug-input" name="slug" type="text" className="form-control" placeholder="Slug"
-                      value={article.slug}
+                      value={article.slug || ''}
                       onChange={ e => this.props.stage.update('slug', e.target.value) } />
               </div>
 

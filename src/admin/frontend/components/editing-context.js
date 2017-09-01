@@ -24,12 +24,16 @@ export function editingContext({
 
       generateProps() {
         let self = this;
+        let changedFields = {};
         let stage = {
           values: Object.assign({}, self.state.stage),
-          update(property, value, cb) {
-            self.setState({stage: Object.assign({}, self.state.stage, {
-              [property]: value,
-            })}, cb);
+          update(property, value) {
+            changedFields[property] = true;
+            return new Promise(resolve => {
+              self.setState({stage: Object.assign({}, self.state.stage, {
+                [property]: value,
+              })}, resolve);
+            });
           },
           clear(cb) {
             self.setState({ stage: {} }, cb);
