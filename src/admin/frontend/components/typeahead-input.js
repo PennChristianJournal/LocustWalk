@@ -1,7 +1,8 @@
 'use strict';
 
 import React, {Component} from 'react';
-import {AsyncTypeahead} from 'react-bootstrap-typeahead'
+import {AsyncTypeahead} from 'react-bootstrap-typeahead';
+import $ from 'jquery';
 
 export default class TypeaheadInput extends Component {
   constructor(props) {
@@ -14,15 +15,16 @@ export default class TypeaheadInput extends Component {
   render() {
     let matches = this.props.query.match(/query ([a-zA-Z]+)[\s\S]*?{[\s\S]*?([a-zA-Z]+)/);
     const {getVariables, query, ...otherProps} = this.props;
+
     return (
       <AsyncTypeahead
         {...otherProps}
-        onSearch={query => {
+        onSearch={search => {
           let data = {
             operationName: matches[1],
             query,
-            variables: getVariables(query),
-          }
+            variables: getVariables(search),
+          };
           $.ajax({
             type: 'POST',
             url: '/graphql',

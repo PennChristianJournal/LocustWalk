@@ -36,7 +36,7 @@ export default class ContentEditor extends Component {
       },
     });
 
-    this.contentEditor.subscribe('blur', (event, editable) => {
+    this.contentEditor.subscribe('blur', () => {
       if (this.props.onChange) {
         this.props.onChange(this.contentEditor.serialize()['element-0'].value);
       }

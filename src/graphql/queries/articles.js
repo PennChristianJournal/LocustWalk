@@ -247,12 +247,13 @@ export const searchDocuments = {
         var files = [];
 
         function fetchPage(pageToken, cb) {
-          drive.files.list({
+          var query = {
             q: `name contains '${title}'`,
             fields: 'nextPageToken, files(id, name)',
             spaces: 'drive',
             pageToken: pageToken,
-          }, function(err, res) {
+          };
+          drive.files.list(query, function(err, res) {
             if (err) {
               return cb(err);
             }

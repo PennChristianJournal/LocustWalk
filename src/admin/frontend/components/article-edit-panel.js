@@ -80,7 +80,7 @@ class ArticleEditPanel extends Component {
                     <TypeaheadInput
                       labelKey="name"
                       query={`
-                        query ArticlesQuery($title: String!) {
+                        query DocumentsQuery($title: String!) {
                           searchDocuments(title: $title) {
                             id
                             name
