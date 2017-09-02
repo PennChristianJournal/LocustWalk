@@ -24,11 +24,9 @@ export function editingContext({
 
       generateProps() {
         let self = this;
-        let changedFields = {};
         let stage = {
           values: Object.assign({}, self.state.stage),
           update(property, value) {
-            changedFields[property] = true;
             return new Promise(resolve => {
               self.setState({stage: Object.assign({}, self.state.stage, {
                 [property]: value,
@@ -43,7 +41,7 @@ export function editingContext({
           },
           getChangedFields() {
             const base = createStage(self.props, {});
-            return Object.keys(stage.values).filter(key => stage.values[key] != base[key]);
+            return Object.keys(stage.values).filter(key => stage.values[key] !== base[key]);
           },
           hasChangedFields() {
             return stage.getChangedFields().length > 0;

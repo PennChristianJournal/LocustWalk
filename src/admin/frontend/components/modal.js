@@ -15,7 +15,7 @@ class Modal extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.isOpen != this.state.isOpen) {
+    if (nextProps.isOpen !== this.state.isOpen) {
       this.setState({
         isHidden: false,
         opening: true,

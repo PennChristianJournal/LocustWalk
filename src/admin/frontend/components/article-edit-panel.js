@@ -194,14 +194,28 @@ class ArticleEditPanel extends Component {
                   onChange={selectedItems => {
                     const selected = selectedItems[0];
                     if (selected) {
-                      this.props.stage.update('parentID', selected._id);
-                      this.props.stage.update('parent', selected);
+                      this.props.stage.update('parent', selected).then(() => {
+                        this.props.stage.update('parentID', selected._id);
+                      });
                     }
                   }}
                   minLength={1}
+                  ref="parentTypeahead"
                   defaultSelected={(article.parent && article.parent._id) ? [article.parent] : undefined}
                 />
-                <input type="text" readOnly className="form-control" placeholder="Article ID" value={article.parentID || (article.parent && article.parent._id) || ''} />
+                <Optional test={article.parentID || (article.parent && article.parent._id)}>
+                  <div className="pull-right">
+                    <button className="btn btn-danger btn-xs" onClick={e => {
+                      e.preventDefault();
+                      this.refs.parentTypeahead.getInstance().clear();
+                      this.props.stage.update('parent', undefined).then(() => {
+                        this.props.stage.update('parentID', null);
+                      });
+                    }}>Remove</button>
+                  </div>
+                </Optional>
+                <div>{article.parentID || (article.parent && article.parent._id) || ''}</div>
+                <input type="hidden" readOnly className="form-control" value={article.parentID || (article.parent && article.parent._id) || ''} />
               </div>
 
               <div className="form-group">
@@ -224,14 +238,28 @@ class ArticleEditPanel extends Component {
                   onChange={selectedItems => {
                     const selected = selectedItems[0];
                     if (selected) {
-                      this.props.stage.update('topicID', selected._id);
-                      this.props.stage.update('topic', selected);
+                      this.props.stage.update('topic', selected).then(() => {
+                        this.props.stage.update('topicID', selected._id);
+                      });
                     }
                   }}
+                  ref="topicTypeahead"
                   minLength={1}
                   defaultSelected={(article.topic && article.topic._id) ? [article.topic] : undefined}
                 />
-                <input type="text" readOnly className="form-control" placeholder="Topic ID" value={article.topicID || (article.topic && article.topic._id) || ''} />
+                <Optional test={article.topicID || (article.topic && article.topic._id)}>
+                  <div className="pull-right">
+                    <button className="btn btn-danger btn-xs" onClick={e =>{
+                      e.preventDefault();
+                      this.refs.topicTypeahead.getInstance().clear();
+                      this.props.stage.update('topic', undefined).then(() => {
+                        this.props.stage.update('topicID', null);
+                      });
+                    }}>Remove</button>
+                  </div>
+                </Optional>
+                <div>{article.topicID || (article.topic && article.topic._id) || ''}</div>
+                <input type="hidden" readOnly className="form-control" value={article.topicID || (article.topic && article.topic._id) || ''} />
               </div>
 
               <div className="form-group">

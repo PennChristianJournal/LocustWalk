@@ -91,7 +91,7 @@ export default compose(
     createStage({topic = {}}, stage = {}) {
       if (!topic || !topic._id) {
         return {};
-      } else if (topic._id != stage._id) {
+      } else if (topic._id !== stage._id) {
         return Object.assign({}, topic);
       } else {
         return Object.assign({}, topic, stage);

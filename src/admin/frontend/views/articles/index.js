@@ -20,6 +20,7 @@ class ArticleList extends Component {
           <tr>
               <th>Title</th>
               <th></th>
+              <th>Parent</th>
               <th>Topic</th>
               <th>Permalink</th>
               <th><i className="fa fa-check" /></th>
@@ -31,6 +32,7 @@ class ArticleList extends Component {
               <tr key={i} onClick={() => setArticle(article) }>
                   <td><a href={`/articles/${article.slug}`}>{article.title}</a></td>
                   <td><a href={`/admin/articles/${article._id}/edit`} className="btn btn-default">Edit</a></td>
+                  <td>{article.parent && article.parent.title}</td>
                   <td>{article.topic && article.topic.title}</td>
                   <td><a href={`/articles/${article._id}`}><i className="fa fa-link" /></a></td>
                   <td>{article.is_published ? <i className="fa fa-check" /> : null}</td>
@@ -51,7 +53,12 @@ export const ARTICLE_SEARCH_QUERY = gql`
       slug
       date
       is_published
+      parent {
+        _id
+        title
+      }
       topic {
+        _id
         title
       }
     }

@@ -18,12 +18,13 @@ class TopicEditPanel extends Component {
     if (file) {
       blob = URL.createObjectURL(file);
     }
-    this.props.stage.update(`${prop}_preview_img`, blob);
-    var reader = new FileReader();
-    reader.onload = () => {
-      this.props.stage.update(`${prop}_buffer`, reader.result);
-    };
-    reader.readAsDataURL(file);
+    this.props.stage.update(`${prop}_preview_img`, blob).then(() => {
+      var reader = new FileReader();
+      reader.onload = () => {
+        this.props.stage.update(`${prop}_buffer`, reader.result);
+      };
+      reader.readAsDataURL(file);
+    });
   }
 
   render() {

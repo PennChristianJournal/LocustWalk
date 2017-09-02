@@ -12,12 +12,17 @@ export default class TypeaheadInput extends Component {
     };
   }
 
+  getInstance() {
+    return this.refs.typeahead.getInstance();
+  }
+
   render() {
     let matches = this.props.query.match(/query ([a-zA-Z]+)[\s\S]*?{[\s\S]*?([a-zA-Z]+)/);
     const {getVariables, query, ...otherProps} = this.props;
 
     return (
       <AsyncTypeahead
+        ref="typeahead"
         {...otherProps}
         onSearch={search => {
           let data = {

@@ -97,7 +97,7 @@ export default compose(
     createStage({feature = {}}, stage = {}) {
       if (!feature._id) {
         return {};
-      } else if (feature._id != stage._id) {
+      } else if (feature._id !== stage._id) {
         return Object.assign({}, feature);
       } else {
         return Object.assign({}, feature, stage);
