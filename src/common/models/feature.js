@@ -12,9 +12,7 @@ const Schema = new mongoose.Schema({
   },
   index: {
     type: Number,
-    index: {
-      unique: true,
-    },
+    index: true,
     required: true,
   },
   is_published: {
