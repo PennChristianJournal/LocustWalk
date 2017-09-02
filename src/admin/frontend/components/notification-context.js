@@ -13,11 +13,15 @@ class Notification extends Component {
   }
 
   componentDidMount() {
-    process.nextTick(() => {
+    this.mountTimeout = setTimeout(() => {
       this.setState({
         in: true,
       });
-    });
+    }, 0);
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.mountTimeout);
   }
 
   render() {
