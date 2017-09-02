@@ -76,7 +76,7 @@ module.exports = {
     process.env.NODE_ENV !== 'production' ? new webpack.HotModuleReplacementPlugin() : null,
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.DefinePlugin({
-      'process.env': ['APP_ENV', 'SERVER_ROOT', 'NODE_ENV']
+      'process.env': ['APP_ENV', 'SERVER_ROOT', 'NODE_ENV', 'PAYPAL_KEY']
       .reduce((acc, cur, i, arr) => {
         acc[cur] = JSON.stringify(nconf.get(cur));
         return acc;
