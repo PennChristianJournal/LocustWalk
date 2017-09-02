@@ -8,6 +8,11 @@ const Schema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  is_published: {
+    type: Boolean,
+    default: false,
+    index: true,
+  },
   content: {
     type: String,
     $p: {

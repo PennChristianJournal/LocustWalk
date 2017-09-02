@@ -32,6 +32,9 @@ export default new GraphQLInterfaceType({
     title: {
       type: GraphQLString,
     },
+    is_published: {
+      type: GraphQLBoolean,
+    },
     preview: {
       type: GraphQLString,
       args: {

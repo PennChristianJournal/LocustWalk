@@ -33,6 +33,9 @@ export default new GraphQLObjectType({
     title: {
       type: GraphQLString,
     },
+    is_published: {
+      type: GraphQLBoolean,
+    },
     content: {
       type: GraphQLString,
     },

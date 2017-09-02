@@ -1,6 +1,7 @@
 'use strict';
 
 import {
+  GraphQLBoolean,
   GraphQLInputObjectType,
   GraphQLString,
 } from 'graphql/type';
@@ -11,6 +12,9 @@ export default new GraphQLInputObjectType({
   fields: {
     title: {
       type: GraphQLString,
+    },
+    is_published: {
+      type: GraphQLBoolean,
     },
     slug: {
       type: GraphQLString,

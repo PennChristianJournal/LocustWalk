@@ -1,6 +1,6 @@
 import React from 'react';
 import PageLayout from '../templates/page-layout';
-import ArchivePanel from '../components/panels/archive';
+import TopicsPanel from '../components/panels/topics';
 import SistersPanel from '../components/panels/sisters';
 import SocialPanel from '../components/panels/social';
 import DonatePanel from '../components/panels/donate';
@@ -173,7 +173,7 @@ const StaffPage = () =>
         side={[
           <div className="row">
               <div className="col-md-12 col-sm-6">
-                  <SistersPanel />
+                  <TopicsPanel />
               </div>
           </div>,
           <div className="row">
@@ -181,7 +181,7 @@ const StaffPage = () =>
                   <SocialPanel />
               </div>
               <div className="col-md-12 col-xs-6">
-                  <ArchivePanel />
+                  <SistersPanel />
               </div>
           </div>,
         ]}

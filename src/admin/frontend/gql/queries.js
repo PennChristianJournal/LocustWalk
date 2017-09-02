@@ -31,6 +31,7 @@ export const TOPIC_QUERY = gql`
     topic(_id: $_id) {
       _id
       title
+      is_published
       slug
       content
       preview

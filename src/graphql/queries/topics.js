@@ -9,10 +9,10 @@ import {
 } from 'graphql/type';
 
 import Topic from '~/common/models/topic';
-import TopicType from '../types/topic';
+import TopicType, {getTopicProjection} from '../types/topic';
 import ObjectIDType from '../types/objectID';
 import mongoose from 'mongoose';
-import {getProjection, skipLimitArgs, applySkipLimit, removeEmpty, authenticatedField} from '../helpers';
+import {skipLimitArgs, applySkipLimit, removeEmpty, authenticatedField} from '../helpers';
 
 export const topic = {
   type: TopicType,
@@ -39,7 +39,7 @@ export const topic = {
 
     let q = Topic.findOne({
       [field]: _id || slug || idOrSlug,
-    }, getProjection(fieldASTs));
+    }, getTopicProjection(fieldASTs));
 
     return q.exec();
   },
@@ -56,7 +56,7 @@ export const topics = {
   resolve: (root, {is_published, skip, limit}, context, fieldASTs) => {
     let q = Topic.find(removeEmpty({
       is_published: authenticatedField(context, is_published, true),
-    }), getProjection(fieldASTs));
+    }), getTopicProjection(fieldASTs));
 
     q.sort({ createdAt: -1 });
     q = applySkipLimit(q, skip, limit);
@@ -95,7 +95,7 @@ export const searchTopics = {
       title: {
         $regex: new RegExp(`^${unescape(title).toLowerCase()}`, 'i'),
       },
-    }, getProjection(fieldASTs));
+    }, getTopicProjection(fieldASTs));
     q = applySkipLimit(q, skip, limit);
     return q.exec();
   },

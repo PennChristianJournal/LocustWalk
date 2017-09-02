@@ -64,6 +64,7 @@ export const TOPIC_NEW = gql`
     newTopic(topic: $topic) {
       _id
       title
+      is_published
       slug
       content
       preview
@@ -78,6 +79,7 @@ export const TOPIC_UPDATE = gql`
     updateTopic(_id: $_id, topic: $topic) {
       _id
       title
+      is_published
       slug
       content
       preview
@@ -92,6 +94,7 @@ export const TOPIC_DELETE = gql`
     deleteTopic(_id: $_id) {
       _id
       title
+      is_published
       slug
       content
       preview
