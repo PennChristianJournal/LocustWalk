@@ -3,6 +3,7 @@ import { Router } from 'express';
 const router = new Router();
 import nconf from 'nconf';
 import graphqlHTTP from 'express-graphql';
+import multer from 'multer';
 import { GraphQLSchema, GraphQLObjectType } from 'graphql/type';
 
 import * as articleQueries from './queries/articles';
@@ -40,6 +41,10 @@ export const schema = new GraphQLSchema({
 import bodyParser from 'body-parser';
 router.use(bodyParser.json({ limit: 1024 * 1024 * 2000, type: 'application/json' }));
 router.use(bodyParser.urlencoded({ extended: true, limit: 1024 * 1024 * 20, type: 'application/x-www-form-urlencoding' }));
+
+router.use(multer({
+  storage: multer.memoryStorage(),
+}).any());
 
 router.use('/', graphqlHTTP({
   schema,

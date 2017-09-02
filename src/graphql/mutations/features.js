@@ -1,7 +1,6 @@
 'use strict';
 
 import { GraphQLNonNull } from 'graphql/type';
-
 import FeatureType from '../types/feature';
 import FeatureInputType from '../types/featureInput';
 import ObjectIDType from '../types/objectID';

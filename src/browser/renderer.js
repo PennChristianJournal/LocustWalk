@@ -4,6 +4,9 @@ import React from 'react';
 import { render } from 'react-dom';
 import nconf from 'nconf';
 import urljoin from 'url-join';
+import { print as printGraphQL } from 'graphql/language/printer';
+import RecursiveIterator from 'recursive-iterator';
+import objectPath from 'object-path';
 
 import {
   ApolloClient,
@@ -14,12 +17,31 @@ import {
 export function mount(Page) {
   if (typeof document !== 'undefined') {
 
-    const networkInterface = createNetworkInterface({
-      uri: urljoin(nconf.get('SERVER_ROOT'), 'graphql'),
-      opts: {
-        credentials: 'same-origin',
+    const networkInterface = {
+      query(request) {
+        const formData  = new FormData();
+
+        // search for File objects on the request and set it as formData
+        for (let { node, path } of new RecursiveIterator(request.variables)) {
+          if (node instanceof File) {
+            const id = Math.random().toString(36);
+            formData.append(id, node);
+            objectPath.set(request.variables, path.join('.'), id);
+          }
+        }
+        
+        formData.append('query', printGraphQL(request.query));
+        formData.append('variables', JSON.stringify(request.variables || {}));
+        formData.append('debugName', request.debugName || '');
+        formData.append('operationName', request.operationName || '');
+
+        return fetch(urljoin(nconf.get('SERVER_ROOT'), 'graphql'), {
+          credentials: 'same-origin',
+          body: formData,
+          method: 'POST',
+        }).then(result => result.json());
       },
-    });
+    }
 
     const client = new ApolloClient({
       networkInterface,

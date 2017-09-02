@@ -24,6 +24,13 @@ class ArticleEditPanel extends Component {
     });
   }
 
+  componentWillReceiveProps(nextProps) {
+    const article = nextProps.article || {};
+    this.setState({
+      dateNow: !article.is_published,
+    });
+  }
+
   componentDidMount() {
     this.timerID = setInterval(() => this.tick(), 1000);
   }
@@ -50,12 +57,9 @@ class ArticleEditPanel extends Component {
     if (file) {
       blob = URL.createObjectURL(file);
     }
-    this.props.stage.update(`${prop}_preview_img`, blob);
-    var reader = new FileReader();
-    reader.onload = () => {
-      this.props.stage.update(`${prop}_buffer`, reader.result);
-    };
-    reader.readAsDataURL(file);
+    this.props.stage.update(`${prop}_preview_img`, blob).then(() => {
+      this.props.stage.update(`${prop}_file`, file);
+    });
   }
 
   syncArticle(event) {
@@ -249,7 +253,7 @@ class ArticleEditPanel extends Component {
                 />
                 <Optional test={article.topicID || (article.topic && article.topic._id)}>
                   <div className="pull-right">
-                    <button className="btn btn-danger btn-xs" onClick={e =>{
+                    <button className="btn btn-danger btn-xs" onClick={e => {
                       e.preventDefault();
                       this.refs.topicTypeahead.getInstance().clear();
                       this.props.stage.update('topic', undefined).then(() => {

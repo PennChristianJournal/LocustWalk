@@ -11,8 +11,8 @@ const editableTopicFields = [
   'title',
   'content',
   'slug',
-  'cover_buffer',
-  'thumb_buffer',
+  'cover_file',
+  'thumb_file',
 ];
 
 class TopicEdit extends Component {

@@ -18,11 +18,11 @@ export default new GraphQLInputObjectType({
     content: {
       type: GraphQLString,
     },
-    cover_buffer: {
-      type: GraphQLBuffer,
+    cover_file: {
+      type: GraphQLString,
     },
-    thumb_buffer: {
-      type: GraphQLBuffer,
+    thumb_file: {
+      type: GraphQLString,
     },
   },
 });

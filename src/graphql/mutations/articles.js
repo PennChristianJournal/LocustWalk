@@ -1,12 +1,11 @@
 'use strict';
 
 import { GraphQLNonNull } from 'graphql/type';
-
 import ArticleType, { getArticleProjection } from '../types/article';
 import ArticleInputType from '../types/articleInput';
 import ObjectIDType from '../types/objectID';
 import Article from '~/common/models/article';
-import SmallFile from '~/common/models/smallFile';
+import {updateImages} from './fileHelpers';
 
 export const newArticle = {
   type: ArticleType,
@@ -16,14 +15,15 @@ export const newArticle = {
       type: ArticleInputType,
     },
   },
-  resolve: (root, {article}, context, fieldASTs) => {
+  resolve: (root, {article: {cover_file, thumb_file, ...article}}, context, fieldASTs) => {
     if (!context.isAuthenticated()) {
       return Promise.reject('Not Authenticated');
     }
 
-    var obj = Object.assign(new Article(), article);
-
-    return obj.save(getArticleProjection(fieldASTs));
+    var result = new Article(article);
+    return updateImages(result, cover_file, thumb_file, context).then(() => {
+      return result.save(getArticleProjection(fieldASTs));
+    });
   },
 };
 
@@ -39,44 +39,49 @@ export const updateArticle = {
       type: ArticleInputType,
     },
   },
-  resolve: (root, {_id, article}, context, fieldASTs) => {
+  resolve: (root, {_id, article: {cover_file, thumb_file, ...article}}, context, fieldASTs) => {
     if (!context.isAuthenticated()) {
       return Promise.reject('Not Authenticated');
     }
 
     return Article.findOne({_id}).then(result => {
-      var {cover_buffer, thumb_buffer, ...fields} = article;
-      Object.assign(result, fields);
+      Object.assign(result, article);
 
-      const coverImageSaved = (cover_buffer ? SmallFile.create({
-        data: cover_buffer,
-        contentType: cover_buffer.mimeType,
-      }) : Promise.resolve(null));
-
-      const thumbImageSaved = (thumb_buffer ? SmallFile.create({
-        data: thumb_buffer,
-        contentType: thumb_buffer.mimeType,
-      }) : Promise.resolve(null));
-
-      return Promise.all([coverImageSaved, thumbImageSaved]).then(([coverImage, thumbImage]) => {
-        const coverImageCleared = ((coverImage && result.cover) ?
-          SmallFile.findByIdAndRemove(result.cover).exec() : Promise.resolve());
-
-        const thumbImageCleared = ((thumbImage && result.thumb) ?
-          SmallFile.findByIdAndRemove(result.thumb).exec() : Promise.resolve());
-
-        if (coverImage) {
-          result.cover = coverImage._id;
-        }
-
-        if (thumbImage) {
-          result.thumb = thumbImage._id;
-        }
-
-        return Promise.all([coverImageCleared, thumbImageCleared]).then(() => {
-          return result.save(getArticleProjection(fieldASTs));
-        });
+      return updateImages(result, cover_file, thumb_file, context).then(() => {
+        return result.save(getArticleProjection(fieldASTs));
       });
+      // var {cover_buffer, thumb_buffer, ...fields} = article;
+      // Object.assign(result, fields);
+
+      // const coverImageSaved = (cover_buffer ? SmallFile.create({
+      //   data: cover_buffer,
+      //   contentType: cover_buffer.mimeType,
+      // }) : Promise.resolve(null));
+
+      // const thumbImageSaved = (thumb_buffer ? SmallFile.create({
+      //   data: thumb_buffer,
+      //   contentType: thumb_buffer.mimeType,
+      // }) : Promise.resolve(null));
+
+      // return Promise.all([coverImageSaved, thumbImageSaved]).then(([coverImage, thumbImage]) => {
+      //   const coverImageCleared = ((coverImage && result.cover) ?
+      //     SmallFile.findByIdAndRemove(result.cover).exec() : Promise.resolve());
+
+      //   const thumbImageCleared = ((thumbImage && result.thumb) ?
+      //     SmallFile.findByIdAndRemove(result.thumb).exec() : Promise.resolve());
+
+      //   if (coverImage) {
+      //     result.cover = coverImage._id;
+      //   }
+
+      //   if (thumbImage) {
+      //     result.thumb = thumbImage._id;
+      //   }
+
+      //   return Promise.all([coverImageCleared, thumbImageCleared]).then(() => {
+      //     return result.save(getArticleProjection(fieldASTs));
+      //   });
+      // });
     });
   },
 };

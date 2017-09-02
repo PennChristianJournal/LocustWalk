@@ -31,11 +31,11 @@ export default new GraphQLInputObjectType({
     slug: {
       type: GraphQLString,
     },
-    cover_buffer: {
-      type: GraphQLBuffer,
+    cover_file: {
+      type: GraphQLString,
     },
-    thumb_buffer: {
-      type: GraphQLBuffer,
+    thumb_file: {
+      type: GraphQLString,
     },
     parent: {
       type: GraphQLID,
