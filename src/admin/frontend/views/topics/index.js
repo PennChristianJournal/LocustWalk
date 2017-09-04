@@ -19,6 +19,7 @@ class TopicList extends Component {
           <tr>
               <th>Title</th>
               <th>Link</th>
+              <th><i className="fa fa-check" /></th>
               <th>Permalink</th>
           </tr>
       }>
@@ -27,6 +28,7 @@ class TopicList extends Component {
               <tr key={i} onClick={() => setTopic(topic) }>
                   <td>{topic.title}</td>
                   <td><a href={`/topics/${topic.slug}`}>{`/topics/${topic.slug}`}</a></td>
+                  <td>{topic.is_published ? <i className="fa fa-check" /> : null}</td>
                   <td><a href={`/topics/${topic._id}`}>{`/topics/${topic._id}`}</a></td>
               </tr>
             );
@@ -41,6 +43,7 @@ const TOPIC_SEARCH_QUERY = gql`
     topics(limit: 10, skip: $skip) {
       _id
       title
+      is_published
       slug
     }
     topicCount
