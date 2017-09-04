@@ -4,6 +4,7 @@ import ArticleMain from '~/common/frontend/components/article-main';
 import ArticleLayout from '~/common/frontend/templates/article-layout';
 import {compose, graphql, gql} from 'react-apollo';
 import { headData } from '~/common/frontend/head';
+import { getFileURL } from '~/common/frontend/helpers/file';
 
 const ARTICLE_QUERY = gql`
   query Article($idOrSlug: String, $_id: ObjectID, $slug: String) {
@@ -12,6 +13,7 @@ const ARTICLE_QUERY = gql`
       title
       date
       cover
+      thumb
       author
       content
       metaDescription: preview(length: 160)
@@ -46,6 +48,7 @@ const ArticlePage = compose(
     if (article) {
       head.setTitle(article.title);
       head.setMetadata('description', article.metaDescription);
+      head.setMetadata('image', getFileURL(article.thumb));
     }
   })
 )( ({article}) => {
