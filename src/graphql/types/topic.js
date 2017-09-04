@@ -63,7 +63,7 @@ export default new GraphQLObjectType({
     url: {
       type: GraphQLString,
       resolve: ({slug}) => {
-        return `/topics/${slug}`;
+        return `/themes/${slug}`;
       },
     },
     cover: {

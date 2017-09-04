@@ -7,7 +7,7 @@ class TopicsPanel extends Component {
   render() {
     return (
       <div className="tile tile-vertical gray-theme">
-          <h2 className="strong">Topics</h2>
+          <h2 className="strong">Themes</h2>
           <ul className="clean">
               {this.props.topics.map(topic => {
                 return <li key={topic._id}><a href={topic.url}>{topic.title}</a></li>;

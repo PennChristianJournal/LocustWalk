@@ -14,8 +14,8 @@ router.use('/articles', ArticlesController);
 router.get('/article', (req, res) => res.status(404));
 
 import TopicsController from './topics';
-router.use('/topics', TopicsController);
-router.get('/topic', (req, res) => res.status(404));
+router.use('/themes', TopicsController);
+router.get('/theme', (req, res) => res.status(404));
 
 import FilesController from './files';
 router.use('/files', FilesController);

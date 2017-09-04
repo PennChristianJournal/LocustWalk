@@ -27,9 +27,9 @@ class TopicList extends Component {
             return (
               <tr key={i} onClick={() => setTopic(topic) }>
                   <td>{topic.title}</td>
-                  <td><a href={`/topics/${topic.slug}`}>{`/topics/${topic.slug}`}</a></td>
+                  <td><a href={topic.url}>{topic.url}</a></td>
                   <td>{topic.is_published ? <i className="fa fa-check" /> : null}</td>
-                  <td><a href={`/topics/${topic._id}`}>{`/topics/${topic._id}`}</a></td>
+                  <td><a href={`/themes/${topic._id}`}>{`/themes/${topic._id}`}</a></td>
               </tr>
             );
           })}
@@ -45,6 +45,7 @@ const TOPIC_SEARCH_QUERY = gql`
       title
       is_published
       slug
+      url
     }
     topicCount
   }
@@ -176,12 +177,12 @@ class TopicListPage extends Component {
             <div className="admin-list-view">
                 <div className="admin-list-header">
                     <h1>
-                        <span>Topics</span>
+                        <span>Themes</span>
                         <a className="pull-right btn btn-primary" href="#" onClick={() => {
                           this.setState({
                             topic: {},
                           });
-                        }}>New Topic</a>
+                        }}>New Theme</a>
                     </h1>
                 </div>
                 <div className="admin-list-content" ref="list">
