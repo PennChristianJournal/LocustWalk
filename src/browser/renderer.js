@@ -5,13 +5,11 @@ import { render } from 'react-dom';
 import nconf from 'nconf';
 import urljoin from 'url-join';
 import { print as printGraphQL } from 'graphql/language/printer';
-import RecursiveIterator from 'recursive-iterator';
 import objectPath from 'object-path';
 
 import {
   ApolloClient,
   ApolloProvider,
-  createNetworkInterface,
   IntrospectionFragmentMatcher,
 } from 'react-apollo';
 export function mount(Page) {
@@ -22,14 +20,18 @@ export function mount(Page) {
         const formData  = new FormData();
 
         // search for File objects on the request and set it as formData
-        for (let { node, path } of new RecursiveIterator(request.variables)) {
+        (function visit(node, path) {
           if (node instanceof File) {
             const id = Math.random().toString(36);
             formData.append(id, node);
             objectPath.set(request.variables, path.join('.'), id);
+          } else if (typeof node === 'object') {
+            Object.keys(node).forEach(key => {
+              visit(node[key], path.concat(key));
+            });
           }
-        }
-        
+        })(request.variables, []);
+
         formData.append('query', printGraphQL(request.query));
         formData.append('variables', JSON.stringify(request.variables || {}));
         formData.append('debugName', request.debugName || '');
@@ -41,7 +43,7 @@ export function mount(Page) {
           method: 'POST',
         }).then(result => result.json());
       },
-    }
+    };
 
     const client = new ApolloClient({
       networkInterface,
