@@ -16,6 +16,9 @@ export default new GraphQLInputObjectType({
     is_published: {
       type: GraphQLBoolean,
     },
+    is_announcement: {
+      type: GraphQLBoolean,
+    },
     slug: {
       type: GraphQLString,
     },

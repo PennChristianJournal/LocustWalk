@@ -77,9 +77,13 @@ const StaffPage = () =>
                 </tr>
                 <tr>
                   <td>Aliya Chen</td>
+                  <td></td>
+                  <td>aliyachen1998@gmail.com</td>
                 </tr>
                 <tr>
                   <td>Felicia Chen</td>
+                  <td></td>
+                  <td>Chen.s.felicia@gmail.com</td>
                 </tr>
                 <tr>
                   <td></td>
@@ -89,6 +93,8 @@ const StaffPage = () =>
                 </tr>
                 <tr>
                   <td>Karissa Lam</td>
+                  <td></td>
+                  <td>lakari@nursing.upenn.edu</td>
                 </tr>
                 <tr>
                   <td>Wendy Zhou</td>

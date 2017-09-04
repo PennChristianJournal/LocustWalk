@@ -36,6 +36,9 @@ export default new GraphQLObjectType({
     is_published: {
       type: GraphQLBoolean,
     },
+    is_announcement: {
+      type: GraphQLBoolean,
+    },
     content: {
       type: GraphQLString,
     },

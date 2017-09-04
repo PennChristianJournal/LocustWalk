@@ -24,7 +24,7 @@ TopicsPanel.propTypes = {
 
 const TOPICS_QUERY = gql`
   query TopicsQuery {
-    topics(is_published: true) {
+    topics(is_published: true, is_announcement: false) {
       _id
       title
       url

@@ -32,6 +32,7 @@ export const TOPIC_QUERY = gql`
       _id
       title
       is_published
+      is_announcement
       slug
       content
       preview

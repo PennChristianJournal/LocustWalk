@@ -52,10 +52,15 @@ export const topics = {
       name: 'is_published',
       type: GraphQLBoolean,
     },
+    is_announcement: {
+      name: 'is_announcement',
+      type: GraphQLBoolean,
+    },
   }, skipLimitArgs),
-  resolve: (root, {is_published, skip, limit}, context, fieldASTs) => {
+  resolve: (root, {is_published, is_announcement, skip, limit}, context, fieldASTs) => {
     let q = Topic.find(removeEmpty({
       is_published: authenticatedField(context, is_published, true),
+      is_announcement,
     }), getTopicProjection(fieldASTs));
 
     q.sort({ createdAt: -1 });

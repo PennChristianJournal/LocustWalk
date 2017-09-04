@@ -20,6 +20,7 @@ class TopicList extends Component {
               <th>Title</th>
               <th>Link</th>
               <th><i className="fa fa-check" /></th>
+              <th><i className="fa fa-bullhorn" /></th>
               <th>Permalink</th>
           </tr>
       }>
@@ -29,6 +30,7 @@ class TopicList extends Component {
                   <td>{topic.title}</td>
                   <td><a href={topic.url}>{topic.url}</a></td>
                   <td>{topic.is_published ? <i className="fa fa-check" /> : null}</td>
+                  <td>{topic.is_announcement ? <i className="fa fa-bullhorn" /> : null}</td>
                   <td><a href={`/themes/${topic._id}`}>{`/themes/${topic._id}`}</a></td>
               </tr>
             );
@@ -44,6 +46,7 @@ const TOPIC_SEARCH_QUERY = gql`
       _id
       title
       is_published
+      is_announcement
       slug
       url
     }

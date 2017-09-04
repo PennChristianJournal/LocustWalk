@@ -48,6 +48,18 @@ class TopicEditPanel extends Component {
           </div>
 
           <div className="form-group">
+              <div className="checkbox">
+                  <label className="checkbox-inline">
+                      <input type="checkbox"
+                        checked={topic.is_announcement || false}
+                        onChange={e => this.props.stage.update('is_announcement', e.target.checked) }
+                      />
+                      Announcement
+                  </label>
+              </div>
+          </div>
+
+          <div className="form-group">
               <label>Cover Photo</label>
               <img
                 style={{maxWidth: '200px', display: 'block'}}

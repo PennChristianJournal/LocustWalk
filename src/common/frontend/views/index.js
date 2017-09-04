@@ -24,6 +24,9 @@ const FEATURED_ARTICLES_QUERY = gql`
           author
           date
         }
+        ...on Topic {
+          is_announcement
+        }
         __typename
       }
       secondaryItems {

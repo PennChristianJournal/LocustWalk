@@ -65,6 +65,7 @@ export const TOPIC_NEW = gql`
       _id
       title
       is_published
+      is_announcement
       slug
       content
       preview
@@ -80,6 +81,7 @@ export const TOPIC_UPDATE = gql`
       _id
       title
       is_published
+      is_announcement
       slug
       content
       preview
@@ -95,6 +97,7 @@ export const TOPIC_DELETE = gql`
       _id
       title
       is_published
+      is_announcement
       slug
       content
       preview

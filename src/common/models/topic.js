@@ -13,6 +13,11 @@ const Schema = new mongoose.Schema({
     default: false,
     index: true,
   },
+  is_announcement: {
+    type: Boolean,
+    default: false,
+    index: true,
+  },
   content: {
     type: String,
     $p: {
