@@ -39,6 +39,7 @@ class FeatureEditPanel extends Component {
             <div className="form-group">
               <label>Main Item</label>
               <TypeaheadInput
+                key={feature.mainItem && feature.mainItem._id}
                 labelKey="title"
                 query={`
                   query FeaturesSearch($title: String!) {
@@ -69,7 +70,7 @@ class FeatureEditPanel extends Component {
                   }
                 }}
                 minLength={1}
-                defaultSelected={feature._id ? [feature] : undefined}
+                defaultSelected={feature.mainItem && feature.mainItem._id ? [feature.mainItem] : undefined}
               />
               <span>{`${mainType} ${mainID}`}</span>
               <input type="hidden" readOnly className="form-control" placeholder="Main Item Type" value={mainType} />

@@ -12,7 +12,7 @@ import { headData } from '~/common/frontend/head';
 
 const FEATURED_ARTICLES_QUERY = gql`
   query FeaturedArticles {
-    features(is_published: true) {
+    features(limit: 24, is_published: true) {
       title
       mainItem {
         _id
@@ -46,7 +46,7 @@ const FeatureSliderWithData = graphql(FEATURED_ARTICLES_QUERY, {
   options: {
     notifyOnNetworkStatusChange: true,
   },
-  props({ data: {loading, features, fetchMore } }) {
+  props({ data: {loading, features } }) {
     features = features || [];
     return {
       loading,
