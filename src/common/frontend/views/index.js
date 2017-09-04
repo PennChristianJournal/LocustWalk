@@ -137,6 +137,13 @@ const RecentArticlesWithData = graphql(gql`
 const HomePage = () => (
      <PageLayout id="home-page"
         top={[
+          <div className="row">
+            <div className="col-md-12 col-sm-12">
+              <div className="tile tile-vertical blue-theme announcement">
+                <p><a href="https://issuu.com/locustwalk/docs/17_7284_u_of_penn_locust_walk_sprin/20">Check out our latest print edition here!</a></p>
+              </div>
+            </div>
+          </div>,
           <FeatureSliderWithData />,
         ]}
 
