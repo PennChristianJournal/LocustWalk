@@ -1,0 +1,9 @@
+node_modules
+config.json
+public/*
+!public/img
+.idea
+dist
+.vscode/
+jwt.json
+tmp/
