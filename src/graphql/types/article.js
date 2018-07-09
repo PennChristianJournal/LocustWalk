@@ -1,19 +1,20 @@
 'use strict';
-
+import Promise from 'bluebird';
 import {
   GraphQLID,
   GraphQLInt,
   GraphQLObjectType,
   GraphQLString,
   GraphQLBoolean,
+  GraphQLList,
 } from 'graphql/type';
 
-import Article from '~/common/models/article';
-import Topic from '~/common/models/topic';
+import Article from '~/models/article';
+import Topic from '~/models/topic';
 import { GraphQLDateTime } from 'graphql-iso-date';
 import TopicType from './topic';
 import FeatureItemType from '../types/featureItem';
-import {getProjection, htmlPreview} from '../helpers';
+import {getProjection, htmlPreview, skipLimitArgs, removeEmpty, authenticatedField, applySkipLimit} from '../helpers';
 
 export function projectionForArticle(projection) {
   // preview is a computed field so we still need to query the content if only the preview is requested
@@ -27,7 +28,7 @@ export function projectionForArticle(projection) {
 }
 
 export function getArticleProjection(fieldASTs) {
-  return projectionForArticle(getProjection(fieldASTs));
+  return projectionForArticle(getProjection(fieldASTs, "Article"));
 }
 
 const ArticleType = new GraphQLObjectType({
@@ -122,6 +123,25 @@ const ArticleType = new GraphQLObjectType({
           }
           return Topic.findOne({_id: topic}, getProjection(fieldASTs));
         });
+      },
+    },
+    responses: {
+      type: new GraphQLList(ArticleType),
+      args: Object.assign({
+        is_published: {
+          name: 'is_published',
+          type: GraphQLBoolean,
+        },
+      }, skipLimitArgs),
+      resolve(root, {is_published, skip, limit}, context, fieldASTs) {
+        let q = Article.find(removeEmpty({
+          parent: root._id,
+          is_published: authenticatedField(context, is_published, true),
+        }), getArticleProjection(fieldASTs));
+
+        q.sort({date: -1});
+        q = applySkipLimit(q, skip, limit);
+        return q.exec();
       },
     },
   }),

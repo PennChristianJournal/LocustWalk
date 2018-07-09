@@ -10,8 +10,8 @@ function serializeBuffer(value) {
   return value.toString();
 }
 
-function parseBuffer(value) {
-  const regex = /^data:(.+\/.+);(.+),/;
+export function parseBuffer(value) {
+  const regex = /^data:(.+\/.+);(?:charset=)?(.+),/;
   var matches = value.match(regex);
   var result = new Buffer(value.substr(matches[0].length), matches[2]);
   result.mimeType = matches[1];

@@ -1,7 +1,8 @@
 'use strict';
 
 import React, {Component} from 'react';
-import {compose, graphql, gql} from 'react-apollo';
+import {compose, graphql} from 'react-apollo';
+import gql from 'graphql-tag';
 import {debounce} from 'underscore';
 import {headData} from '~/common/frontend/head';
 import AdminLayout from '~/admin/frontend/templates/admin-layout';

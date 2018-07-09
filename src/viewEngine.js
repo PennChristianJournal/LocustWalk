@@ -1,6 +1,6 @@
 'use strict';
 
-import fs from 'fs';
+import fs, { lchmod } from 'fs';
 import path from 'path';
 import nconf from 'nconf';
 
@@ -58,7 +58,7 @@ function registerTargets(group, prefix, dir) {
         if (module.hot) {
           module.hot.accept('${file}', () => {
             const NewApp = require('${file}').default;
-            rerender(NewApp); 
+            rerender(NewApp);
           });
         }
       `;
@@ -81,12 +81,11 @@ function getViews(group) {
   return TARGETS[group] || {};
 }
 
-registerTargets('common', '', path.join(__dirname, 'common/frontend/views'));
-registerTargets('admin', 'admin', path.join(__dirname, 'admin/frontend/views'));
+// registerTargets('common', '', path.join(__dirname, 'common/frontend/views'));
+// registerTargets('admin', 'admin', path.join(__dirname, 'admin/frontend/views'));
 
 export default {
   registerTargets,
   getViews,
   TARGETS,
 };
-

@@ -3,6 +3,7 @@
 import {
   GraphQLInputObjectType,
   GraphQLString,
+  GraphQLBoolean,
 } from 'graphql/type';
 import GraphQLBuffer from './buffer';
 
@@ -11,6 +12,9 @@ export default new GraphQLInputObjectType({
   fields: {
     title: {
       type: GraphQLString,
+    },
+    is_published: {
+      type: GraphQLBoolean,
     },
     slug: {
       type: GraphQLString,

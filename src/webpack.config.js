@@ -4,22 +4,32 @@ import path from 'path';
 import webpack from 'webpack';
 import nconf from 'nconf';
 
-nconf.argv().env().file({file: path.join(__dirname, '../config.json')}).overrides({
-  APP_ENV: 'browser',
-});
+const TARGETS = {
+  common: {
+  },
+  public: {
+    'publicApp': path.resolve(__dirname, 'frontend/public/app'),
+  },
+  admin: {
+    'adminApp': path.resolve(__dirname, 'frontend/admin/app'),
+  },
+};
 
 const GROUPS = {};
 const ENTRIES = {};
 
-Object.keys(ViewEngine.TARGETS).forEach(group => {
-  const GROUP = ViewEngine.TARGETS[group];
+Object.keys(TARGETS).forEach(group => {
+  const GROUP = TARGETS[group];
   GROUPS[group] = Object.keys(GROUP).map(target => `js/${target}`);
   Object.keys(GROUP).forEach(target => {
-    const mountTarget = GROUP[target].mountTarget;
     if (process.env.NODE_ENV !== 'production') {
-      ENTRIES[`js/${target}`] = ['react-hot-loader/patch', 'webpack-hot-middleware/client', mountTarget];
+      ENTRIES[`js/${target}`] = [
+        'react-hot-loader/patch',
+        'webpack-hot-middleware/client',
+        GROUP[target],
+      ];
     } else {
-      ENTRIES[`js/${target}`] = mountTarget;
+      ENTRIES[`js/${target}`] = GROUP[target];
     }
   });
 });
@@ -34,30 +44,33 @@ module.exports = {
     publicPath: nconf.get('SERVER_ROOT'),
   },
   module: {
-    rules: [{
-      test: /\.js$/,
-      exclude: /node_modules/,
-      use: [{
-        loader: 'react-hot-loader/webpack',
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: 'babel-loader',
+            query: {
+              presets: [
+                ['env', { modules: false }],
+                'react',
+                'stage-2',
+              ],
+              plugins: [
+                ['babel-plugin-relative-import', {
+                  rootPathSuffix: 'src',
+                }],
+                'dynamic-import-webpack',
+              ],
+            },
+          }
+        ],
       }, {
-        loader: 'babel-loader',
-        query: {
-          presets: [
-            ['es2015', { modules: false }],
-            'react',
-            'stage-2',
-          ],
-          plugins: [
-            ['babel-plugin-relative-import', {
-              rootPathSuffix: 'src',
-            }],
-          ],
-        },
-      }],
-    }, {
-      test: require.resolve('medium-editor-insert-plugin'),
-      loader: 'imports-loader?define=>false',
-    }],
+        test: require.resolve('medium-editor-insert-plugin'),
+        loader: 'imports-loader?define=>false',
+      },
+    ],
   },
 
   resolve: {
@@ -77,11 +90,13 @@ module.exports = {
     process.env.NODE_ENV !== 'production' ? new webpack.HotModuleReplacementPlugin() : null,
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.DefinePlugin({
-      'process.env': ['APP_ENV', 'SERVER_ROOT', 'NODE_ENV']
+      'process.env': Object.assign(['SERVER_ROOT', 'NODE_ENV']
       .reduce((acc, cur, i, arr) => {
         acc[cur] = JSON.stringify(nconf.get(cur));
         return acc;
-      }, {}),
+      }, {}), {
+        'APP_ENV': JSON.stringify('browser'),
+      }),
     }),
     new webpack.NormalModuleReplacementPlugin(/nconf/, function(resource) {
       resource.request = resource.request.replace(/nconf/, 'nconf-browser');
@@ -91,11 +106,17 @@ module.exports = {
       minChunks(module, count) {
         var context = module.context;
         return context && (
-          context.indexOf('node_modules/react/') >= 0 ||
-          context.indexOf('node_modules/react-dom/') >= 0 ||
-          context.indexOf('node_modules/react-redux/') >= 0 ||
-          context.indexOf('node_modules/redux/') >= 0 ||
-          context.indexOf('node_modules/react-thunk/') >= 0
+          context.indexOf(path.join('node_modules', 'react')) >= 0 ||
+          context.indexOf(path.join('node_modules', 'react-dom')) >= 0 ||
+          context.indexOf(path.join('node_modules', 'react-router')) >= 0 ||
+          context.indexOf(path.join('node_modules', 'react-helmet')) >= 0 ||
+          context.indexOf(path.join('node_modules', 'react-redux')) >= 0 ||
+          context.indexOf(path.join('node_modules', 'redux')) >= 0 ||
+          context.indexOf(path.join('node_modules', 'react-thunk')) >= 0 ||
+          context.indexOf(path.join('node_modules', 'react-apollo')) >= 0 ||
+          context.indexOf(path.join('node_modules', 'apollo-client')) >= 0 ||
+          context.indexOf(path.join('node_modules', 'fbjs')) >= 0 ||
+          context.indexOf(path.join('node_modules', 'prop-types')) >= 0
         );
       },
     }),

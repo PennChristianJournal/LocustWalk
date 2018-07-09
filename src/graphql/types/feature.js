@@ -11,8 +11,8 @@ import {
 } from 'graphql/type';
 
 import {getProjection} from '../helpers';
-import Article from '~/common/models/article';
-import Topic from '~/common/models/topic';
+import Article from '~/models/article';
+import Topic from '~/models/topic';
 import {projectionForArticle} from './article';
 import FeatureItemType from './featureItem';
 
@@ -57,4 +57,3 @@ export default new GraphQLObjectType({
     },
   }),
 });
-

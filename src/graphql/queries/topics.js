@@ -8,11 +8,17 @@ import {
   GraphQLBoolean,
 } from 'graphql/type';
 
-import Topic from '~/common/models/topic';
-import TopicType from '../types/topic';
+import Topic from '~/models/topic';
+import TopicType, { getTopicProjection } from '../types/topic';
 import ObjectIDType from '../types/objectID';
 import mongoose from 'mongoose';
-import {getProjection, skipLimitArgs, applySkipLimit, removeEmpty, authenticatedField} from '../helpers';
+
+import {
+  removeEmpty,
+  skipLimitArgs,
+  applySkipLimit,
+  authenticatedField,
+} from '../helpers';
 
 export const topic = {
   type: TopicType,
@@ -37,9 +43,9 @@ export const topic = {
 
     let field = (_id || mongoose.Types.ObjectId.isValid(idOrSlug)) ? '_id' : 'slug';
 
-    let q = Topic.findOne({
+    let q = Topic.findOne(removeEmpty({
       [field]: _id || slug || idOrSlug,
-    }, getProjection(fieldASTs));
+    }), getTopicProjection(fieldASTs));
 
     return q.exec();
   },
@@ -52,11 +58,17 @@ export const topics = {
       name: 'is_published',
       type: GraphQLBoolean,
     },
+    search: {
+      name: 'search',
+      type: GraphQLString,
+      defaultValue: '',
+    },
   }, skipLimitArgs),
-  resolve: (root, {is_published, skip, limit}, context, fieldASTs) => {
+  resolve: (root, {is_published, skip, limit, search}, context, fieldASTs) => {
     let q = Topic.find(removeEmpty({
       is_published: authenticatedField(context, is_published, true),
-    }), getProjection(fieldASTs));
+      title: search.length > 0 ? { $regex: new RegExp(search, 'i') } : undefined,
+    }), getTopicProjection(fieldASTs));
 
     q.sort({ createdAt: -1 });
     q = applySkipLimit(q, skip, limit);
@@ -71,10 +83,16 @@ export const topicCount = {
       name: 'is_published',
       type: GraphQLBoolean,
     },
+    search: {
+      name: 'search',
+      type: GraphQLString,
+      defaultValue: '',
+    },
   },
-  resolve: (root, {is_published}, context) => {
+  resolve: (root, {is_published, search}, context) => {
     return Topic.count(removeEmpty({
       is_published: authenticatedField(context, is_published, true),
+      title: search.length > 0 ? { $regex: new RegExp(search, 'i') } : undefined,
     })).exec();
   },
 };
@@ -95,9 +113,8 @@ export const searchTopics = {
       title: {
         $regex: new RegExp(`^${unescape(title).toLowerCase()}`, 'i'),
       },
-    }, getProjection(fieldASTs));
+    }, getTopicProjection(fieldASTs));
     q = applySkipLimit(q, skip, limit);
     return q.exec();
   },
 };
-

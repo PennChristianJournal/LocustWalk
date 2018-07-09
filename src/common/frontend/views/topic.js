@@ -2,7 +2,8 @@
 import React from 'react';
 import TopicMain from '~/common/frontend/components/topic-main';
 import ArticleLayout from '~/common/frontend/templates/article-layout';
-import {compose, graphql, gql} from 'react-apollo';
+import {compose, graphql} from 'react-apollo';
+import gql from 'graphql-tag';
 import { headData } from '~/common/frontend/head';
 
 const TOPIC_QUERY = gql`

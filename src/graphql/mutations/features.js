@@ -5,7 +5,7 @@ import { GraphQLNonNull } from 'graphql/type';
 import FeatureType from '../types/feature';
 import FeatureInputType from '../types/featureInput';
 import ObjectIDType from '../types/objectID';
-import Feature from '~/common/models/feature';
+import Feature from '~/models/feature';
 import {getProjection} from '../helpers';
 
 export const newFeature = {
@@ -21,9 +21,7 @@ export const newFeature = {
       return Promise.reject('Not Authenticated');
     }
 
-    var obj = Object.assign(new Feature(), feature);
-
-    return obj.save(getProjection(fieldASTs));
+    return (new Feature(feature)).save(getProjection(fieldASTs));
   },
 };
 

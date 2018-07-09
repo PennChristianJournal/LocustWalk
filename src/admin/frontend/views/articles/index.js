@@ -8,7 +8,8 @@ import Table from '~/admin/frontend/components/table';
 import moment from 'moment';
 import queryString from 'query-string';
 import {debounce} from 'underscore';
-import {graphql, gql} from 'react-apollo';
+import {graphql} from 'react-apollo';
+import gql from 'graphql-tag';
 
 class ArticleList extends Component {
 
@@ -45,7 +46,7 @@ class ArticleList extends Component {
 
 const ARTICLE_SEARCH_QUERY = gql`
   query SearchArticles($skip: Int!) {
-    articles: recentArticles(limit: 10, skip: $skip) {
+    articles(limit: 10, skip: $skip) {
       _id
       title
       slug
@@ -217,4 +218,3 @@ export default class ArticleListPage extends Component {
     );
   }
 }
-

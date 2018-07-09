@@ -11,7 +11,7 @@ import {
 import ArticleType, { getArticleProjection } from '../types/article';
 import { getTopicProjection } from '../types/topic';
 import ObjectIDType from '../types/objectID';
-import Article from '~/common/models/article';
+import Article from '~/models/article';
 import mongoose from 'mongoose';
 
 import {
@@ -165,17 +165,23 @@ export const topicArticlesCount = {
   },
 };
 
-export const recentArticles = {
+export const articles = {
   type: new GraphQLList(ArticleType),
   args: Object.assign({
     is_published: {
       name: 'is_published',
       type: GraphQLBoolean,
     },
+    search: {
+      name: 'search',
+      type: GraphQLString,
+      defaultValue: '',
+    },
   }, skipLimitArgs),
-  resolve: (root, {is_published, skip, limit}, context, fieldASTs) => {
+  resolve: (root, {is_published, skip, limit, search}, context, fieldASTs) => {
     let q = Article.find(removeEmpty({
       is_published: authenticatedField(context, is_published, true),
+      title: search.length > 0 ? { $regex: new RegExp(search, 'i') } : undefined,
     }), getArticleProjection(fieldASTs));
 
     q.sort({ date: -1 });
@@ -191,10 +197,16 @@ export const articleCount = {
       name: 'is_published',
       type: GraphQLBoolean,
     },
+    search: {
+      name: 'search',
+      type: GraphQLString,
+      defaultValue: '',
+    },
   },
-  resolve(root, {is_published}, context) {
+  resolve(root, {is_published, search}, context) {
     return Article.count(removeEmpty({
       is_published: authenticatedField(context, is_published, true),
+      title: search.length > 0 ? { $regex: new RegExp(search, 'i') } : undefined,
     })).exec();
   },
 };

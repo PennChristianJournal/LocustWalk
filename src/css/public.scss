@@ -1,0 +1,38 @@
+@import 'variables';
+@import 'theme';
+@import 'mixins';
+
+@media(max-width: 767px) {
+  #top {
+    padding: 0px;
+  }
+}
+
+.tile {
+  padding: 30px;
+  margin: 0px;
+
+  .logo {
+    display: inline-block;
+    width: 50px;
+    padding-top: 10px;
+    padding-right: 5%;
+  }
+}
+
+$tile-spacing: 15px;
+.tile-vertical {
+  margin-top: $tile-spacing;
+  margin-bottom: $tile-spacing;
+}
+
+.tile-horizontal {
+  margin-left: $tile-spacing;
+  margin-right: $tile-spacing;
+}
+
+.tile {
+  & > *:first-child {
+    margin-top: 5px;
+  }
+}

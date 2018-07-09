@@ -21,7 +21,7 @@ export function getProjection(fieldASTs, type) {
           }
           break;
         case Kind.FRAGMENT_SPREAD:
-          var node = fieldASTs.fragments[selection.name.value];
+          let node = fieldASTs.fragments[selection.name.value];
           if (node.typeCondition.name.value === type) {
             Object.assign(projections, reduceFields(node));
           }

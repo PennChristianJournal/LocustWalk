@@ -11,11 +11,23 @@ import {
 
 import ArticleType, {getArticleProjection} from './article';
 import FeatureItemType from '../types/featureItem';
-import Article from '~/common/models/article';
-import {skipLimitArgs, applySkipLimit, authenticatedField, removeEmpty, htmlPreview} from '../helpers';
+import Article from '~/models/article';
+import {getProjection, skipLimitArgs, applySkipLimit, authenticatedField, removeEmpty, htmlPreview} from '../helpers';
 
-// This adds content to the article if preview is requested. Topics mimic that behavior as well
-export const getTopicProjection = getArticleProjection;
+export function projectionForTopic(projection) {
+  // preview is a computed field so we still need to query the content if only the preview is requested
+  if (projection.preview) {
+    projection.content = true;
+  }
+  if (projection.url) {
+    projection.slug = true;
+  }
+  return projection;
+}
+
+export function getTopicProjection(fieldASTs) {
+  return projectionForTopic(getProjection(fieldASTs, "Topic"));
+}
 
 export default new GraphQLObjectType({
   name: 'Topic',
@@ -32,6 +44,9 @@ export default new GraphQLObjectType({
     },
     title: {
       type: GraphQLString,
+    },
+    is_published: {
+      type: GraphQLBoolean,
     },
     content: {
       type: GraphQLString,

@@ -38,10 +38,24 @@ export default new GraphQLInputObjectType({
       type: GraphQLBuffer,
     },
     parent: {
-      type: GraphQLID,
+      type: new GraphQLInputObjectType({
+        name: 'ArticleParentInput',
+        fields: {
+          _id: {
+            type: GraphQLID,
+          },
+        },
+      }),
     },
     topic: {
-      type: GraphQLID,
+      type: new GraphQLInputObjectType({
+        name: 'ArticleTopicInput',
+        fields: {
+          _id: {
+            type: GraphQLID,
+          },
+        },
+      }),
     },
   },
 });

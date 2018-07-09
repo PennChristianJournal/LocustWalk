@@ -10,5 +10,5 @@
   "env": {
     "NODE_ENV": "development"
   },
-  "exec": "babel-node --presets es2015,react,stage-2"
+  "exec": "babel-node --presets=env,react,stage-2 --plugins=dynamic-import-node"
 }

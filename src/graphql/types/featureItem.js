@@ -8,8 +8,8 @@ import {
   GraphQLInterfaceType,
 } from 'graphql/type';
 
-import Article from '~/common/models/article';
-import Topic from '~/common/models/topic';
+import Article from '~/models/article';
+import Topic from '~/models/topic';
 import ArticleType from './article';
 import TopicType from './topic';
 

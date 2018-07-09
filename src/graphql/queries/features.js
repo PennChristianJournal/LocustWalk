@@ -20,9 +20,9 @@ import ObjectIDType from '../types/objectID';
 import FeatureType from '../types/feature';
 import FeatureItemType from '../types/featureItem';
 import {projectionForArticle} from '../types/article';
-import Feature from '~/common/models/feature';
-import Article from '~/common/models/article';
-import Topic from '~/common/models/topic';
+import Feature from '~/models/feature';
+import Article from '~/models/article';
+import Topic from '~/models/topic';
 
 export const feature = {
   type: FeatureType,
@@ -44,10 +44,16 @@ export const features = {
       name: 'is_published',
       type: GraphQLBoolean,
     },
+    search: {
+      name: 'search',
+      type: GraphQLString,
+      defaultValue: '',
+    },
   }, skipLimitArgs),
-  resolve: (root, {skip, limit, is_published}, context, fieldASTs) => {
+  resolve: (root, {skip, limit, is_published, search}, context, fieldASTs) => {
     let q = Feature.find(removeEmpty({
       is_published: authenticatedField(context, is_published, true),
+      title: search.length > 0 ? { $regex: new RegExp(search, 'i') } : undefined,
     }));
     q.sort({ index: -1 });
     q = applySkipLimit(q, skip, limit);
@@ -62,10 +68,16 @@ export const featureCount = {
       name: 'is_published',
       type: GraphQLBoolean,
     },
+    search: {
+      name: 'search',
+      type: GraphQLString,
+      defaultValue: '',
+    },
   },
-  resolve: (root, {is_published}, context) => {
+  resolve: (root, {is_published, search}, context) => {
     return Feature.count(removeEmpty({
       is_published: authenticatedField(context, is_published, true),
+      title: search.length > 0 ? { $regex: new RegExp(search, 'i') } : undefined,
     })).exec();
   },
 };

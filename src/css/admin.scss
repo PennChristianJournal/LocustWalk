@@ -1,4 +1,5 @@
 @import 'variables';
+@import 'react-datetime';
 
 .admin-list-view {
     position: relative;
@@ -62,6 +63,7 @@
 
 .twitter-typeahead {
   display: block!important;
+  flex: 1 1 auto;
 }
 
 .tt-dropdown-menu {
@@ -95,4 +97,64 @@
   width: 100%;
   background-color: white;
   border: 1px solid gray;
+}
+
+.admin-cardgroup {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-top: 1px solid gray;
+  &::after {
+    display: block;
+    content: "";
+    clear: both;
+  }
+}
+
+.admin-card {
+  background-color: white;
+  padding: 10px;
+  &::after {
+    display: block;
+    content: "";
+    clear: both;
+  }
+}
+
+.admin-subcard {
+  margin-left: 10%;
+}
+
+.admin-card-img {
+  float: left;
+  width: 200px;
+  // width: 33%;
+  margin-right: 10px;
+}
+
+.admin-card-body {
+  &::after {
+    display: block;
+    content: "";
+    clear: both;
+  }
+  .btn + .btn {
+    margin-left: 5px;
+  }
+}
+
+.admin-card-img + .admin-card-body {
+  margin-left: 200px;
+}
+
+.admin-card-disabled {
+  background-color: #ddd;
+  .admin-card-body {
+    color: #eee!important;
+  }
+}
+
+.popup {
+  position: fixed;
+  left: 0;
+  top: 0;
 }

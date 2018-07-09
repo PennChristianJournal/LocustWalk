@@ -1,17 +1,30 @@
 'use strict';
 
 import React, {Component} from 'react';
+import ReactDOM from 'react-dom';
 import Optional from '~/common/frontend/components/optional';
 import classnames from 'classnames';
 
 class Modal extends Component {
   constructor(props) {
     super(props);
+
+    this.el = document.createElement('div');
+    this.modalRoot = document.getElementById('modal-root');
+
     this.state = {
       isOpen: props.isOpen,
       isHidden: true,
       opening: false,
     };
+  }
+
+  componentDidMount() {
+    this.modalRoot.appendChild(this.el);
+  }
+
+  componentWillUnmount() {
+    this.modalRoot.removeChild(this.el);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -50,7 +63,7 @@ class Modal extends Component {
       }, 300);
     }
 
-    return (
+    return ReactDOM.createPortal(
       <div className={classnames({
         'modal-open': !this.state.isHidden,
       })}>
@@ -77,7 +90,8 @@ class Modal extends Component {
             </div>
           </div>
         </div>
-      </div>
+      </div>,
+      this.el
     );
   }
 

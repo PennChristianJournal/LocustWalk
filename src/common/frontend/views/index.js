@@ -7,7 +7,8 @@ import SocialPanel from '../components/panels/social';
 import ArticleThumb from '../components/article-thumb';
 import FeatureSlider from '../components/feature-slider';
 import Optional from '../components/optional';
-import {graphql, gql} from 'react-apollo';
+import {graphql} from 'react-apollo';
+import gql from 'graphql-tag';
 import { headData } from '~/common/frontend/head';
 
 const FEATURED_ARTICLES_QUERY = gql`
@@ -59,26 +60,26 @@ const FeatureSliderWithData = graphql(FEATURED_ARTICLES_QUERY, {
 
 const RECENT_ARTICLES_QUERY = gql`
   query RecentArticles($skip: Int!) {
-    recentArticles(limit: 10, skip: $skip) {
+    articles(limit: 10, skip: $skip) {
       title
       slug
       preview(length: 300)
       date
       author
-      thumb 
+      thumb
     }
   }
 `;
 
 const RecentArticlesWithData = graphql(gql`
   query RecentArticlesWithCount($skip: Int!) {
-    recentArticles(limit: 10, skip: $skip) {
+    articles(limit: 10, skip: $skip) {
       title
       slug
       preview(length: 300)
       date
       author
-      thumb 
+      thumb
     }
     articleCount
   }
@@ -89,16 +90,16 @@ const RecentArticlesWithData = graphql(gql`
     },
     notifyOnNetworkStatusChange: true,
   },
-  props({ data: {loading, recentArticles, articleCount, fetchMore } }) {
-    recentArticles = recentArticles || [];
+  props({ data: {loading, articles, articleCount, fetchMore } }) {
+    articles = articles || [];
     return {
       loading,
-      recentArticles,
+      articles,
       loadMore() {
         if (loading) {
           return;
         }
-        const page = recentArticles.length;
+        const page = articles.length;
         return fetchMore({
           query: RECENT_ARTICLES_QUERY,
           variables: {
@@ -110,21 +111,21 @@ const RecentArticlesWithData = graphql(gql`
             }
 
             return Object.assign({}, previousResult, {
-              recentArticles: [...previousResult.recentArticles, ...fetchMoreResult.recentArticles],
+              articles: [...previousResult.articles, ...fetchMoreResult.articles],
             });
           },
         });
       },
       hasMore() {
-        return recentArticles.length < articleCount;
+        return articles.length < articleCount;
       },
     };
   },
-})( ({loading, recentArticles, loadMore, hasMore}) => {
+})( ({loading, articles, loadMore, hasMore}) => {
   return (
     <div className="tile tile-vertical white-theme">
         <h2 className="strong">Recent Articles</h2>
-        {recentArticles.map((article, i) => {
+        {articles.map((article, i) => {
           return <ArticleThumb article={article} key={i} />;
         })}
         <Optional test={hasMore()}>

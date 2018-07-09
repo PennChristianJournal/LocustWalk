@@ -11,7 +11,7 @@ $nav-img-height: 120px;
       img {
         height: $ht;
         position: relative;
-        top: 50px - $ht;
+        // top: 50px - $ht;
         margin-top: 4px;
       }
     }
@@ -52,6 +52,16 @@ body {
   position: relative;
   top: -$nav-img-height - 10px - 50px;
   visibility: hidden;
+}
+
+.navbar-collapse {
+  margin-top: auto;
+  margin-bottom: 8px;
+}
+
+.navbar-toggler {
+  margin-top: auto;
+  margin-bottom: 8px;
 }
 
 .navbar-toggle {

@@ -2,7 +2,8 @@
 import React from 'react';
 import ArticleMain from '~/common/frontend/components/article-main';
 import ArticleLayout from '~/common/frontend/templates/article-layout';
-import {compose, graphql, gql} from 'react-apollo';
+import {compose, graphql} from 'react-apollo';
+import gql from 'graphql-tag';
 import { headData } from '~/common/frontend/head';
 
 const ARTICLE_QUERY = gql`

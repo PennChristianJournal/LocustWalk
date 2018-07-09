@@ -7,7 +7,8 @@ import Table from '~/admin/frontend/components/table';
 import TopicEdit from '~/admin/frontend/components/topic-edit';
 import TopicEditPanel from '~/admin/frontend/components/topic-edit-panel';
 import {debounce} from 'underscore';
-import {graphql, gql} from 'react-apollo';
+import {graphql} from 'react-apollo';
+import gql from 'graphql-tag';
 import {headData} from '~/common/frontend/head';
 
 class TopicList extends Component {

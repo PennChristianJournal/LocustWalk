@@ -5,8 +5,8 @@ import { GraphQLNonNull } from 'graphql/type';
 import TopicType from '../types/topic';
 import TopicInputType from '../types/topicInput';
 import ObjectIDType from '../types/objectID';
-import Topic from '~/common/models/topic';
-import SmallFile from '~/common/models/smallFile';
+import Topic from '~/models/topic';
+import SmallFile from '~/models/smallFile';
 import {getProjection} from '../helpers';
 
 export const newTopic = {

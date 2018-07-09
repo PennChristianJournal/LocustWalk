@@ -6,9 +6,10 @@ import express from 'express';
 import logger from 'morgan';
 import mongoose from 'mongoose';
 import http from 'http';
+import Promise from 'bluebird';
 
 nconf.argv().env().file({file: path.join(__dirname, '../config.json')});
-
+nconf.set('APP_ENV', 'server');
 nconf.defaults({
   PORT: 3000,
   REDIS_URL: 'redis://127.0.0.1:6379',
@@ -16,66 +17,71 @@ nconf.defaults({
   MONGODB_URI: 'mongodb://localhost:27017/locustwalk',
 });
 
-process.on('unhandledRejection', r => console.log(r));
+process.on('unhandledRejection', r => console.error(r));
 
 const NODE_ENV = nconf.get('NODE_ENV');
 
-const server = express();
+const app = express();
 
-server.set('port', nconf.get('PORT'));
+app.set('port', nconf.get('PORT'));
 
-server.use(logger(NODE_ENV === 'development' ? 'dev' : 'common'));
+app.use(logger(NODE_ENV === 'development' ? 'dev' : 'common'));
 
 if (NODE_ENV !== 'production') {
   var compiler = require('webpack')(require('./webpack.config.js'));
-  server.use(require('webpack-dev-middleware')(compiler, {
+  app.use(require('webpack-dev-middleware')(compiler, {
     publicPath: '/',
     noInfo: true,
   }));
-  server.use(require('webpack-hot-middleware')(compiler));
+  app.use(require('webpack-hot-middleware')(compiler));
 }
 
 import sassMiddleware from 'node-sass-middleware';
-server.use(sassMiddleware({
+app.use(sassMiddleware({
   src: path.join(__dirname, ''),
   dest: path.join(__dirname, '../public'),
   outputStyle: 'compressed',
 }), express.static(path.join(__dirname, '../public/css')));
-server.use(express.static(`${__dirname}/../public`));
+app.use(express.static(`${__dirname}/../public`));
 
-
-require('./auth')(server);
-server.use('/admin', require('./admin/server'));
-server.use('/', require('./common/server'));
+app.use('/', require('./server').default);
 
 function truncateObject(obj) {
   if (obj) {
     for (var prop in obj) {
       if (obj.hasOwnProperty(prop)) {
         if (obj[prop] && obj[prop].length && obj[prop].length > 100) {
-          obj[prop].length = 100;
+          if (Array.isArray(obj[prop])) {
+            obj[prop].length = 100;
+          } else {
+            obj[prop] = obj[prop].substr(0, 100);
+          }
         }
       }
     }
   }
 }
 
-mongoose.set('debug', function(collection, method, query, doc, options) {
-  if (NODE_ENV === 'development') {
-    truncateObject(query);
-    truncateObject(doc);
-    truncateObject(options);
+// mongoose.set('debug', function(collection, method, query, doc, options) {
+  // if (NODE_ENV === 'development') {
+  //   truncateObject(query);
+  //   truncateObject(doc);
+  //   truncateObject(options);
 
-    console.dir([collection, method, query, doc, options], {colors: true, depth: 4});
-  }
-});
-mongoose.Promise = global.Promise;
-mongoose.connect(nconf.get('MONGODB_URI'), function(err) {
+  //   console.dir([collection, method, query, doc, options], {colors: true, depth: 4});
+  // }
+// });
+mongoose.Promise = Promise;
+mongoose.connect(nconf.get('MONGODB_URI'), { useMongoClient: true }, function(err) {
   if (err) {
     throw err;
   }
   console.log('Connected to database');
-  http.createServer(server).listen(server.get('port'), function() {
-    console.log(`Express server listening on port ${server.get('port')}`);
+  http.createServer(app).listen(app.get('port'), function() {
+    console.log(`Express server listening on port ${app.get('port')}`);
   });
+
+  if (nconf.get('MONGODB_URI') === 'mongodb://localhost:27017/locustwalk_test') {
+    require('./seedDB');
+  }
 });
